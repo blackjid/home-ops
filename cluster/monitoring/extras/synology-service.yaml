@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: synology-metrics
+  namespace: monitoring
+  labels:
+    app: synology
+spec:
+  type: ExternalName
+  externalName: 10.2.1.50
+  ports:
+  - name: metrics
+    port: 9100
+    protocol: TCP
+    targetPort: 9100
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: synology-metrics
+  namespace: monitoring
+  labels:
+    app: synology
+subsets:
+  - addresses:
+    - ip: 10.2.1.50
+    ports:
+      - name: metrics
+        port: 9100
+        protocol: TCP

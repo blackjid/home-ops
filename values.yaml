@@ -1,0 +1,35 @@
+USER-SUPPLIED VALUES:
+controllerType: deployment
+env:
+  TZ: America/Santiago
+image:
+  pullPolicy: Always
+  repository: ghcr.io/k8s-at-home/jackett
+  tag: v0.20.64
+ingress:
+  main:
+    annotations:
+      external-dns.alpha.kubernetes.io/target: home.donoso.family
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
+      nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth
+    enabled: true
+    hosts:
+    - host: jackett.donoso.family
+      paths:
+      - path: /
+        pathType: Prefix
+    tls:
+    - hosts:
+      - jackett.donoso.family
+persistence:
+  config:
+    enabled: true
+    existingClaim: jackett-config
+resources:
+  limits:
+    cpu: 1000m
+    memory: 500Mi
+  requests:
+    cpu: 25m
+    memory: 350Mi

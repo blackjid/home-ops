@@ -1,0 +1,20 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: octoprint
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: octoprint
+  template:
+    metadata:
+      labels:
+        name: octoprint
+    spec:
+      containers:
+      - name: octoprint
+        image: octoprint/octoprint:1.4.2
+        imagePullPolicy: IfNotPresent
