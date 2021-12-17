@@ -16,5 +16,5 @@ spec:
     spec:
       containers:
       - name: octoprint
-        image: octoprint/octoprint:1.4.2
+        image: octoprint/octoprint:1.7.2
         imagePullPolicy: IfNotPresent
