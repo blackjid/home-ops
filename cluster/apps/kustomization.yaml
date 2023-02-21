@@ -9,3 +9,4 @@ resources:
   - media
   - networking
   - system-upgrade
+  - security
