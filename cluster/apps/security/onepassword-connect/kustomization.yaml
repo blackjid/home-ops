@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - onepassword-connect-secret.sops.yaml
   - helm-release.yaml
+  - cluster-secret-store.yaml
 labels:
   - pairs:
       app.kubernetes.io/name: stores
