@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: obsidian-couchdb
+  name: obsidian-sync
   namespace: default
 spec:
   interval: 15m
@@ -28,16 +28,12 @@ spec:
   values:
     initContainers:
       init-config:
-        image: public.ecr.aws/docker/library/busybox:latest@sha256:7b3ccabffc97de872a30dfd234fd972a66d247c8cfc69b0550f276481852627c
-        command:
-          - "sh"
-          - "-c"
-          - "cp /tmp/config/*.ini /default.d/; ls -lrt /default.d;"
+        image: public.ecr.aws/docker/library/busybox:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "-c", "cp /tmp/config/*.ini /default.d/; ls -lrt /default.d;"]
         volumeMounts:
-          - name: config
-            mountPath: /tmp/config
-          - name: config-storage
-            mountPath: /default.d
+          - { name: config-file, mountPath: /tmp/config }
+          - { name: config-storage, mountPath: /default.d }
 
     controller:
       type: statefulset
@@ -50,12 +46,12 @@ spec:
       COUCHDB_USER:
         valueFrom:
           secretKeyRef:
-            name: obsidian-couchdb-secret
+            name: obsidian-sync-secret
             key: couchdb-user
       COUCHDB_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: obsidian-couchdb-secret
+            name: obsidian-sync-secret
             key: couchdb-password
 
     service:
@@ -72,9 +68,8 @@ spec:
           external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
           nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
-          hajimari.io/icon: mdi:note-outline
         hosts:
-          - host: &host obsidian-db.${SECRET_PUBLIC_DOMAIN}
+          - host: &host obsidian-sync.${SECRET_PUBLIC_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix
@@ -83,12 +78,11 @@ spec:
               - *host
 
     persistence:
-      config:
+      config-file:
         enabled: true
         type: configMap
-        name: obsidian-couchdb-configmap
+        name: obsidian-sync-configmap # overriden by kustomizeconfig
         mountPath: "-"
-
       config-storage:
         enabled: true
         type: emptyDir
@@ -96,10 +90,10 @@ spec:
 
     resources:
       requests:
-        cpu: 63m
-        memory: 256M
+        cpu: 10m
+        memory: 50Mi
       limits:
-        memory: 512M
+        memory: 250Mi
 
     volumeClaimTemplates:
       - name: data

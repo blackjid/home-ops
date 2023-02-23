@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - _pvc
   - minio
-  - obsidian-couchdb
+  - obsidian-sync
