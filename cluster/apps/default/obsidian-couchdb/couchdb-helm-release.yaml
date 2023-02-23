@@ -1,0 +1,109 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: obsidian-couchdb
+  namespace: default
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.3.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    initContainers:
+      init-config:
+        image: public.ecr.aws/docker/library/busybox:latest@sha256:7b3ccabffc97de872a30dfd234fd972a66d247c8cfc69b0550f276481852627c
+        command:
+          - "sh"
+          - "-c"
+          - "cp /tmp/config/*.ini /default.d/; ls -lrt /default.d;"
+        volumeMounts:
+          - name: config
+            mountPath: /tmp/config
+          - name: config-storage
+            mountPath: /default.d
+
+    controller:
+      type: statefulset
+
+    image:
+      repository: public.ecr.aws/docker/library/couchdb
+      tag: 3.3.1
+
+    env:
+      COUCHDB_USER:
+        valueFrom:
+          secretKeyRef:
+            name: obsidian-couchdb-secret
+            key: couchdb-user
+      COUCHDB_PASSWORD:
+        valueFrom:
+          secretKeyRef:
+            name: obsidian-couchdb-secret
+            key: couchdb-password
+
+    service:
+      main:
+        ports:
+          http:
+            port: 5984
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
+          hajimari.io/icon: mdi:note-outline
+        hosts:
+          - host: &host obsidian-db.${SECRET_PUBLIC_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      config:
+        enabled: true
+        type: configMap
+        name: obsidian-couchdb-configmap
+        mountPath: "-"
+
+      config-storage:
+        enabled: true
+        type: emptyDir
+        mountPath: /opt/couchdb/etc/default.d
+
+    resources:
+      requests:
+        cpu: 63m
+        memory: 256M
+      limits:
+        memory: 512M
+
+    volumeClaimTemplates:
+      - name: data
+        mountPath: /opt/couchdb/data
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        storageClass: longhorn
