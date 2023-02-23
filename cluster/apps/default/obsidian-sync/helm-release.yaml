@@ -66,8 +66,6 @@ spec:
         ingressClassName: nginx
         annotations:
           external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
-          nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
         hosts:
           - host: &host obsidian-sync.${SECRET_PUBLIC_DOMAIN}
             paths:
