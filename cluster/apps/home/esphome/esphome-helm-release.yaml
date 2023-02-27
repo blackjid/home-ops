@@ -5,81 +5,59 @@ metadata:
   name: esphome
   namespace: home
 spec:
-  releaseName: esphome
-  interval: 5m
+  interval: 30m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: esphome
-      version: 8.4.2
+      chart: app-template
+      version: 1.3.2
+      interval: 30m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
+
   values:
     image:
       repository: esphome/esphome
-      tag: 2023.2.3
-    env:
-      TZ: "${TIMEZONE}"
-      ESPHOME_DASHBOARD_USE_PING: true
+      tag: 2023.2.4
+
+    service:
+      main:
+        ports:
+          http:
+            port: 6052
+
     hostNetwork: true
+
     ingress:
       main:
         enabled: true
+        ingressClassName: "nginx"
         annotations:
-          kubernetes.io/ingress.class: "nginx"
           external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
           monitor.stakater.com/enabled: "true"
           nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
         hosts:
-        - host: esphome.${SECRET_PUBLIC_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
+          - host: &host "esphome.${SECRET_PUBLIC_DOMAIN}"
+            paths:
+              - path: /
         tls:
-        - hosts:
-          - "esphome.${SECRET_PUBLIC_DOMAIN}"
+          - hosts:
+              - *host
+
     persistence:
+      esphome-cache:
+        enabled: true
+        type: emptyDir
+        mountPath: /config/.esphome
       config:
         enabled: true
         existingClaim: "esphome-config"
+
     resources:
       requests:
-        memory: 500Mi
-        cpu: "500m"
+        cpu: 300m
+        memory: 512M
       limits:
-        memory: 1000Mi
-    addons:
-      codeserver:
-        enabled: true
-        image:
-          repository: codercom/code-server
-          tag: 4.9.1
-        workingDir: "/config"
-        args:
-          - --user-data-dir
-          - "/config/.vscode"
-          - --auth
-          - "none"
-        service:
-          ports:
-            codeserver:
-              port: 12322
-        ingress:
-          enabled: true
-          annotations:
-            kubernetes.io/ingress.class: "nginx"
-            external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
-            nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
-            nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
-          hosts:
-          - host: esphome-vscode.${SECRET_PUBLIC_DOMAIN}
-            paths:
-            - path: /
-              pathType: Prefix
-        volumeMounts:
-        - name: config
-          mountPath: /config
+        memory: 2048M
