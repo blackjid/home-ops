@@ -5,55 +5,67 @@ metadata:
   name: prowlarr
   namespace: media
 spec:
-  interval: 5m
+  interval: 30m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: prowlarr
-      version: 4.5.2
+      chart: app-template
+      version: 1.3.2
+      interval: 30m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
+
   values:
     image:
-      repository: ghcr.io/k8s-at-home/prowlarr
-      tag: v0.4.0.1802
+      repository: ghcr.io/onedr0p/prowlarr-nightly
+      tag: 1.3.2.2832@sha256:23db155c4f31a94502d52a9ca7f9ef30fda2dc17f069b64fa4f80a87b1241a44
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+
     env:
-      TZ: "${TIMEZONE}"
+      PROWLARR__INSTANCE_NAME: Prowlarr
+      PROWLARR__PORT: &port 9696
+      PROWLARR__LOG_LEVEL: info
+      PROWLARR__ANALYTICS_ENABLED: "False"
+      PROWLARR__AUTHENTICATION_METHOD: External
+
+    hostname: prowlarr
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
     ingress:
       main:
         enabled: true
+        ingressClassName: "nginx"
         annotations:
-          kubernetes.io/ingress.class: "nginx"
           external-dns.alpha.kubernetes.io/target: "home.${SECRET_PUBLIC_DOMAIN}"
           nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
         hosts:
-        - host: prowlarr.${SECRET_PUBLIC_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
+          - host: &host "prowlarr.${SECRET_PUBLIC_DOMAIN}"
+            paths:
+              - path: /
         tls:
-        - hosts:
-          - prowlarr.${SECRET_PUBLIC_DOMAIN}
+          - hosts:
+              - *host
+
     persistence:
       config:
         enabled: true
         existingClaim: prowlarr-config
-      backup:
-        enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NAS_ADDR}"
-            path: /volume1/data/backups/apps/prowlarr
-        mountPath: /config/Backups
-        readOnly: false
+
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        cpu: 20m
+        memory: 273M
       limits:
-        memory: 1000Mi
+        memory: 1841M
