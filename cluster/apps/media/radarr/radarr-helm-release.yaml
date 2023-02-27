@@ -5,63 +5,73 @@ metadata:
   name: radarr
   namespace: media
 spec:
-  interval: 5m
+  interval: 30m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: radarr
-      version: 16.3.2
+      chart: app-template
+      version: 1.3.2
+      interval: 30m
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
+
   values:
     image:
-      repository: ghcr.io/k8s-at-home/radarr-develop
-      tag: v4.3.0.6671
+      repository: ghcr.io/onedr0p/radarr-develop
+      tag: 4.4.2.6956@sha256:02068de49a62214022efcee0ca8540cff510bb740d7974f81a45758d6cd6043d
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 65539
+
     env:
-      TZ:  "${TIMEZONE}"
+      RADARR__INSTANCE_NAME: Radarr
+      RADARR__PORT: &port 7878
+      RADARR__APPLICATION_URL: "https://radarr.${SECRET_PUBLIC_DOMAIN}"
+      RADARR__LOG_LEVEL: info
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
     ingress:
       main:
         enabled: true
+        ingressClassName: "nginx"
         annotations:
-          kubernetes.io/ingress.class: "nginx"
           external-dns.alpha.kubernetes.io/target: "home.${SECRET_PUBLIC_DOMAIN}"
           nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
         hosts:
-        - host: radarr.${SECRET_PUBLIC_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
+          - host: &host "radarr.${SECRET_PUBLIC_DOMAIN}"
+            paths:
+              - path: /
         tls:
-        - hosts:
-          - radarr.${SECRET_PUBLIC_DOMAIN}
+          - hosts:
+              - *host
+
     persistence:
       config:
         enabled: true
-        existingClaim: "radarr-config"
+        existingClaim: radarr-config
+
       media:
         enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NAS_ADDR}"
-            path: /volume1/media
+        type: nfs
+        server: "${NAS_ADDR}"
+        path: /volume1/media
         mountPath: /media
-      backup:
-        enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NAS_ADDR}"
-            path: /volume1/data/backups/apps/radarr
-        mountPath: /config/Backups
-        readOnly: false
+
     resources:
       requests:
-        memory: 350Mi
-        cpu: 25m
+        cpu: 15m
+        memory: 164M
       limits:
-        memory: 500Mi
+        memory: 1408M
