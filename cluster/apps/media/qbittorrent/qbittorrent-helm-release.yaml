@@ -1,30 +1,35 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.trux.dev/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: qbittorrent
+  name: &app qbittorrent
   namespace: media
 spec:
-  releaseName: qbittorrent
-  interval: 5m
+  interval: 15m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: qbittorrent
-      version: 13.5.2
+      chart: app-template
+      version: 1.3.2
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s-charts
         namespace: flux-system
-      interval: 5m
+  install:
+    createNamespace: true
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
   values:
     image:
-      repository: ghcr.io/k8s-at-home/qbittorrent
-      tag: v4.4.2
+      repository: ghcr.io/onedr0p/qbittorrent
+      tag: 4.5.2@sha256:a4a66d66ed11c5e3570078daf4e4adeb8a7f88b000a64aa760d46ef12fa7a4c6
     env:
       TZ: "${TIMEZONE}"
-    settings:
-      automaticPortSetup: false
+      QBITTORRENT__BT_PORT: &port-bt 50413
+    hostname: qbittorrent
     service:
       main:
         ports:
@@ -38,41 +43,47 @@ spec:
         ports:
           bittorrent:
             enabled: true
-            port: 50413
+            port: *port-bt
             protocol: TCP
-            targetPort: 50413
+            targetPort: *port-bt
         externalTrafficPolicy: Local
     ingress:
       main:
         enabled: true
+        ingressClassName: "nginx"
         annotations:
-          kubernetes.io/ingress.class: "nginx"
           external-dns.alpha.kubernetes.io/target: "home.${SECRET_PUBLIC_DOMAIN}"
           nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
+          hajimari.io/icon: mdi:download
         hosts:
-        - host: qb.${SECRET_PUBLIC_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
+          - host: &host "qb.${SECRET_PUBLIC_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
         tls:
-        - hosts:
-          - qb.${SECRET_PUBLIC_DOMAIN}
+          - hosts:
+              - *host
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 100
     persistence:
       config:
         enabled: true
-        existingClaim: "qbittorrent-config"
+        existingClaim: qbittorrent-config
       media:
         enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NAS_ADDR}"
-            path: /volume1/media
+        type: nfs
+        server: "${NAS_ADDR}"
+        path: /volume1/media
         mountPath: /media
     resources:
       requests:
+        cpu: 10m
         memory: 250Mi
-        cpu: 25m
       limits:
         memory: 1500Mi
