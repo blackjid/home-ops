@@ -1,128 +1,115 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.trux.dev/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: home-assistant
+  name: &app home-assistant
   namespace: home
 spec:
-  interval: 5m
+  interval: 15m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: home-assistant
-      version: 13.4.2
+      chart: app-template
+      version: 1.3.2
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: bjw-s
         namespace: flux-system
-      interval: 5m
+  install:
+    createNamespace: true
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
   values:
     image:
-      repository: homeassistant/home-assistant
-      tag: 2023.3.1
+      repository: ghcr.io/onedr0p/home-assistant
+      tag: 2023.3.1@sha256:9175189567c44ae14ff1bf546e4f3c378963216e9f4ee94409da8ec84e8871f8
     env:
-      TZ: "${TIMEZONE}"
+      TZ: '${TIMEZONE}'
+      HASS_IP: 10.2.1.100
     envFrom:
       - secretRef:
           name: home-assistant-secrets
-    hostNetwork: true
-    dnsPolicy: ClusterFirstWithHostNet
     service:
       main:
-        type: LoadBalancer
-        loadBalancerIP: 10.2.1.100
+        ports:
+          http:
+            port: 8123
     ingress:
       main:
         enabled: true
+        ingressClassName: 'nginx'
         annotations:
-          kubernetes.io/ingress.class: "nginx"
           external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
           monitor.stakater.com/enabled: "true"
+          hajimari.io/icon: mdi:home-assistant
         hosts:
-        - host: hass.${SECRET_PUBLIC_DOMAIN}
-          paths:
-          - path: /
-            pathType: Prefix
-    prometheus:
-      serviceMonitor:
-        enabled: false
+          - host: &host 'hass.${SECRET_PUBLIC_DOMAIN}'
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: 'OnRootMismatch'
+    persistence:
+      config:
+        enabled: true
+        existingClaim: home-assistant-config
+    addons:
+      codeserver:
+        enabled: true
+        image:
+          repository: ghcr.io/coder/code-server
+          tag: 4.10.1
+        env:
+          TZ: '${TIMEZONE}'
+          EMAIL: jidonoso@gmail.com
+          GIT_AUTHOR_NAME: Juan Ignacio Donoso
+        workingDir: '/config'
+        args:
+          - --auth
+          - 'none'
+          - --user-data-dir
+          - '/config/.vscode'
+          - --extensions-dir
+          - '/config/.vscode'
+        ingress:
+          enabled: true
+          ingressClassName: 'nginx'
+          annotations:
+            external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
+            nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
+            nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
+            hajimari.io/appName: 'Hass Config'
+            hajimari.io/icon: cib:visual-studio-code
+          hosts:
+            - host: &host 'hass-vscode.${SECRET_PUBLIC_DOMAIN}'
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - *host
+        volumeMounts:
+          - name: config
+            mountPath: /config
     probes:
       liveness:
         enabled: false
       readiness:
         enabled: false
       startup:
-        enabled: true
-    persistence:
-      config:
-        enabled: true
-        existingClaim: "home-assistant-config"
-      backup:
-        enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: "${NAS_ADDR}"
-            path: /volume1/data/backups/apps/home-assistant
-        mountPath: /config/backups
-        readOnly: false
-    addons:
-      codeserver:
-        enabled: true
-        image:
-          repository: codercom/code-server
-          tag: 4.9.1
-        env:
-          TZ: "${TIMEZONE}"
-          HASS_SERVER: http://localhost:8123
-          EMAIL: jidonoso@gmail.com
-          GIT_AUTHOR_NAME: Juan Ignacio Donoso
-        git:
-          deployKeySecret: code-server-secrets
-        workingDir: "/config"
-        args:
-          - --auth
-          - "none"
-          - --user-data-dir
-          - "/config/.vscode"
-          - --extensions-dir
-          - "/config/.vscode"
-        ingress:
-          enabled: true
-          annotations:
-            kubernetes.io/ingress.class: "nginx"
-            external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
-            nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
-            nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
-          hosts:
-          - host: hass-vscode.${SECRET_PUBLIC_DOMAIN}
-            paths:
-            - path: /
-              pathType: Prefix
-        volumeMounts:
-        - name: config
-          mountPath: /config
-    postgresql:
-      enabled: true
-      image:
-        tag: 12.9.0-debian-10-r12
-      auth:
-        username: home-assistant
-        database: home-assistant
-        existingSecret: home-assistant-postgresql
-      persistence:
-        enabled: true
-        storageClass: "longhorn"
+        enabled: false
     resources:
-      limits:
-        memory: 2500Mi
       requests:
-        cpu: 35m
-        memory: 2000Mi
-    monitoring:
-      enabled: false
-  valuesFrom:
-  - kind: Secret
-    name: home-assistant-values
-    valuesKey: HASS_TOKEN
-    targetPath: addons.codeserver.env.HASS_TOKEN
+        cpu: 48m
+        memory: 443M
+      limits:
+        memory: 709M
