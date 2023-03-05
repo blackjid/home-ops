@@ -34,6 +34,8 @@ spec:
           name: home-assistant-secrets
     service:
       main:
+        type: LoadBalancer
+        loadBalancerIP: 10.2.1.100
         ports:
           http:
             port: 8123
