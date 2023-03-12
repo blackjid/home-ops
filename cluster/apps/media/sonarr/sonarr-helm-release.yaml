@@ -34,6 +34,11 @@ spec:
       SONARR__PORT: &port 8989
       SONARR__APPLICATION_URL: "https://sonarr.${SECRET_PUBLIC_DOMAIN}"
       SONARR__LOG_LEVEL: info
+      SONARR__API_KEY:
+        valueFrom:
+          secretKeyRef:
+            name: sonarr-secret
+            key: api_key
 
     service:
       main:
