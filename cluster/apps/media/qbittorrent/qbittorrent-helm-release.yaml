@@ -24,8 +24,8 @@ spec:
       retries: 5
   values:
     image:
-      repository: ghcr.io/hotio/qbittorrent
-      tag: release-4.5.2
+      repository: blackjid/vuetorr
+      tag: 4.5.2
     env:
       TZ: "${TIMEZONE}"
       QBITTORRENT__BT_PORT: &port-bt 50413
