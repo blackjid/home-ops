@@ -24,8 +24,8 @@ spec:
       retries: 5
   values:
     image:
-      repository: ghcr.io/onedr0p/qbittorrent
-      tag: 4.5.2@sha256:a4a66d66ed11c5e3570078daf4e4adeb8a7f88b000a64aa760d46ef12fa7a4c6
+      repository: ghcr.io/hotio/qbittorrent
+      tag: release-4.5.2
     env:
       TZ: "${TIMEZONE}"
       QBITTORRENT__BT_PORT: &port-bt 50413
