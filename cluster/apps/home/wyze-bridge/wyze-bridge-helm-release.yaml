@@ -26,7 +26,7 @@ spec:
   values:
     image:
       repository: mrlt8/wyze-bridge
-      tag: 2.0.1
+      tag: 2.0.2
 
     env:
       TZ: "${TIMEZONE}"
