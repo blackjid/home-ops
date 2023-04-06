@@ -48,7 +48,7 @@ spec:
           monitor.stakater.com/enabled: "true"
           hajimari.io/icon: mdi:home-assistant
         hosts:
-          - host: &host 'hass.${SECRET_PUBLIC_DOMAIN}'
+          - host: &host hass.${SECRET_PUBLIC_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix
@@ -92,13 +92,13 @@ spec:
             hajimari.io/appName: 'Hass Config'
             hajimari.io/icon: cib:visual-studio-code
           hosts:
-            - host: &host 'hass-vscode.${SECRET_PUBLIC_DOMAIN}'
+            - host: &hostvs hass-vscode.${SECRET_PUBLIC_DOMAIN}
               paths:
                 - path: /
                   pathType: Prefix
           tls:
             - hosts:
-                - *host
+                - *hostvs
         volumeMounts:
           - name: config
             mountPath: /config
