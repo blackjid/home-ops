@@ -1,38 +1,37 @@
 ---
+name: Schedule - Renovate
 
-name: Schedule - Renovate Helm Releases
-
-on: # yamllint disable-line rule:truthy
+on:
   workflow_dispatch:
+    inputs:
+      dryRun:
+        description: "Dry-Run"
+        default: false
+        required: false
+        type: boolean
+      logLevel:
+        description: "Log-Level"
+        default: "debug"
+        required: false
   schedule:
-  - cron: '0 */12 * * *'
+    - cron: "0 * * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/renovate.json5"
+      - ".github/renovate/**.json"
+      - ".github/renovate/**.json5"
+      - ".github/workflows/schedule-renovate.yaml"
 
 jobs:
-  renovate-helm-releases:
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        fetch-depth: 1
-
-    - name: Renovate Helm Releases
-      uses: k8s-at-home/renovate-helm-releases@v1
-      with:
-        cluster-path: "./cluster"
-
-    - name: Create pull request for renovatebot helm-release annotations
-      uses: peter-evans/create-pull-request@v5
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        branch: renovate-annotations
-        delete-branch: true
-        title: "chore(deps): update renovate annotations"
-        signoff: true
-        committer: "Juan Ignacio Donoso <blackjid@users.noreply.github.com>"
-        author: "Juan Ignacio Donoso <blackjid@users.noreply.github.com>"
-        assignees: "blackjid"
-        commit-message: "chore(deps): update renovate annotations"
-        body: |
-          Update HelmReleases inorder for Renovate to pick up new versions of Helm charts
-        labels: renovate/annotations
+  renovate:
+    name: Renovate
+    uses: blackjid/k8s-gitops/.github/workflows/run-renovate.yaml@master
+    with:
+      configurationFile: ".github/renovate.json5"
+      dryRun: ${{ inputs.dryRun || 'false' }}
+      renovateLogLevel: ${{ inputs.logLevel || 'debug' }}
+    secrets:
+      app_id: ${{ vars.BLACKJID_BOT_APP_ID }}
+      app_private_key: ${{ secrets.BLACKJID_BOT_PRIVATE_KEY }}
