@@ -1,15 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "github>blackjid/home-ops//.github/renovate/allowedVersions.json5",
-    "github>blackjid/home-ops//.github/renovate/autoMerge.json5",
-    "github>blackjid/home-ops//.github/renovate/disabledDatasources.json5",
-    "github>blackjid/home-ops//.github/renovate/groups.json5",
+    "github>blackjid/k8s-gitops//.github/renovate/allowedVersions.json5",
+    "github>blackjid/k8s-gitops//.github/renovate/autoMerge.json5",
+    "github>blackjid/k8s-gitops//.github/renovate/disabledDatasources.json5",
+    "github>blackjid/k8s-gitops//.github/renovate/groups.json5",
   ],
   "platform": "github",
   "username": "blackjid-bot[bot]",
   "gitAuthor": "blackjid-bot <87358111+blackjid-bot[bot]@users.noreply.github.com>",
-  "repositories": ["blackjid/home-ops"],
+  "repositories": ["blackjid/k8s-gitops"],
   "flux": {
     "fileMatch": ["kubernetes/.+\\.ya?ml$"]
   },
