@@ -27,7 +27,7 @@ on:
 jobs:
   renovate:
     name: Renovate
-    uses: blackjid/k8s-gitops/.github/workflows/run-renovate.yaml@master
+    uses: blackjid/k8s-gitops/.github/workflows/renovate-run.yaml@master
     with:
       configurationFile: ".github/renovate.json5"
       dryRun: ${{ inputs.dryRun || 'false' }}
