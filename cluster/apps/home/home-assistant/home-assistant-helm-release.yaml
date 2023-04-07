@@ -24,8 +24,8 @@ spec:
       retries: 5
   values:
     image:
-      repository: ghcr.io/onedr0p/home-assistant
-      tag: 2023.3.6@sha256:5f61d3fe876824d980c17f9a085a46b97ee838421abe50b43e4a8386292a35ad
+      repository: ghcr.io/home-assistant/home-assistant
+      tag: 2023.3.6
     env:
       TZ: '${TIMEZONE}'
       HASS_IP: 10.2.1.100
