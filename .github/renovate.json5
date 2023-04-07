@@ -8,7 +8,7 @@
   ],
   "platform": "github",
   "username": "blackjid-bot[bot]",
-  "gitAuthor": "blackjid-bot <87358111+blackjid-bot[bot]@users.noreply.github.com>",
+  "gitAuthor": "blackjid-bot <130179593+blackjid-bot[bot]@users.noreply.github.com>",
   "repositories": ["blackjid/k8s-gitops"],
   "flux": {
     "fileMatch": ["cluster/.+\\.ya?ml$"]
