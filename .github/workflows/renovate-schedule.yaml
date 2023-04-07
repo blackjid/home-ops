@@ -33,5 +33,5 @@ jobs:
       dryRun: ${{ inputs.dryRun || 'false' }}
       renovateLogLevel: ${{ inputs.logLevel || 'debug' }}
     secrets:
-      app_id: ${{ vars.BLACKJID_BOT_APP_ID }}
+      app_id: ${{ secrets.BLACKJID_BOT_APP_ID }}
       app_private_key: ${{ secrets.BLACKJID_BOT_PRIVATE_KEY }}
