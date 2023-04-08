@@ -24,7 +24,7 @@ spec:
       retries: 5
   values:
     image:
-      repository: ghcr.io/home-assistant/home-assistant
+      repository: ghcr.io/onedr0p/home-assistant
       tag: 2023.3.6
     env:
       TZ: '${TIMEZONE}'
