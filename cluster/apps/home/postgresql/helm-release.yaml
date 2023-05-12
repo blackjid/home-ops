@@ -28,8 +28,8 @@ spec:
   values:
     image:
       registry: docker.io
-      repository: bitnami/postgres
-      tag: "15.2.0"
+      repository: bitnami/postgresql
+      tag: "15.3.0"
     auth:
       username: hass-postgres
       database: hass
