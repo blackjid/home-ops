@@ -8,6 +8,7 @@ resources:
   - frigate
   - home-assistant
   - node-red
-  - zigbee2mqtt
+  - postgresql
   - wyze-bridge
+  - zigbee2mqtt
   - zwavejs2mqtt
