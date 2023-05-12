@@ -33,7 +33,7 @@ spec:
     auth:
       username: hass-postgres
       database: hass
-      existingSecret: hass-postgressql-credentials
+      existingSecret: hass-postgressql-secret
     primary:
       persistence:
         enabled: true
