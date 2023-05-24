@@ -29,7 +29,7 @@ spec:
     keepHistory: false
   values:
     kind: Deployment
-    replicas: 2
+    replicas: 3
     leaderElection:
       enabled: true
     resources:
@@ -38,6 +38,9 @@ spec:
         memory: 48M
       limits:
         memory: 48M
+    tolerations:
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
     affinity:
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
