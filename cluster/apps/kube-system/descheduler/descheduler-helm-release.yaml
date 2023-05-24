@@ -29,6 +29,7 @@ spec:
     keepHistory: false
   values:
     kind: Deployment
+    replicas: 2
     leaderElection:
       enabled: true
     resources:
