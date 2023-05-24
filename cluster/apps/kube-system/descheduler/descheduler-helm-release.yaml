@@ -16,14 +16,45 @@ spec:
         name: kubernetes-sigs-descheduler-charts
         namespace: flux-system
       interval: 5m
+  maxHistory: 2
   install:
     createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
     kind: Deployment
+    leaderElection:
+      enabled: true
+    resources:
+      requests:
+        cpu: 5m
+        memory: 48M
+      limits:
+        memory: 48M
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values: ["descheduler"]
+              topologyKey: kubernetes.io/hostname
+
     deschedulerPolicy:
       strategies:
         RemoveDuplicates:
-          enabled: false
+          enabled: true
+        RemovePodsViolatingNodeTaints:
+          enabled: true
         RemovePodsViolatingNodeAffinity:
           enabled: true
           params:
@@ -39,3 +70,17 @@ spec:
             nodeFit: true
         LowNodeUtilization:
           enabled: false
+        RemoveFailedPods:
+          enabled: true
+          params:
+            failedPods:
+              includingInitContainers: true
+              excludeOwnerKinds:
+                - "Job"
+              minPodLifetimeSeconds: 3600
+        RemovePodsHavingTooManyRestarts:
+          enabled: true
+          params:
+            podsHavingTooManyRestarts:
+              podRestartThreshold: 100
+              includingInitContainers: true
