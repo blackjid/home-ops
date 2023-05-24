@@ -7,9 +7,6 @@
     "github>blackjid/k8s-gitops//.github/renovate/groups.json5",
   ],
   "platform": "github",
-  "username": "blackjid-bot[bot]",
-  "gitAuthor": "blackjid-bot <130179593+blackjid-bot[bot]@users.noreply.github.com>",
-  "repositories": ["blackjid/k8s-gitops"],
   "flux": {
     "fileMatch": ["cluster/.+\\.ya?ml$"]
   },
@@ -21,74 +18,40 @@
   },
   "regexManagers": [
     {
-      "description": ["Process CRD dependencies - Chart and Github Release are the same version"],
-      "fileMatch": ["cluster/.+\\.ya?ml$"],
-      "matchStrings": [
-        "# renovate: registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n",
-      ],
-      "datasourceTemplate": "helm"
-    },
-    {
-      "description": ["Generic Docker image Regex manager"],
+      "description": "Process imageName values",
       "fileMatch": [
-        "infrastructure/.+\\.ya?ml$",
-        "infrastructure/.+\\.tf$"
+        "kubernetes/.+\\.ya?ml$"
       ],
       "matchStrings": [
-        "# renovate: docker-image( versioning=(?<versioning>.*=?))?\n .*[:|=] \"?(?<depName>.*?):(?<currentValue>[^\"\n]*=?)\"?",
+        "imageName: (?<depName>\\S+):(?<currentValue>.*\\-.*)"
       ],
       "datasourceTemplate": "docker",
-      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+      "versioningTemplate": "redhat"
     },
     {
-      "description": ["Raw GitHub URL Regex manager"],
+      "description": "Process custom dependencies",
       "fileMatch": [
-        "infrastructure/.+\\.ya?ml$",
         "cluster/.+\\.ya?ml$"
       ],
       "matchStrings": [
-        "https:\\/\\/raw.githubusercontent.com\\/(?<depName>[\\w\\d\\-_]+\\/[\\w\\d\\-_]+)\\/(?<currentValue>[\\w\\d\\.\\-_]+)\\/.*",
+        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?\"(?<currentValue>.*)\"\n"
       ],
-      "datasourceTemplate": "github-releases",
-      "versioningTemplate": "semver"
+      "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ],
   "packageRules": [
-    // Custom version schemes
     {
-      "description": "Use custom versioning for dsmr-reader",
+      "description": "Loose versioning for non-semver packages",
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/xirixiz/dsmr-reader-docker"],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<build>\\d+\\.\\d+\\.\\d+)$"
-    },
-    {
-      "description": "Use custom versioning for Vector",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["docker.io/timberio/vector"],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$"
-    },
-    {
-      "description": "Use custom versioning for http-https-echo",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/mendhak/http-https-echo"],
-      "versioning": "regex:^(?<major>\\d+)$"
+      "versioning": "loose",
+      "matchPackagePatterns": ["changedetection", "plex", "qbittorrent"]
     },
     {
       "description": "Use custom versioning for Minio",
       "matchDatasources": ["docker"],
-      "versioning": "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+)T.*Z(-(?<compatibility>.*))?$",
-      "matchPackageNames": ["quay.io/minio/minio"]
-    },
-    // Version strategies
-    {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/onedr0p/plex", "ghcr.io/onedr0p/qbittorrent"],
-      "versioning": "loose"
-    },
-    {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["tomsquest/docker-radicale"],
-      "versioning": "pep440"
+      "versioning": "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+)T.*Z$",
+      "matchPackagePatterns": ["minio"]
     }
   ]
 }

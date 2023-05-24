@@ -1,0 +1,6 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "username": "blackjid-bot[bot]",
+  "gitAuthor": "blackjid-bot <130179593+blackjid-bot[bot]@users.noreply.github.com>",
+  "repositories": ["blackjid/k8s-gitops"],
+}
