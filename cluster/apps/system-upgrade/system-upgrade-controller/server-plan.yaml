@@ -5,9 +5,10 @@ metadata:
   name: k3s-server
   namespace: system-upgrade
 spec:
+  # renovate: datasource=github-releases depName=k3s-io/k3s
+  version: "v1.23.17+k3s1"
   serviceAccountName: system-upgrade
   concurrency: 1
-  channel: https://update.k3s.io/v1-release/channels/v1.22
   cordon: true
   nodeSelector:
     matchExpressions:
@@ -15,12 +16,5 @@ spec:
         operator: In
         values:
           - "true"
-      - key: k3s-upgrade
-        operator: In
-        values:
-          - "enabled"
-  tolerations:
-    - key: "node-role.kubernetes.io/master"
-      operator: "Exists"
   upgrade:
     image: rancher/k3s-upgrade
