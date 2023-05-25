@@ -8,3 +8,4 @@ resources:
   - node-feature-discovery
   - reloader
   - sealed-secrets
+  - snapshot-controller/ks.yaml
