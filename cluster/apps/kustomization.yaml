@@ -10,3 +10,4 @@ resources:
   - networking
   - system-upgrade
   - security
+  - volsync
