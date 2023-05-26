@@ -24,10 +24,11 @@ spec:
       backupTargetCredentialSecret: longhorn-backup
       defaultReplicaCount: 2
       defaultLonghornStaticStorageClass: longhorn
-    images:
+    image:
       csi:
-        snapshotter: longhornio/csi-snapshotter
-        tag: v6.0.1
+        snapshotter:
+          repository: longhornio/csi-snapshotter
+          tag: v6.0.1
     ingress:
       enabled: false
       annotations:
