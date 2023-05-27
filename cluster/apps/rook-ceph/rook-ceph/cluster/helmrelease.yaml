@@ -34,11 +34,11 @@ spec:
       dashboard:
         ingressClassName: nginx
         annotations:
-          external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
+          external-dns.alpha.kubernetes.io/target: home.donoso.family
           hajimari.io/appName: "Rook"
           hajimari.io/icon: mdi:chess-rook
         host:
-          name: &host 'rook.${SECRET_PUBLIC_DOMAIN}'
+          name: &host 'rook.donoso.family'
           path: /
         tls:
           - hosts:
