@@ -8,6 +8,7 @@ resources:
   - kube-system
   - media
   - networking
+  - rook-ceph
   - system-upgrade
   - security
   - volsync
