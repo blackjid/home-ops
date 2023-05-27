@@ -18,6 +18,7 @@ spec:
       interval: 5m
   values:
     persistence:
+      defaultClass: false
       defaultClassReplicaCount: 2
     defaultSettings:
       backupTarget: s3://longhorn@minio/backups
