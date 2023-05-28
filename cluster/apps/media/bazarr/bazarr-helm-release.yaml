@@ -41,7 +41,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: "bazarr-config"
+        existingClaim: bazarr-config-0
       media:
         enabled: true
         type: custom
