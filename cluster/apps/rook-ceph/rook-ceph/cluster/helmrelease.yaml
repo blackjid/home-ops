@@ -71,10 +71,10 @@ spec:
         nodes:
           - name: k3s-a
             devices:
-              - name: /dev/disk/by-uuid/68ae04a6-d6ab-46fe-af89-2924c6553022
+              - name: /dev/disk/by-id/dm-name-ubuntu--vg-storage--0
           - name: k3s-b
             devices:
-              - name: /dev/disk/by-uuid/2336e4a2-6fcb-42de-beb1-414501c1cc93
+              - name: /dev/disk/by-id/dm-name-ubuntu--vg-storage--0
           - name: k3s-c
             devices:
               - name: sda
