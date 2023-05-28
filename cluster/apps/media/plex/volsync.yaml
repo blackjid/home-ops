@@ -30,7 +30,7 @@ metadata:
   name: plex
   namespace: media
 spec:
-  sourcePVC: plex-config
+  sourcePVC: plex-config-0
   trigger:
     schedule: "0 7 * * *"
   restic:
@@ -38,8 +38,8 @@ spec:
     pruneIntervalDays: 7
     repository: plex-restic-secret
     cacheCapacity: 5Gi
-    volumeSnapshotClassName: longhorn
-    storageClassName: longhorn
+    volumeSnapshotClassName: csi-ceph-blockpool
+    storageClassName: ceph-block
     moverSecurityContext:
       runAsUser: 568
       runAsGroup: 568
