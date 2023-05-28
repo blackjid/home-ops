@@ -44,11 +44,11 @@ spec:
         enabled: true
         ingressClassName: 'nginx'
         annotations:
-          external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
+          external-dns.alpha.kubernetes.io/target: home.donoso.family
           monitor.stakater.com/enabled: "true"
           hajimari.io/icon: mdi:home-assistant
         hosts:
-          - host: &host 'hass.${SECRET_PUBLIC_DOMAIN}'
+          - host: &host 'hass.donoso.family'
             paths:
               - path: /
                 pathType: Prefix
@@ -81,13 +81,13 @@ spec:
           enabled: true
           ingressClassName: 'nginx'
           annotations:
-            external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
-            nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
-            nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
+            external-dns.alpha.kubernetes.io/target: home.donoso.family
+            nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth
+            nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
             hajimari.io/appName: 'Hass Config'
             hajimari.io/icon: cib:visual-studio-code
           hosts:
-            - host: &hostvs 'hass-vscode.${SECRET_PUBLIC_DOMAIN}'
+            - host: &hostvs 'hass-vscode.donoso.family'
               paths:
                 - path: /
                   pathType: Prefix

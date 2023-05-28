@@ -65,9 +65,9 @@ spec:
         enabled: true
         ingressClassName: nginx
         annotations:
-          external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
+          external-dns.alpha.kubernetes.io/target: home.donoso.family
         hosts:
-          - host: &host obsidian-sync.${SECRET_PUBLIC_DOMAIN}
+          - host: &host obsidian-sync.donoso.family
             paths:
               - path: /
                 pathType: Prefix

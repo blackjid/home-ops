@@ -43,7 +43,7 @@ spec:
           external-dns.alpha.kubernetes.io/target: home.donoso.family
           hajimari.io/icon: mdi:plex
         hosts:
-          - host: &host "{{ .Release.Name }}.${SECRET_PUBLIC_DOMAIN}"
+          - host: &host "{{ .Release.Name }}.donoso.family"
             paths:
               - path: /
                 pathType: Prefix

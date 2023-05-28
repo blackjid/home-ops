@@ -53,9 +53,9 @@ spec:
         ingressClassName: nginx
         annotations:
           kubernetes.io/ingress.class: "nginx"
-          external-dns.alpha.kubernetes.io/target: home.${SECRET_PUBLIC_DOMAIN}
-          nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
+          external-dns.alpha.kubernetes.io/target: home.donoso.family
+          nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
           hajimari.io/enable: "false"
         hosts:
           - host: &host apps.donoso.family

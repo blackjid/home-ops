@@ -32,7 +32,7 @@ spec:
     env:
       RADARR__INSTANCE_NAME: Radarr
       RADARR__PORT: &port 7878
-      RADARR__APPLICATION_URL: "https://radarr.${SECRET_PUBLIC_DOMAIN}"
+      RADARR__APPLICATION_URL: "https://radarr.donoso.family"
       RADARR__LOG_LEVEL: info
 
     service:
@@ -47,10 +47,10 @@ spec:
         ingressClassName: "nginx"
         annotations:
           external-dns.alpha.kubernetes.io/target: home.donoso.family
-          nginx.ingress.kubernetes.io/auth-url: "https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/auth"
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.${SECRET_PUBLIC_DOMAIN}/oauth2/start
+          nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
         hosts:
-          - host: &host "radarr.${SECRET_PUBLIC_DOMAIN}"
+          - host: &host "radarr.donoso.family"
             paths:
               - path: /
         tls:

@@ -36,7 +36,7 @@ spec:
     sources:
       - ingress
     domainFilters:
-      - "${SECRET_PUBLIC_DOMAIN}"
+      - "donoso.family"
     extraArgs:
       - --cloudflare-proxied
     resources:
