@@ -62,7 +62,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: plex-config
+        existingClaim: plex-config-0
       media:
         enabled: true
         type: nfs
