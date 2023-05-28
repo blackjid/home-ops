@@ -61,7 +61,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: prowlarr-config
+        existingClaim: prowlarr-config-0
 
     resources:
       requests:
