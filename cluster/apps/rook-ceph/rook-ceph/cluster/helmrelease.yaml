@@ -75,6 +75,9 @@ spec:
           - name: k3s-b
             devices:
               - name: /dev/disk/by-uuid/2336e4a2-6fcb-42de-beb1-414501c1cc93
+          - name: k3s-c
+            devices:
+              - name: sda
     cephBlockPools:
       - name: ceph-blockpool
         spec:
