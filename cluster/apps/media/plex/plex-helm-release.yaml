@@ -69,12 +69,6 @@ spec:
         server: &nas "${NAS_ADDR}"
         path: /volume1/media
         mountPath: /media
-      backup:
-        enabled: true
-        type: nfs
-        server: *nas
-        path: /volume1/data/backups/apps/plex
-        mountPath: /config/backup
       transcode:
         enabled: true
         type: emptyDir
