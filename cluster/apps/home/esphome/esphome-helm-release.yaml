@@ -53,7 +53,7 @@ spec:
         mountPath: /config/.esphome
       config:
         enabled: true
-        existingClaim: "esphome-config"
+        existingClaim: esphome-config-0
 
     addons:
       codeserver:
