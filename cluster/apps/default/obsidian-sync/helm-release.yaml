@@ -94,8 +94,8 @@ spec:
         memory: 250Mi
 
     volumeClaimTemplates:
-      - name: data
+      - name: data-0
         mountPath: /opt/couchdb/data
         accessMode: ReadWriteOnce
         size: 10Gi
-        storageClass: longhorn
+        storageClass: ceph-block
