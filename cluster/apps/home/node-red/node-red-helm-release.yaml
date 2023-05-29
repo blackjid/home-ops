@@ -41,7 +41,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: "node-red-config"
+        existingClaim: node-red-config-0
         mountPath: "/data"
     resources:
       requests:
