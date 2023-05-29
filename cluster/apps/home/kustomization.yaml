@@ -11,4 +11,4 @@ resources:
   - postgresql
   - wyze-bridge
   - zigbee2mqtt
-  - zwavejs2mqtt
+  - zwave-js-ui
