@@ -37,7 +37,7 @@ spec:
     primary:
       persistence:
         enabled: true
-        existingClaim: hass-postgresql-data
+        existingClaim: hass-postgresql-data-0
     metrics:
       enabled: false
       serviceMonitor:
