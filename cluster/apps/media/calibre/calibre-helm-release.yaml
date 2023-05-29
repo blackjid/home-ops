@@ -28,7 +28,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: calibre-config
+        existingClaim: calibre-config-0
       media:
         enabled: true
         type: custom

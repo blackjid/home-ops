@@ -60,7 +60,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: readarr-config
+        existingClaim: readarr-config-0
 
       media:
         enabled: true
