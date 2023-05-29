@@ -55,7 +55,7 @@ spec:
         readOnly: true
       data:
         enabled: true
-        existingClaim: frigate-data
+        existingClaim: frigate-data-0
       cache:
         enabled: true
         type: emptyDir
