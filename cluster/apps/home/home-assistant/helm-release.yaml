@@ -58,7 +58,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: home-assistant-config
+        existingClaim: home-assistant-config-0
     addons:
       codeserver:
         enabled: true
