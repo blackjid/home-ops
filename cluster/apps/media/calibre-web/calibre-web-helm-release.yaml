@@ -22,7 +22,7 @@ spec:
       tag: version-0.6.18
 
     env:
-      TZ: "${TIMEZONE}"
+      TZ: America/Santiago
       PGID: 65539
       DOCKER_MODS: "linuxserver/calibre-web:calibre"
 
@@ -35,7 +35,7 @@ spec:
         type: custom
         volumeSpec:
           nfs:
-            server: "${NAS_ADDR}"
+            server: 10.2.1.50
             path: /volume1/media
         mountPath: /media
 

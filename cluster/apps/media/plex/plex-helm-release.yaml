@@ -26,12 +26,12 @@ spec:
       repository: ghcr.io/onedr0p/plex
       tag: 1.32.2.7100-248a2daf0@sha256:e169d7ba4c37de7fa416a63cb86fe8642b8552ecaf135271c670fa97abd0fee5
     env:
-      TZ: "${TIMEZONE}"
+      TZ: America/Santiago
     service:
       main:
         type: LoadBalancer
         externalTrafficPolicy: Local
-        loadBalancerIP: "${SVC_PLEX_ADDR}"
+        loadBalancerIP: 10.2.1.104
         ports:
           http:
             port: &port 32400
@@ -66,7 +66,7 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: &nas "${NAS_ADDR}"
+        server: &nas 10.2.1.50
         path: /volume1/media
         mountPath: /media
       transcode:

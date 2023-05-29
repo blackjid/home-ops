@@ -29,7 +29,7 @@ spec:
       tag: 2.1.7
 
     env:
-      TZ: "${TIMEZONE}"
+      TZ: America/Santiago
     envFrom:
       - secretRef:
           name: wyze-secrets

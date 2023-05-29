@@ -27,7 +27,7 @@ spec:
       repository: blackjid/vuetorr
       tag: 4.5.2
     env:
-      TZ: "${TIMEZONE}"
+      TZ: America/Santiago
       QBITTORRENT__BT_PORT: &port-bt 50413
     hostname: qbittorrent
     service:
@@ -39,7 +39,7 @@ spec:
         enabled: true
         type: LoadBalancer
         externalIPs:
-          - "${SVC_QBITTORRENT_ADDR}"
+          - 10.2.1.102
         ports:
           bittorrent:
             enabled: true
@@ -78,7 +78,7 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: "${NAS_ADDR}"
+        server: 10.2.1.50
         path: /volume1/media
         mountPath: /media
     resources:

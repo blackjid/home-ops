@@ -40,7 +40,7 @@ spec:
               imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
-                  value: "${TIMEZONE}"
+                  value: America/Santiago
                 - name: DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
                   value: "1"
               command:
@@ -59,7 +59,7 @@ spec:
               imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
-                  value: "${TIMEZONE}"
+                  value: America/Santiago
               command:
                 - /app/trash
               args:

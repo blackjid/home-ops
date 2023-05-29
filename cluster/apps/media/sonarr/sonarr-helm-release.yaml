@@ -69,7 +69,7 @@ spec:
       media:
         enabled: true
         type: nfs
-        server: "${NAS_ADDR}"
+        server: 10.2.1.50
         path: /volume1/media
         mountPath: /media
 
