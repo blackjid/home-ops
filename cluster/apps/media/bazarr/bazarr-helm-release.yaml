@@ -50,15 +50,6 @@ spec:
             server: 10.2.1.50
             path: /volume1/media
         mountPath: /media
-      backup:
-        enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: 10.2.1.50
-            path: /volume1/data/backups/apps/bazarr
-        mountPath: /config/Backups
-        readOnly: false
     resources:
       requests:
         memory: 250Mi
