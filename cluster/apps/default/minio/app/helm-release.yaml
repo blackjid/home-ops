@@ -109,7 +109,7 @@ spec:
         enabled: true
         type: nfs
         server: 10.2.1.50
-        path: /volume1/minio/minio
+        path: /volume1/minio
         readOnly: false
         mountPath: /data
 
