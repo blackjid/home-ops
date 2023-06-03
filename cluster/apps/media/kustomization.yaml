@@ -11,5 +11,6 @@ resources:
   - qbittorrent
   - radarr
   - readarr
+  - recyclarr
   - sonarr
   - trash-updater
