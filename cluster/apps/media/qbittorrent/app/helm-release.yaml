@@ -23,6 +23,10 @@ spec:
     remediation:
       retries: 5
   values:
+    controller:
+      type: statefulset
+      annotations:
+        reloader.stakater.com/auto: "true"
     image:
       repository: ghcr.io/onedr0p/qbittorrent
       tag: 4.5.2@sha256:0efdd8d3ef3964d658d78ea7789efa285e9c01d1d436da2903cfde462a7fe67a
@@ -30,7 +34,6 @@ spec:
       TZ: America/Santiago
       QBITTORRENT__PORT: &port 80
       QBITTORRENT__BT_PORT: &port-bt 50413
-    hostname: qbittorrent
     service:
       main:
         ports:
