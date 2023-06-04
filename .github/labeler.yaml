@@ -1,0 +1,5 @@
+---
+area/github:
+  - ".github/**/*"
+area/kubernetes:
+  - "cluster/**/*"
