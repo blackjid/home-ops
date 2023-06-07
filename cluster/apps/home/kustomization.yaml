@@ -9,6 +9,7 @@ resources:
   - home-assistant
   - node-red
   - postgresql
+  - scrypted
   - wyze-bridge
   - zigbee2mqtt
   - zwave-js-ui
