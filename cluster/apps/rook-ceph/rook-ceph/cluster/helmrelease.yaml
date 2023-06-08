@@ -34,7 +34,6 @@ spec:
       dashboard:
         ingressClassName: nginx
         annotations:
-          external-dns.alpha.kubernetes.io/target: home.donoso.family
           hajimari.io/appName: "Rook"
           hajimari.io/icon: mdi:chess-rook
         host:

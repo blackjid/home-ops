@@ -66,7 +66,6 @@ spec:
         ingressClassName: nginx
         annotations:
           hajimari.io/icon: mdi:z-wave
-          external-dns.alpha.kubernetes.io/target: home.donoso.family
           nginx.ingress.kubernetes.io/auth-url: "https://auth.donoso.family/oauth2/auth"
           nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
         hosts:
