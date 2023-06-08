@@ -14,9 +14,9 @@ spec:
       - dns01:
           cloudflare:
             email: jidonoso@gmail.com
-            apiKeySecretRef:
+            apiTokenSecretRef:
               name: cloudflare-secret
-              key: api-key
+              key: api-token
         selector:
           dnsZones:
             - donoso.family
@@ -36,9 +36,9 @@ spec:
       - dns01:
           cloudflare:
             email: jidonoso@gmail.com
-            apiKeySecretRef:
+            apiTokenSecretRef:
               name: cloudflare-secret
-              key: api-key
+              key: api-token
         selector:
           dnsZones:
             - donoso.family
