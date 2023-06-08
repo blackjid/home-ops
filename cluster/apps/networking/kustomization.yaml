@@ -4,6 +4,6 @@ kind: Kustomization
 resources:
   # - blocky
   - external-dns
+  - ingress-nginx
   - metallb
-  - nginx
   - oauth2-proxy
