@@ -6,7 +6,7 @@ metadata:
   name: &app plex
   namespace: media
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
@@ -15,18 +15,28 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  maxHistory: 2
   install:
+    createNamespace: true
     remediation:
-      retries: 5
+      retries: 3
   upgrade:
+    cleanupOnFail: true
     remediation:
-      retries: 5
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
+    controller:
+      type: statefulset
+
     image:
       repository: ghcr.io/onedr0p/plex
       tag: 1.32.3.7162-b0a36929b@sha256:7b7017f94b1054d46b80243dce9be8483aa1c162852b87c7782bbbfe5ec74a68
+
     env:
       TZ: America/Santiago
+
     service:
       main:
         type: LoadBalancer
@@ -49,6 +59,7 @@ spec:
         tls:
           - hosts:
               - *host
+
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
@@ -58,10 +69,15 @@ spec:
         - 44
         - 109
         - 100
+
+    volumeClaimTemplates:
+      - name: config
+        mountPath: /config
+        accessMode: ReadWriteOnce
+        size: 100Gi
+        storageClass: ceph-block
+
     persistence:
-      config:
-        enabled: true
-        existingClaim: plex-config-0
       media:
         enabled: true
         type: nfs
@@ -71,15 +87,14 @@ spec:
       transcode:
         enabled: true
         type: emptyDir
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: feature.node.kubernetes.io/custom-intel-gpu
-                  operator: In
-                  values:
-                    - "true"
+      local:
+        enabled: true
+        type: emptyDir
+        mountPath: /.local
+
+    nodeSelector:
+      intel.feature.node.kubernetes.io/gpu: "true"
+
     resources:
       requests:
         gpu.intel.com/i915: 1
