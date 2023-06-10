@@ -1,9 +1,9 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.trux.dev/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: &app home-assistant
+  name: home-assistant
   namespace: home
 spec:
   interval: 15m
@@ -23,15 +23,21 @@ spec:
     remediation:
       retries: 5
   values:
+    controller:
+      type: statefulset
+
     image:
       repository: ghcr.io/onedr0p/home-assistant
       tag: 2023.6.1
+
     env:
       TZ: America/Santiago
       HASS_IP: 10.2.1.100
+
     envFrom:
       - secretRef:
           name: home-assistant-secrets
+
     service:
       main:
         type: LoadBalancer
@@ -39,6 +45,7 @@ spec:
         ports:
           http:
             port: 8123
+
     ingress:
       main:
         enabled: true
@@ -54,10 +61,35 @@ spec:
         tls:
           - hosts:
               - *host
-    persistence:
-      config:
-        enabled: true
-        existingClaim: home-assistant-config-0
+
+    probes:
+      liveness:
+        enabled: false
+      readiness:
+        enabled: false
+      startup:
+        enabled: false
+
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: OnRootMismatch
+
+    volumeClaimTemplates:
+      - name: config
+        mountPath: /config
+        accessMode: ReadWriteOnce
+        size: 4Gi
+        storageClass: ceph-block
+
+    resources:
+      requests:
+        cpu: 48m
+        memory: 443M
+      limits:
+        memory: 709M
+
     addons:
       codeserver:
         enabled: true
@@ -95,16 +127,3 @@ spec:
         volumeMounts:
           - name: config
             mountPath: /config
-    probes:
-      liveness:
-        enabled: false
-      readiness:
-        enabled: false
-      startup:
-        enabled: false
-    resources:
-      requests:
-        cpu: 48m
-        memory: 443M
-      limits:
-        memory: 709M
