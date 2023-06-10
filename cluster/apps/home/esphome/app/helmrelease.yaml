@@ -17,8 +17,11 @@ spec:
         namespace: flux-system
 
   values:
+    controller:
+      type: statefulset
+
     image:
-      repository: esphome/esphome
+      repository: ghcr.io/esphome/esphome
       tag: 2023.5.5
 
     service:
@@ -50,9 +53,13 @@ spec:
         enabled: true
         type: emptyDir
         mountPath: /config/.esphome
-      config:
-        enabled: true
-        existingClaim: esphome-config-0
+
+    volumeClaimTemplates:
+      - name: config
+        mountPath: /config
+        accessMode: ReadWriteOnce
+        size: 4Gi
+        storageClass: ceph-block
 
     addons:
       codeserver:
