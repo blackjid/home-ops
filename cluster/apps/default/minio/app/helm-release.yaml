@@ -97,20 +97,15 @@ spec:
 
 
     podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
+      runAsUser: 1032
+      runAsGroup: 100
+      fsGroup: 100
       fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 100
 
     persistence:
       config:
         enabled: true
-        type: nfs
-        server: 10.2.1.50
-        path: /volume1/minio
-        readOnly: false
+        existingClaim: minio-nfs
         mountPath: /data
 
     podAnnotations:
