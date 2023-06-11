@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/externaldns.k8s.io/dnsendpoint_v1alpha1.json
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: cloudflared
+  namespace: networking
+  annotations:
+    external-dns.alpha.kubernetes.io/target: ingress.donoso.family
+spec:
+  endpoints:
+    - dnsName: ingress.donoso.family
+      recordType: CNAME
+      targets: ["${CLUSTER_CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"]
