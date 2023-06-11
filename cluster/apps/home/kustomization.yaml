@@ -7,7 +7,6 @@ resources:
   - esphome
   - frigate
   - home-assistant
-  - node-red
   - postgresql
   - scrypted
   - wyze-bridge
