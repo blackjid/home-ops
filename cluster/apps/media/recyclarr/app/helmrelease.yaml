@@ -26,33 +26,41 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
+
   values:
     controller:
       type: statefulset
       annotations:
         reloader.stakater.com/auto: "true"
+
     image:
       repository: ghcr.io/recyclarr/recyclarr
       tag: 4.4.1
+
     env:
       TZ: America/Santiago
+
     envFrom:
       - secretRef:
           name: recyclarr-secret
+
     service:
       main:
         enabled: false
+
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
       fsGroup: 568
       fsGroupChangePolicy: OnRootMismatch
+
     volumeClaimTemplates:
       - name: config
         mountPath: /config
         accessMode: ReadWriteOnce
         size: 1Gi
         storageClass: ceph-block
+
     persistence:
       config-file:
         enabled: true
@@ -61,6 +69,7 @@ spec:
         subPath: recyclarr.yml
         mountPath: /config/recyclarr.yml
         readOnly: true
+
     resources:
       requests:
         cpu: 10m
