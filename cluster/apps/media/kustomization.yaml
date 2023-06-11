@@ -5,7 +5,6 @@ resources:
   - bazarr
   - calibre
   - calibre-web
-  - flaresolverr
   - plex
   - prowlarr
   - qbittorrent
