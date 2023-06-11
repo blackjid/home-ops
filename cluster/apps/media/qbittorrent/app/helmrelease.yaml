@@ -1,12 +1,12 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.trux.dev/helmrelease_v2beta1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: &app qbittorrent
+  name: qbittorrent
   namespace: media
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
@@ -15,25 +15,33 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  maxHistory: 2
   install:
     createNamespace: true
     remediation:
-      retries: 5
+      retries: 3
   upgrade:
+    cleanupOnFail: true
     remediation:
-      retries: 5
+      retries: 3
+  uninstall:
+    keepHistory: false
+
   values:
     controller:
       type: statefulset
-      annotations:
-        reloader.stakater.com/auto: "true"
+
     image:
       repository: ghcr.io/onedr0p/qbittorrent
       tag: 4.5.3@sha256:5f97e1e998a498cc27ba08abcdad5be61bd396f833157c6b6c1f3d672915f2fa
+
     env:
       TZ: America/Santiago
       QBITTORRENT__PORT: &port 80
-      QBITTORRENT__BT_PORT: &port-bt 50413
+      QBITTORRENT__BT_PORT: &bittorrentPort 50413
+      QBT_Preferences__WebUI__AlternativeUIEnabled: "false"
+      QBT_Preferences__WebUI__RootFolder: ""
+
     service:
       main:
         ports:
@@ -42,44 +50,53 @@ spec:
       bittorrent:
         enabled: true
         type: LoadBalancer
-        externalIPs:
-          - 10.2.1.102
+        externalIPs: ["10.2.1.102"]
         ports:
           bittorrent:
             enabled: true
-            port: *port-bt
+            port: *bittorrentPort
             protocol: TCP
-            targetPort: *port-bt
+            targetPort: *bittorrentPort
         externalTrafficPolicy: Local
+
     ingress:
       main:
         enabled: true
-        ingressClassName: "nginx"
+        ingressClassName: nginx
         annotations:
           nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth
           nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_hide_header "x-webkit-csp";
+            proxy_hide_header "content-security-policy";
+            proxy_hide_header "X-Frame-Options";
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.devbu.io/css/base/qbittorrent/nord.css"></head>';
+            sub_filter_once on;
           hajimari.io/icon: mdi:download
         hosts:
-          - host: &host "qb.donoso.family"
+          - host: &host qb.donoso.family
             paths:
               - path: /
                 pathType: Prefix
         tls:
           - hosts:
               - *host
+
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
       fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 100
+      fsGroupChangePolicy: OnRootMismatch
+      supplementalGroups: [10000]
+
     volumeClaimTemplates:
       - name: config
         mountPath: /config
         accessMode: ReadWriteOnce
         size: 1Gi
         storageClass: ceph-block
+
     persistence:
       media:
         enabled: true
@@ -87,9 +104,13 @@ spec:
         server: 10.2.1.50
         path: /volume1/media
         mountPath: /media
+      incomplete:
+        enabled: true
+        type: emptyDir
+
     resources:
       requests:
         cpu: 10m
         memory: 250Mi
       limits:
-        memory: 1500Mi
+        memory: 6000Mi
