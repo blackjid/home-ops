@@ -46,6 +46,8 @@ spec:
       main:
         enabled: true
         ingressClassName: nginx
+        annotations:
+          external-dns.alpha.kubernetes.io/target: ingress.donoso.family
         hosts:
           - host: &host "{{ .Release.Name }}.donoso.family"
             paths:

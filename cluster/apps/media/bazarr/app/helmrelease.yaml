@@ -48,9 +48,10 @@ spec:
         enabled: true
         ingressClassName: nginx
         annotations:
-          hajimari.io/icon: mdi:subtitles-outline
+          external-dns.alpha.kubernetes.io/target: ingress.donoso.family
           nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth
           nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
+          hajimari.io/icon: mdi:subtitles-outline
         hosts:
           - host: &host "{{ .Release.Name }}.donoso.family"
             paths:

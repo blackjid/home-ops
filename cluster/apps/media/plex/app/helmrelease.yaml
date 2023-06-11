@@ -50,6 +50,7 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         annotations:
+          external-dns.alpha.kubernetes.io/target: ingress.donoso.family
           hajimari.io/icon: mdi:plex
         hosts:
           - host: &host "{{ .Release.Name }}.donoso.family"

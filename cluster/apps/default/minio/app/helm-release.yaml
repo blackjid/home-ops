@@ -61,6 +61,7 @@ spec:
         enabled: true
         ingressClassName: nginx
         annotations:
+          external-dns.alpha.kubernetes.io/target: ingress.donoso.family
           hajimari.io/enable: "true"
           hajimari.io/appName: "Minio Console"
           hajimari.io/group: "storage"
