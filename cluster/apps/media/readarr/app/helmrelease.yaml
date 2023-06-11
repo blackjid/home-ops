@@ -10,26 +10,32 @@ spec:
     spec:
       chart: app-template
       version: 1.5.1
-      interval: 30m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  maxHistory: 2
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
+    controller:
+      type: statefulset
+
     image:
       repository: ghcr.io/onedr0p/readarr-develop
       tag: 0.1.7.1882@sha256:8196e1cf82d9db90c698fb19908964fafc41e5ec791d32dc4f09fc4732ad436d
 
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-      supplementalGroups:
-        - 65539
-
     env:
+      TZ: America/Santiago
       READARR__INSTANCE_NAME: Readarr
       READARR__PORT: &port 8787
       READARR__APPLICATION_URL: "https://readarr.donoso.family"
@@ -56,11 +62,22 @@ spec:
           - hosts:
               - *host
 
-    persistence:
-      config:
-        enabled: true
-        existingClaim: readarr-config-0
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 65539
 
+    volumeClaimTemplates:
+      - name: config
+        mountPath: /config
+        accessMode: ReadWriteOnce
+        size: 2Gi
+        storageClass: ceph-block
+
+    persistence:
       media:
         enabled: true
         type: nfs
