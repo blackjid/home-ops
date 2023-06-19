@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - bazarr
   - calibre-web
+  - overseerr
   - plex
   - prowlarr
   - qbittorrent
