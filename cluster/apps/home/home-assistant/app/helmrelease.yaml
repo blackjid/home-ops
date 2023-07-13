@@ -36,7 +36,7 @@ spec:
       type: statefulset
     image:
       repository: ghcr.io/onedr0p/home-assistant
-      tag: 2023.7.1
+      tag: 2023.7.2
     env:
       TZ: America/Santiago
     envFrom:
