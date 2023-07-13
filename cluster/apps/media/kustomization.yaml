@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - bazarr
   - calibre-web
+  - kavita
   - overseerr
   - plex
   - prowlarr
