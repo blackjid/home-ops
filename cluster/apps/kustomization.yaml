@@ -6,6 +6,7 @@ resources:
   - default
   - home
   - kube-system
+  - kyverno
   - media
   - networking
   - rook-ceph
