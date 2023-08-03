@@ -9,7 +9,7 @@ spec:
   # renovate: datasource=github-releases
   url: https://github.com/external-secrets/external-secrets.git
   ref:
-    tag: v0.9.1
+    tag: v0.9.2
   ignore: |
     # exclude all
     /*
