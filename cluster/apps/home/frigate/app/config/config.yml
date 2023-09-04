@@ -27,7 +27,7 @@ ffmpeg:
     record: preset-record-ubiquiti
 
 objects:
-  track: ["person"]
+  track: ["person", "pet"]
   filters:
     person:
       min_area: 5000
