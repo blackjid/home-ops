@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://frigate.devbu.io/api/config/schema.json
+# yaml-language-server: $schema=https://frigate.donoso.family/api/config/schema.json
 logger:
   default: info
   # logs:
@@ -34,6 +34,13 @@ objects:
       max_area: 100000
       threshold: 0.7
 
+go2rtc:
+  streams:
+    backyard_hq:
+      - rtsp://hass:NsoxTwwvnkTWeUb9F24W@10.0.2.238:554/h264Preview_01_main
+    backyard_lq:
+      - rtsp://hass:NsoxTwwvnkTWeUb9F24W@10.0.2.238:554/h264Preview_01_sub
+
 # Specify camera's
 cameras:
   living_room:
@@ -44,3 +51,14 @@ cameras:
             - rtmp
     rtmp:
       enabled: True
+  backyard:
+    ffmpeg:
+      inputs:
+        - path: rtsp://localhost:8554/backyard_lq
+          roles: ["detect"]
+        - path: rtsp://localhost:8554/backyard_hq
+          roles: ["record"]
+    detect:
+      width: 640
+      height: 360
+      fps: 10
