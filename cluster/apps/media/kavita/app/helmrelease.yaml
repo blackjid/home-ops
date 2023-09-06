@@ -28,7 +28,7 @@ spec:
 
     image:
       repository: kizaing/kavita
-      tag: 0.7.7
+      tag: 0.7.8
 
     env:
       TZ: America/Santiago
