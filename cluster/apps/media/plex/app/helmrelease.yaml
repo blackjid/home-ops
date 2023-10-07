@@ -32,7 +32,7 @@ spec:
 
     image:
       repository: ghcr.io/onedr0p/plex
-      tag: 1.32.6.7557-1cf77d501@sha256:4dc9b6a3890d83b7a3a775c1249e4f28db2810086180feccc07629eb7df70c79
+      tag: 1.32.6.7557-1cf77d501@sha256:7cc587ba32ba8b1f00b0f1b6bd07d8d6290e6e06c5bb05ea00cd5e9f13bbd40c
 
     env:
       TZ: America/Santiago
