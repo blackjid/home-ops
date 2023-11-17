@@ -17,7 +17,6 @@ spec:
         namespace: flux-system
   maxHistory: 2
   install:
-    createNamespace: true
     crds: CreateReplace
     remediation:
       retries: 3
@@ -28,6 +27,9 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
+  dependsOn:
+    - name: rook-ceph-operator
+      namespace: rook-ceph
   values:
     volumeSnapshotClasses:
       - name: csi-ceph-blockpool
