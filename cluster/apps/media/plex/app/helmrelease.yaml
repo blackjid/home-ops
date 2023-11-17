@@ -61,6 +61,17 @@ spec:
           - hosts:
               - *host
 
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - frigate
+          topologyKey: "kubernetes.io/hostname"
+
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
