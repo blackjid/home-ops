@@ -40,7 +40,6 @@ spec:
               SUBSTREAM: True
               # FFMPEG_LOGLEVEL: debug
               LIBVA_DRIVER_NAME: i965
-              WB_IP: 10.2.1.103
             envFrom:
               - secretRef:
                   name: wyze-secret
@@ -63,7 +62,6 @@ spec:
 
     service:
       main:
-        type: LoadBalancer
         ports:
           http:
             enabled: true
