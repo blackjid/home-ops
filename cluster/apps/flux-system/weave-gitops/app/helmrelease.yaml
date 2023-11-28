@@ -30,25 +30,11 @@ spec:
       createSecret: false
       username: admin
     ingress:
-      enabled: true
-      className: internal
-      hosts:
-        - host: &host weave-gitops.devbu.io
-          paths:
-            - path: /
-              pathType: Prefix
-        - host: &customHost gitops.devbu.io
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - *host
-            - *customHost
+      enabled: false
     networkPolicy:
       create: false
     metrics:
-      enabled: true
+      enabled: false
     rbac:
       create: true
       impersonationResourceNames: ["admin"]
