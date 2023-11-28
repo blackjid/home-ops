@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - cert-manager
   - default
+  - flux-system
   - home
   - kube-system
   - kyverno
