@@ -30,7 +30,7 @@ spec:
           main:
             image:
               repository: mrlt8/wyze-bridge
-              tag: 2.5.2-qsv
+              tag: 2.5.3-qsv
 
             env:
               TZ: America/Santiago
