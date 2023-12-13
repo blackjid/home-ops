@@ -6,7 +6,8 @@ metadata:
   name: rook-ceph-cluster
   namespace: rook-ceph
 spec:
-  interval: 15m
+  interval: 30m
+  timeout: 15m
   chart:
     spec:
       chart: rook-ceph-cluster
@@ -17,7 +18,6 @@ spec:
         namespace: flux-system
   maxHistory: 2
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
@@ -26,10 +26,15 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
+  dependsOn:
+    - name: rook-ceph-operator
+      namespace: rook-ceph
+    - name: snapshot-controller
+      namespace: kube-system
   values:
     monitoring:
       enabled: false
-      createPrometheusRules: true
+      createPrometheusRules: false
     ingress:
       dashboard:
         ingressClassName: nginx
@@ -50,6 +55,8 @@ spec:
       bdev_async_discard = true
       # osd_class_update_on_start = false
     cephClusterSpec:
+      cephVersion:
+        image: quay.io/ceph/ceph:v18.2.0
       network:
         provider: host
         connections:
