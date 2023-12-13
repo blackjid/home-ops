@@ -1,64 +1,31 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  packageRules: [
+  "packageRules": [
     {
-      description: "1Password Connect images",
-      groupName: "1password-connect",
-      matchPackageNames: [
-        "docker.io/1password/connect-sync",
-        "docker.io/1password/connect-api",
-      ],
-      matchDatasources: ["docker"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      separateMinorPatch: true,
-    },
-    {
-      "description": "Immich images",
-      "groupName": "Immich",
-      "matchPackageNames": [
-        "ghcr.io/immich-app/immich-server",
-        "ghcr.io/immich-app/immich-web",
-        "ghcr.io/immich-app/immich-machine-learning",
-      ],
-      "matchDatasources": ["docker"],
+      "description": "Flux Group",
+      "groupName": "Flux",
+      "matchPackagePatterns": ["fluxcd"],
+      "matchDatasources": ["docker", "github-tags"],
+      "versioning": "semver",
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
       "separateMinorPatch": true
     },
     {
-      description: "Rook-Ceph image and chart",
-      groupName: "Rook Ceph",
-      matchPackagePatterns: ["rook.ceph"],
-      matchDatasources: ["docker", "helm"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group"
+      "description": "Local Path Provisioner Group",
+      "groupName": "Local Path Provisioner",
+      "matchPackagePatterns": ["local-path-provisioner"],
+      "matchDatasources": ["docker", "github-tags"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
       },
-      separateMinorPatch: true,
+      "separateMinorPatch": true
     },
     {
-      description: "Cilium image and chart",
-      groupName: "cilium",
-      matchPackageNames: [
-        "quay.io/cilium/cilium",
-        "quay.io/cilium/operator-generic",
-        "cilium",
-      ],
-      matchDatasources: ["helm", "docker"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group"
-      },
-      separateMinorPatch: true,
-    },
-    {
-      "description": "External Snapshotter charts",
-      "groupName": "External Snapshotter",
-      "matchPackageNames": [
-        "snapshot-controller",
-        "snapshot-validation-webhook"
-      ],
+      "description": "Rook-Ceph Group",
+      "groupName": "Rook-Ceph",
+      "matchPackagePatterns": ["rook.ceph"],
       "matchDatasources": ["helm"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
@@ -66,29 +33,14 @@
       "separateMinorPatch": true
     },
     {
-      description: "Thanos image and chart - versions do not match",
-      groupName: "Thanos",
-      matchPackagePatterns: [
-        "quay.io/thanos/thanos",
-        "thanos"
-      ],
-      matchDatasources: ["docker", "github-releases", "helm"],
-      matchUpdateTypes: ["minor", "patch"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group"
+      "description": "System Upgrade Controller Group",
+      "groupName": "System Upgrade Controller",
+      "matchPackagePatterns": ["system-upgrade-controller"],
+      "matchDatasources": ["docker", "github-releases"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
       },
-      separateMinorPatch: false,
-    },
-    {
-      description: "Vector image and chart - versions do not match",
-      groupName: "Vector",
-      matchPackagePatterns: ["vector"],
-      matchDatasources: ["docker", "github-releases", "helm"],
-      matchUpdateTypes: ["minor", "patch"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group"
-      },
-      separateMinorPatch: false,
-    },
-  ],
+      "separateMinorPatch": true
+    }
+  ]
 }
