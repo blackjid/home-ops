@@ -13,7 +13,7 @@ spec:
   values:
     image:
       repository: b4bz/homer
-      tag: 20.12.19
+      tag: v23.10.1
     env:
       TZ: "America/Santiago"
     service:
