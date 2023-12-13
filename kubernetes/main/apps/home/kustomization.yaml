@@ -1,14 +1,17 @@
 ---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: home
 resources:
-  - emqx
-  - esphome
-  - frigate
-  - home-assistant
-  - postgresql
-  - scrypted
-  - wyze-bridge
-  - zigbee2mqtt
-  - zwave-js-ui
+  # Pre Flux-Kustomizations
+  - ./namespace.yaml
+  # Flux-Kustomizations
+  - ./emqx
+  - ./esphome
+  - ./frigate
+  - ./home-assistant
+  - ./postgresql
+  - ./scrypted
+  - ./wyze-bridge
+  - ./zigbee2mqtt
+  - ./zwave-js-ui
