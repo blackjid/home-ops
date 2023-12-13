@@ -6,7 +6,7 @@ metadata:
   name: &app external-secrets
   namespace: flux-system
 spec:
-  targetNamespace: kube-system
+  targetNamespace: security
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
