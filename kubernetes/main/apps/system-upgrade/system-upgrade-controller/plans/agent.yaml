@@ -1,24 +1,19 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/upgrade.cattle.io/plan_v1.json
 apiVersion: upgrade.cattle.io/v1
 kind: Plan
 metadata:
-  name: k3s-agent
-  namespace: system-upgrade
-  labels:
-    k3s-upgrade: agent
+  name: agent
 spec:
   # renovate: datasource=github-releases depName=k3s-io/k3s
-  version: "v1.28.4+k3s1"
+  version: "v1.28.4+k3s2"
   serviceAccountName: system-upgrade
   concurrency: 1
   nodeSelector:
     matchExpressions:
-      - key: node-role.kubernetes.io/master
-        operator: DoesNotExist
+      - {key: node-role.kubernetes.io/control-plane, operator: DoesNotExist}
   prepare:
     image: rancher/k3s-upgrade
-    args:
-      - "prepare"
-      - "k3s-server"
+    args: ["prepare", "server"]
   upgrade:
     image: rancher/k3s-upgrade
