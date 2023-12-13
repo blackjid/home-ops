@@ -7,7 +7,7 @@
 [![k3s](https://img.shields.io/badge/k3s-v1.18.8-orange?style=flat-square)](https://k3s.io/)
 [![GitHub stars](https://img.shields.io/github/stars/blackjid/k3s-gitops?color=green&style=flat-square)](https://github.com/blackjid/k3s-gitops/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/blackjid/k3s-gitops?style=flat-square)](https://github.com/blackjid/k3s-gitops/issues)
-[![GitHub last commit](https://img.shields.io/github/last-commit/blackjid/k3s-gitops?color=purple&style=flat-square)](https://github.com/blackjid/k3s-gitops/commits/master)
+[![GitHub last commit](https://img.shields.io/github/last-commit/blackjid/k3s-gitops?color=purple&style=flat-square)](https://github.com/blackjid/k3s-gitops/commits/main)
 
 <br/>
 
