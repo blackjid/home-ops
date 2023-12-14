@@ -10,5 +10,4 @@ resources:
   - ./cloudflared
   - ./external-dns
   - ./ingress-nginx
-  - ./metallb
   - ./oauth2-proxy
