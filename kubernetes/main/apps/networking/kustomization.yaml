@@ -9,5 +9,5 @@ resources:
   # - ./blocky
   - ./cloudflared
   - ./external-dns
-  - ./ingress-nginx
+  - ./ingress-nginx/ks.yaml
   - ./oauth2-proxy

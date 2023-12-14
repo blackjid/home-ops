@@ -32,8 +32,7 @@ spec:
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: ingress.donoso.family
-        externalIPs: ["10.2.1.110"]
-        externalTrafficPolicy: Local
+          io.cilium/lb-ipam-ips: 10.2.1.100
       ingressClassResource:
         default: true
       config:
