@@ -8,6 +8,6 @@ resources:
   # Flux-Kustomizations
   # - ./blocky
   - ./cloudflared
-  - ./external-dns
+  - ./external-dns/ks.yaml
   - ./nginx/ks.yaml
   - ./oauth2-proxy/ks.yaml
