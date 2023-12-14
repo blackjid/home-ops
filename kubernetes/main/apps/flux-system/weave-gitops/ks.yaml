@@ -10,13 +10,13 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  # dependsOn:
-  #   - name: external-secrets-stores
-  path: ./cluster/apps/flux-system/weave-gitops/app
+  dependsOn:
+    - name: external-secrets-stores
+  path: ./kubernetes/main/apps/flux-system/weave-gitops/app
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-system
+    name: home-kubernetes
   wait: false
   interval: 30m
   retryInterval: 1m
