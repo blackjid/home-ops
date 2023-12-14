@@ -6,6 +6,7 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
+  - ./cilium/ks.yaml
   - ./descheduler
   - ./intel-device-plugin
   - ./node-feature-discovery
