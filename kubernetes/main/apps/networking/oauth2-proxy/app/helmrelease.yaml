@@ -13,7 +13,7 @@ spec:
       version: 6.23.1
       sourceRef:
         kind: HelmRepository
-        name: oauth2-proxy-charts
+        name: oauth2-proxy
         namespace: flux-system
       interval: 5m
   values:
@@ -43,5 +43,5 @@ spec:
       whitelist-domain: .donoso.family
   valuesFrom:
   - kind: Secret
-    name: "oauth2-proxy-values"
+    name: oauth2-proxy-values-secret
     optional: false
