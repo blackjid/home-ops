@@ -12,7 +12,7 @@ resources:
   # - ./calico.yaml
   - ./cilium.yaml
   # - ./cloudnative-pg.yaml
-  # - ./coredns.yaml
+  - ./coredns.yaml
   # - ./crossplane.yaml
   - ./csi-driver-nfs.yaml
   - ./descheduler.yaml
