@@ -9,6 +9,7 @@ resources:
   - ./cilium/ks.yaml
   - ./descheduler
   - ./intel-device-plugin
+  - ./metrics-server/ks.yaml
   - ./node-feature-discovery
   - ./reloader
   - ./sealed-secrets
