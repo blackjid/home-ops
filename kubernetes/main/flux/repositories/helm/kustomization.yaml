@@ -33,7 +33,7 @@ resources:
   # - ./kepler.yaml
   # - ./kubernetes-dashboard.yaml
   # - ./kyverno.yaml
-  - ./metallb.yaml
+  # - ./metallb.yaml
   - ./metrics-server.yaml
   - ./minio.yaml
   # - ./nextcloud.yaml
