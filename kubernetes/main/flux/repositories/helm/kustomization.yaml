@@ -34,7 +34,7 @@ resources:
   # - ./kubernetes-dashboard.yaml
   # - ./kyverno.yaml
   - ./metallb.yaml
-  # - ./metrics-server.yaml
+  - ./metrics-server.yaml
   - ./minio.yaml
   # - ./nextcloud.yaml
   - ./node-feature-discovery.yaml
