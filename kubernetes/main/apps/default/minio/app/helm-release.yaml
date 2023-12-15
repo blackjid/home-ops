@@ -59,7 +59,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: external
         annotations:
           external-dns.alpha.kubernetes.io/target: ingress.donoso.family
           hajimari.io/enable: "true"
@@ -78,7 +78,7 @@ spec:
               - *host-console
       s3:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: external
         annotations:
           nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
           nginx.ingress.kubernetes.io/proxy-body-size: 5000m
