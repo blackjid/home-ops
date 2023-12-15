@@ -12,5 +12,4 @@ resources:
   - ./metrics-server/ks.yaml
   - ./node-feature-discovery
   - ./reloader
-  - ./sealed-secrets
   - ./snapshot-controller/ks.yaml
