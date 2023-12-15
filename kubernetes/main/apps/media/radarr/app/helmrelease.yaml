@@ -69,7 +69,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: "internal"
+        ingressClassName: external
         annotations:
           external-dns.alpha.kubernetes.io/target: ingress.donoso.family
           nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth
