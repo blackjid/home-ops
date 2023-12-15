@@ -84,6 +84,55 @@ spec:
           - name: k3s-c
             devices:
               - name: sda
+      resources:
+        mgr:
+          requests:
+            cpu: "125m"
+            memory: "512Mi"
+          limits:
+            memory: "1Gi"
+        mon:
+          requests:
+            cpu: "50m"
+            memory: "512Mi"
+          limits:
+            memory: "1Gi"
+        osd:
+          requests:
+            cpu: "300m"
+            memory: "512Mi"
+          limits:
+            memory: "6Gi"
+        mgr-sidecar:
+          requests:
+            cpu: "50m"
+            memory: "100Mi"
+          limits:
+            memory: "200Mi"
+        crashcollector:
+          requests:
+            cpu: "15m"
+            memory: "64Mi"
+          limits:
+            memory: "128Mi"
+        logcollector:
+          requests:
+            cpu: "100m"
+            memory: "100Mi"
+          limits:
+            memory: "1Gi"
+        prepareosd:
+          requests:
+            cpu: "250m"
+            memory: "50Mi"
+          limits:
+            memory: "2Gi"
+        cleanup:
+          requests:
+            cpu: "250m"
+            memory: "100Mi"
+          limits:
+            memory: "1Gi"
     cephBlockPools:
       - name: ceph-blockpool
         spec:
