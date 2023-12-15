@@ -36,7 +36,7 @@ spec:
       type: statefulset
     image:
       repository: ghcr.io/onedr0p/home-assistant
-      tag: 2023.12.1
+      tag: 2023.12.2
     env:
       TZ: America/Santiago
     envFrom:
@@ -52,7 +52,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: 'nginx'
+        ingressClassName: external
         annotations:
           external-dns.alpha.kubernetes.io/target: ingress.donoso.family
           hajimari.io/icon: mdi:home-assistant
@@ -108,7 +108,7 @@ spec:
           - '/config/.vscode'
         ingress:
           enabled: true
-          ingressClassName: 'nginx'
+          ingressClassName: external
           annotations:
             external-dns.alpha.kubernetes.io/target: ingress.donoso.family
             nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth

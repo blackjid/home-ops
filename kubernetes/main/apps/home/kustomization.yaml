@@ -8,7 +8,7 @@ resources:
   # Flux-Kustomizations
   - ./emqx
   - ./esphome
-  - ./frigate
+  - ./frigate/ks.yaml
   - ./home-assistant
   - ./postgresql
   - ./scrypted

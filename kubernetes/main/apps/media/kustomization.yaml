@@ -7,8 +7,6 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./bazarr
-  - ./calibre-web
-  - ./kavita
   - ./overseerr
   - ./plex
   - ./prowlarr

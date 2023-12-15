@@ -10,9 +10,9 @@ resources:
   - ./bitnami.yaml
   - ./bjw-s.yaml
   # - ./calico.yaml
-  # - ./cilium.yaml
+  - ./cilium.yaml
   # - ./cloudnative-pg.yaml
-  # - ./coredns.yaml
+  - ./coredns.yaml
   # - ./crossplane.yaml
   - ./csi-driver-nfs.yaml
   - ./descheduler.yaml
@@ -33,8 +33,8 @@ resources:
   # - ./kepler.yaml
   # - ./kubernetes-dashboard.yaml
   # - ./kyverno.yaml
-  - ./metallb.yaml
-  # - ./metrics-server.yaml
+  # - ./metallb.yaml
+  - ./metrics-server.yaml
   - ./minio.yaml
   # - ./nextcloud.yaml
   - ./node-feature-discovery.yaml

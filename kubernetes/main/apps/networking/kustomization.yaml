@@ -6,9 +6,7 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  # - ./blocky
-  - ./cloudflared
-  - ./external-dns
-  - ./ingress-nginx
-  - ./metallb
-  - ./oauth2-proxy
+  - ./cloudflared/ks.yaml
+  - ./external-dns/ks.yaml
+  - ./nginx/ks.yaml
+  - ./oauth2-proxy/ks.yaml

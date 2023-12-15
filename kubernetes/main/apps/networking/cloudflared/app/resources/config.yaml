@@ -1,0 +1,14 @@
+---
+originRequest:
+  http2Origin: true
+
+ingress:
+  - hostname: donoso.family
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
+    originRequest:
+      originServerName: ingress.donoso.family
+  - hostname: "*.donoso.family"
+    service: https://nginx-external-controller.networking.svc.cluster.local:443
+    originRequest:
+      originServerName: ingress.donoso.family
+  - service: http_status:404
