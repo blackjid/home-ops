@@ -8,4 +8,4 @@ resources:
   # Flux-Kustomizations
   - ./hajimari
   - ./minio
-  - ./obsidian-sync
+  - ./obsidian-sync/ks.yaml
