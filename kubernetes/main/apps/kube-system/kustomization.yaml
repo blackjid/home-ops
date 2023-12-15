@@ -10,6 +10,6 @@ resources:
   - ./descheduler
   - ./intel-device-plugin
   - ./metrics-server/ks.yaml
-  - ./node-feature-discovery
+  - ./node-feature-discovery/ks.yaml
   - ./reloader
   - ./snapshot-controller/ks.yaml
