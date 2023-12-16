@@ -8,7 +8,7 @@ resources:
   # Flux-Kustomizations
   - ./bazarr
   - ./overseerr
-  - ./plex
+  - ./plex/ks.yaml
   - ./prowlarr
   - ./qbittorrent
   - ./radarr
