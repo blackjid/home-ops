@@ -6,6 +6,6 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./hajimari
-  - ./minio
+  - ./hajimari/ks.yaml
+  - ./minio/ks.yaml
   - ./obsidian-sync/ks.yaml

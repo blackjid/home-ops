@@ -7,11 +7,11 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./emqx
-  - ./esphome
+  - ./esphome/ks.yaml
   - ./frigate/ks.yaml
-  - ./home-assistant
-  - ./postgresql
-  - ./scrypted
-  - ./wyze-bridge
-  - ./zigbee2mqtt
-  - ./zwave-js-ui
+  - ./home-assistant/ks.yaml
+  - ./postgresql/ks.yaml
+  - ./scrypted/ks.yaml
+  - ./wyze-bridge/ks.yaml
+  - ./zigbee2mqtt/ks.yaml
+  - ./zwave-js-ui/ks.yaml
