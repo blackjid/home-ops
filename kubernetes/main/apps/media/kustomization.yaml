@@ -6,13 +6,13 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./bazarr
+  - ./bazarr/ks.yaml
   - ./overseerr/ks.yaml
   - ./plex/ks.yaml
-  - ./prowlarr
-  - ./qbittorrent
-  - ./radarr
-  - ./readarr
-  - ./recyclarr
-  - ./sonarr
-  - ./tautilli
+  - ./prowlarr/ks.yaml
+  - ./qbittorrent/ks.yaml
+  - ./radarr/ks.yaml
+  - ./readarr/ks.yaml
+  - ./recyclarr/ks.yaml
+  - ./sonarr/ks.yaml
+  - ./tautilli/ks.yaml
