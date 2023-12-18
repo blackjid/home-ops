@@ -6,7 +6,7 @@ metadata:
   name: &app obsidian-sync
   namespace: flux-system
 spec:
-  targetNamespace: home
+  targetNamespace: default
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
