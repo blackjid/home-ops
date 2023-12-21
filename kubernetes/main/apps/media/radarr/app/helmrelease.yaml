@@ -47,6 +47,9 @@ spec:
               RADARR__LOG_LEVEL: info
               RADARR__THEME: dark
               TZ: America/Santiago
+            envFrom: &envFrom
+              - secretRef:
+                  name: radarr-secret
             probes:
               liveness: &probes
                 enabled: true
