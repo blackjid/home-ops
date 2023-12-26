@@ -24,7 +24,7 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: emqx-operator
+    - name: emqx
       namespace: home
     - name: rook-ceph-cluster
       namespace: rook-ceph
