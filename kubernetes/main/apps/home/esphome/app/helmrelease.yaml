@@ -22,7 +22,7 @@ spec:
 
     image:
       repository: ghcr.io/esphome/esphome
-      tag: 2023.12.1
+      tag: 2023.12.5
 
     service:
       main:
@@ -67,7 +67,7 @@ spec:
         enabled: true
         image:
           repository: ghcr.io/coder/code-server
-          tag: 4.19.1
+          tag: 4.20.0
         env:
           TZ: America/Santiago
           EMAIL: jidonoso@gmail.com
