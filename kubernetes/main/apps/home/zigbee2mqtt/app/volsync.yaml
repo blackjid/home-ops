@@ -4,7 +4,6 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: zigbee2mqtt-restic
-  namespace: home
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -28,7 +27,6 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: zigbee2mqtt
-  namespace: home
 spec:
   sourcePVC: config-zigbee2mqtt-0
   trigger:
