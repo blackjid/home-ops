@@ -4,7 +4,6 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: zwave-js-ui-restic
-  namespace: default
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -28,7 +27,6 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: zwave-js-ui
-  namespace: default
 spec:
   sourcePVC: config-zwave-js-ui-0
   trigger:
