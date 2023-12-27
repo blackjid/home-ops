@@ -57,6 +57,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_DEVICE_OPTIONS_LEGACY: "false"
               ZIGBEE2MQTT_CONFIG_DEVICE_OPTIONS_RETAIN: "true"
               ZIGBEE2MQTT_CONFIG_EXPERIMENTAL_NEW_API: "true"
+              ZIGBEE2MQTT_CONFIG_FRONTEND: "false"
               ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &port 80
               ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://zigbee.donoso.family
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT: "true"
@@ -71,7 +72,7 @@ spec:
               - secretRef:
                   name: zigbee2mqtt-secret
             securityContext:
-              allowPrivilegeEscalation: false
+              privileged: true
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
@@ -85,7 +86,7 @@ spec:
             zzh.feature.node.kubernetes.io/zigbee: "true"
           securityContext:
             runAsUser: 568
-            runAsGroup: 568
+            runAsGroup: 20
             runAsNonRoot: true
             fsGroup: 568
             fsGroupChangePolicy: OnRootMismatch
@@ -97,7 +98,12 @@ spec:
     ingress:
       main:
         enabled: true
-        className: internal
+        className: external
+        annotations:
+          external-dns.alpha.kubernetes.io/target: ingress.donoso.family
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.donoso.family/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
+          hajimari.io/icon: mdi:z-wave
         hosts:
           - host: &host "{{ .Release.Name }}.donoso.family"
             paths:
