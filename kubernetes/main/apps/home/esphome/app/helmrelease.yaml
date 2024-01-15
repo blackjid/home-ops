@@ -22,7 +22,7 @@ spec:
 
     image:
       repository: ghcr.io/esphome/esphome
-      tag: 2023.12.5
+      tag: 2023.12.6
 
     service:
       main:
