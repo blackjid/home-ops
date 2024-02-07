@@ -78,12 +78,12 @@ spec:
           - name: k3s-a
             devices:
               - name: /dev/disk/by-id/dm-name-ubuntu--vg-storage--0
-          - name: k3s-b
-            devices:
-              - name: /dev/disk/by-id/dm-name-ubuntu--vg-storage--0
-          - name: k3s-c
-            devices:
-              - name: sda
+          # - name: k3s-b
+          #   devices:
+          #     - name: /dev/disk/by-id/dm-name-ubuntu--vg-storage--0
+          # - name: k3s-c
+          #   devices:
+          #     - name: sda
       resources:
         mgr:
           requests:

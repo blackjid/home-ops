@@ -1,0 +1,26 @@
+---
+kubernetes:
+  vars:
+    ansible_user: jidonoso
+    ansible_ssh_port: 22
+  children:
+    master:
+      vars:
+        ansible_user: ubuntu
+      hosts:
+        k3s-pi4-0:
+          ansible_host: 10.2.1.20
+    worker:
+      hosts:
+        k3s-a:
+          ansible_host: 10.2.1.3
+          ceph_drives:
+            - /dev/disk/by-id/dm-name-ubuntu--vg-storage--0
+        k3s-b:
+          ansible_host: 10.2.1.4
+          ceph_drives:
+            - /dev/disk/by-id/dm-name-ubuntu--vg-storage--0
+        # k3s-c:
+        #   ansible_host: 10.2.1.1
+        #   ceph_drives:
+        #     - /dev/sda
