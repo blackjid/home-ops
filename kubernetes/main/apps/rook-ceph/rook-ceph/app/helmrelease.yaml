@@ -29,8 +29,15 @@ spec:
     - name: snapshot-controller
       namespace: kube-system
   values:
-    # csi:
-    #   # TODO: Set to `ms_mode=prefer-crc` on rebuild
-    #   cephFSKernelMountOptions: ms_mode=secure
+    csi:
+      cephFSKernelMountOptions: ms_mode=prefer-crc
+      enableLiveness: true
+      serviceMonitor:
+        enabled: true
     monitoring:
-      enabled: false
+      enabled: true
+    resources:
+      requests:
+        memory: 128Mi # unchangable
+        cpu: 100m # unchangable
+      limits: {}
