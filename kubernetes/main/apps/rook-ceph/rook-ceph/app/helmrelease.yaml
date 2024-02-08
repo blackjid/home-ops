@@ -33,9 +33,9 @@ spec:
       cephFSKernelMountOptions: ms_mode=prefer-crc
       enableLiveness: true
       serviceMonitor:
-        enabled: true
+        enabled: false
     monitoring:
-      enabled: true
+      enabled: flase
     resources:
       requests:
         memory: 128Mi # unchangable
