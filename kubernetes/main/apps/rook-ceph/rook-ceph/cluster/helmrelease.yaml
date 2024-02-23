@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: rook-ceph-cluster
-      version: v1.13.4
+      version: v1.13.3
       sourceRef:
         kind: HelmRepository
         name: rook-ceph
@@ -54,15 +54,37 @@ spec:
       osd_class_update_on_start = false
     cephClusterSpec:
       network:
+        provider: host
         connections:
           requireMsgr2: true
+      crashCollector:
+        disable: false
+      dashboard:
+        enabled: true
+        urlPrefix: /
+        ssl: false
+      storage:
+        useAllNodes: false
+        useAllDevices: false
+        config:
+          osdsPerDevice: "1"
+        nodes:
+          - name: k3s-a
+            devices:
+              - name: /dev/disk/by-id/dm-name-ubuntu--vg-storage--0
+          # - name: k3s-b
+          #   devices:
+          #     - name: /dev/disk/by-id/dm-name-ubuntu--vg-storage--0
+          # - name: k3s-c
+          #   devices:
+          #     - name: sda
       resources:
         mgr:
           requests:
-            cpu: 100m
+            cpu: 125m
             memory: 512Mi
           limits:
-            memory: 2Gi
+            memory: 1Gi
         mon:
           requests:
             cpu: 50m
@@ -71,37 +93,40 @@ spec:
             memory: 1Gi
         osd:
           requests:
-            cpu: 500m
-            memory: 2Gi
+            cpu: 300m
+            memory: 512Mi
           limits:
             memory: 6Gi
         mgr-sidecar:
           requests:
             cpu: 50m
-            memory: 128Mi
+            memory: 100Mi
           limits:
-            memory: 256Mi
-      crashCollector:
-        disable: false
-      dashboard:
-        enabled: true
-        urlPrefix: /
-        ssl: false
-      storage:
-        useAllNodes: true
-        useAllDevices: true
-        deviceFilter: nvme0n1
-        config:
-          osdsPerDevice: "1"
-      placement:
-        mgr: &placement
-          nodeAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              nodeSelectorTerms:
-                - matchExpressions:
-                    - key: node-role.kubernetes.io/control-plane
-                      operator: Exists
-        mon: *placement
+            memory: 200Mi
+        crashcollector:
+          requests:
+            cpu: 15m
+            memory: 64Mi
+          limits:
+            memory: 128Mi
+        logcollector:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            memory: 1Gi
+        prepareosd:
+          requests:
+            cpu: 250m
+            memory: 50Mi
+          limits:
+            memory: 2Gi
+        cleanup:
+          requests:
+            cpu: 250m
+            memory: 100Mi
+          limits:
+            memory: 1Gi
     cephBlockPools:
       - name: ceph-blockpool
         spec:
@@ -114,7 +139,6 @@ spec:
           isDefault: true
           reclaimPolicy: Delete
           allowVolumeExpansion: true
-          volumeBindingMode: Immediate
           parameters:
             imageFormat: "2"
             imageFeatures: layering
