@@ -77,9 +77,9 @@ spec:
           - name: k3s-b
             devices:
               - name: /dev/disk/by-id/dm-name-ubuntu--vg-storage--0
-          # - name: k3s-c
-          #   devices:
-          #     - name: sda
+          - name: k3s-c
+            devices:
+              - name: sda
       resources:
         mgr:
           requests:
@@ -134,7 +134,7 @@ spec:
         spec:
           failureDomain: host
           replicated:
-            size: 1
+            size: 3
         storageClass:
           enabled: true
           name: ceph-block
