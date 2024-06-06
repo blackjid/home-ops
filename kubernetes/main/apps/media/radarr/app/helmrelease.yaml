@@ -35,7 +35,7 @@ spec:
           main:
             image:
               repository: ghcr.io/onedr0p/radarr-develop
-              tag: 5.3.2.8504@sha256:d87bccdcac992e5d43f93f355ee714e137b21b77df21e250bc9b3ac4d14708db
+              tag: 5.6.0.8846@sha256:99c264af3f2d177e6674a9b304b64a35261202de30e54b35d5758d40edd94366
             env:
               # https://github.com/Radarr/Radarr/issues/7030#issuecomment-1039689518
               # https://github.com/dotnet/runtime/issues/9336
