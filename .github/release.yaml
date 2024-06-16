@@ -1,4 +1,4 @@
 changelog:
   exclude:
     authors:
-      - bot-x-mod
+      - renovate

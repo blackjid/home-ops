@@ -1,0 +1,91 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "e2e"
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: ["main"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  configure:
+    if: ${{ github.repository == 'onedr0p/cluster-template' }}
+    name: configure
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config-files:
+          - talos
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Homebrew
+        id: setup-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        id: setup-python
+        with:
+          python-version: "3.11" # minimum supported version
+
+      - name: Cache homebrew packages
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/cache@v4
+        id: cache-homebrew-packages
+        with:
+          key: homebrew-${{ runner.os }}-${{ steps.setup-homebrew.outputs.gems-hash }}-${{ hashFiles('.taskfiles/Workstation/Brewfile') }}
+          path: /home/linuxbrew/.linuxbrew
+
+      - name: Cache venv
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/cache@v4
+        with:
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('requirements.txt', 'requirements.yaml') }}
+          path: .venv
+
+      - name: Setup Workflow Tools
+        if: ${{ github.event_name == 'pull_request' && steps.cache-homebrew-packages.outputs.cache-hit != 'true' }}
+        shell: bash
+        run: brew install go-task
+
+      - name: Run Workstation Brew tasks
+        if: ${{ github.event_name == 'pull_request' && steps.cache-homebrew-packages.outputs.cache-hit != 'true' }}
+        shell: bash
+        run: task workstation:brew
+
+      - name: Run Workstation venv tasks
+        shell: bash
+        run: task workstation:venv
+
+      - name: Run Workstation direnv tasks
+        shell: bash
+        run: task workstation:direnv
+
+      - name: Run Sops Age key task
+        shell: bash
+        run: task sops:age-keygen
+
+      - name: Run init tasks
+        shell: bash
+        run: |
+          task init
+          cp ./.github/tests/config-${{ matrix.config-files }}.yaml ./config.yaml
+          export BOOTSTRAP_AGE_PUBLIC_KEY=$(sed -n 's/# public key: //gp' age.key)
+          envsubst < ./config.yaml | sponge ./config.yaml
+
+      - name: Run configure task
+        shell: bash
+        run: task configure --yes
+
+      - name: Run repo clean and reset tasks
+        shell: bash
+        run: |
+          task repository:clean
+          task repository:reset --yes

@@ -1,17 +1,26 @@
+# Trash
 .DS_Store
 Thumbs.db
-.private/
-.venv/
-.task/
-.terraform
-*.tfvars
-.cache_ggshield
-.decrypted~*
-*.secret.env
-*.secret.yaml
+# k8s
+kubeconfig
+talosconfig
+.decrypted~*.yaml
+.config.env
 *.agekey
 *.pub
 *.key
-*.pem
-kubeconfig
-config.xml
+# Private
+.private
+.bin
+# Ansible
+.venv*
+# Taskfile
+.task
+# Brew
+Brewfile.lock.json
+# intellij
+.idea
+# wiki
+wiki
+# Bootstrap
+/config.yaml
