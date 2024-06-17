@@ -1,0 +1,5 @@
+machine:
+  disks:
+  - device: /dev/sda
+    partitions:
+      - mountpoint: /var/mnt/longhorn

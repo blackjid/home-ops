@@ -72,6 +72,8 @@ nodes:
         mtu: 1500
         vip:
           ip: "192.168.86.210"
+    patches:
+      - "@./patches/k8s-c/longhorn.yaml"
 
 # Global patches
 patches:
