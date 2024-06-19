@@ -69,7 +69,7 @@ spec:
     storageClassName: "${VOLSYNC_STORAGECLASS:-longhorn-snapshot}"
     accessModes: ["${VOLSYNC_ACCESSMODES:-ReadWriteOnce}"]
     capacity: "${VOLSYNC_CAPACITY}"
-    # moverSecurityContext:
-    #   runAsUser: "${VOLSYNC_UID:-568}"
-    #   runAsGroup: "${VOLSYNC_GID:-568}"
-    #   fsGroup: "${VOLSYNC_GID:-568}"
+    moverSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
