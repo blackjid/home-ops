@@ -6,7 +6,7 @@ metadata:
   name: "${APP}-volsync"
 spec:
   secretStoreRef:
-    name: bitwarden-secrets-manager
+    name: onepassword-connect
     kind: ClusterSecretStore
   target:
     name: "${APP}-volsync"
