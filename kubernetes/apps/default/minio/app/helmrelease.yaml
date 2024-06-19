@@ -112,9 +112,8 @@ spec:
                   port: s3
     persistence:
       data:
-        enabled: true
-        type: nfs
-        server: 192.168.86.90
-        path: /volume1/minio
+        # Use the existing NFS volume claim for storage
+        # to use nfs version 3 while keeping the global config in 4
+        existingClaim: minio-nfs
         globalMounts:
           - path: /data
