@@ -11,7 +11,7 @@ spec:
     repository: ${app}-volsync-secret
     destinationPVC: ${claim}
     copyMethod: Direct
-    storageClassName: ceph-block
+    storageClassName: longhorn
     # storageClassName: ceph-filesystem
     # accessModes: ["ReadWriteMany"]
     # IMPORTANT NOTE:
