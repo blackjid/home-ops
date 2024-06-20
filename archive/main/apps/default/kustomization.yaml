@@ -7,5 +7,4 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./hajimari/ks.yaml
-  - ./minio/ks.yaml
   - ./obsidian-sync/ks.yaml

@@ -8,7 +8,4 @@ resources:
   # Flux-Kustomizations
   - ./cilium/ks.yaml
   - ./descheduler/ks.yaml
-  - ./intel-device-plugin/ks.yaml
   - ./metrics-server/ks.yaml
-  - ./node-feature-discovery/ks.yaml
-  - ./reloader/ks.yaml
