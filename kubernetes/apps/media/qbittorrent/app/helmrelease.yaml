@@ -117,5 +117,5 @@ spec:
         server: 192.168.86.90
         path: /volume1/media
         globalMounts:
-          - path: /media
+          - path: /downloads
             subPath: downloads
