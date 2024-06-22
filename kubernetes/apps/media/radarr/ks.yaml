@@ -11,8 +11,9 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
+    - name: cloudnative-pg-cluster
     - name: external-secrets-stores
-  path: ./kubernetes/main/apps/media/radarr/app
+  path: ./kubernetes/apps/media/radarr/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -21,3 +22,6 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
