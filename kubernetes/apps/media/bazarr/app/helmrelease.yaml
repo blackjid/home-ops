@@ -1,91 +1,107 @@
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: bazarr
-  namespace: media
 spec:
   interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
-
+  dependsOn:
+    - name: longhorn
+      namespace: longhorn-system
   values:
-    controller:
-      type: statefulset
-
-    image:
-      repository: ghcr.io/onedr0p/bazarr
-      tag: 1.4.0@sha256:c81c4d9cbec093d5a999cfa3cd1af01d3f00d6292d6f5c33608510cef0ed83c7
-
-    env:
-      TZ: America/Santiago
-
+    controllers:
+      bazarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/bazarr
+              tag: 1.4.3@sha256:d2b70813f7d636fb1ab3448e13ca4074630b63216c6c6d02d034cd5d9e938ea3
+            env:
+              BAZARR__APP__INSTANCENAME: bazarr
+              BAZARR__APP__THEME: dark
+              BAZARR__AUTH__METHOD: External
+              BAZARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              BAZARR__LOG__DBENABLED: "False"
+              BAZARR__LOG__LEVEL: info
+              BAZARR__SERVER__PORT: &port 80
+              BAZARR__UPDATE__BRANCH: develop
+              TZ: America/Santiago
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [10000]
+        seccompProfile: { type: RuntimeDefault }
     service:
-      main:
+      app:
+        controller: bazarr
         ports:
           http:
-            port: 6767
-
+            port: *port
     ingress:
-      main:
-        enabled: true
-        ingressClassName: external
+      app:
         annotations:
-          external-dns.alpha.kubernetes.io/target: ingress.donoso.family
-          nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
-          hajimari.io/icon: mdi:subtitles-outline
+          external-dns.alpha.kubernetes.io/target: internal.donoso.family
+        className: internal
         hosts:
-          - host: &host "{{ .Release.Name }}.donoso.family"
+          - host: "{{ .Release.Name }}.donoso.family"
             paths:
               - path: /
-                pathType: Prefix
-        tls:
-          - hosts:
-              - *host
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: OnRootMismatch
-      supplementalGroups: [10000]
-
-    volumeClaimTemplates:
-      - name: config
-        mountPath: /config
-        accessMode: ReadWriteOnce
-        size: 1Gi
-        storageClass: ceph-block
-
+                service:
+                  identifier: app
+                  port: http
     persistence:
+      config:
+        existingClaim: bazarr
+      tmp:
+        type: emptyDir
       media:
-        enabled: true
         type: nfs
-        server: 10.2.1.50
+        server: 192.168.86.90
         path: /volume1/media
-        mountPath: /media
-
-    resources:
-      requests:
-        memory: 250Mi
-        cpu: 500m
-      limits:
-        memory: 500Mi
+        globalMounts:
+          - path: /media
