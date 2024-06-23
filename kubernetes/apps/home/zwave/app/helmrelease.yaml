@@ -60,16 +60,9 @@ spec:
                 cpu: 10m
               limits:
                 memory: 512Mi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
-      nodeSelector:
-        aeotec.feature.node.kubernetes.io/zwave: "true"
+        pod:
+          nodeSelector:
+            aeotec.feature.node.kubernetes.io/zwave: "true"
     service:
       app:
         controller: zwave
