@@ -42,7 +42,7 @@ spec:
               BAZARR__AUTH__REQUIRED: DisabledForLocalAddresses
               BAZARR__LOG__DBENABLED: "False"
               BAZARR__LOG__LEVEL: info
-              BAZARR__SERVER__PORT: &port 80
+              BAZARR__SERVER__PORT: &port 6767
               BAZARR__UPDATE__BRANCH: develop
               TZ: America/Santiago
             probes:
