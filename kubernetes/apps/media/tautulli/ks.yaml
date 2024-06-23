@@ -3,16 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app tautilli
+  name: &app tautulli
   namespace: flux-system
 spec:
   targetNamespace: media
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: external-secrets-stores
-  path: ./kubernetes/main/apps/media/tautilli/app
+  path: ./kubernetes/apps/media/tautulli/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -21,3 +19,7 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CAPACITY: 5Gi
