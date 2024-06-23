@@ -36,14 +36,11 @@ spec:
               repository: ghcr.io/onedr0p/bazarr
               tag: 1.4.3@sha256:d2b70813f7d636fb1ab3448e13ca4074630b63216c6c6d02d034cd5d9e938ea3
             env:
-              BAZARR__APP__INSTANCENAME: bazarr
-              BAZARR__APP__THEME: dark
-              BAZARR__AUTH__METHOD: External
-              BAZARR__AUTH__REQUIRED: DisabledForLocalAddresses
-              BAZARR__LOG__DBENABLED: "False"
-              BAZARR__LOG__LEVEL: info
-              BAZARR__SERVER__PORT: &port 6767
-              BAZARR__UPDATE__BRANCH: develop
+              BAZARR__INSTANCE_NAME: bazarr
+              BAZARR__AUTHENTICATION_METHOD: External
+              BAZARR__AUTHENTICATION_REQUIRED: DisabledForLocalAddresses
+              BAZARR__LOG_LEVEL: info
+              BAZARR__PORT: &port 6767
               TZ: America/Santiago
             probes:
               liveness: &probes
