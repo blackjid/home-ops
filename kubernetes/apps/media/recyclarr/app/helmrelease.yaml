@@ -1,6 +1,6 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: recyclarr
@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.4.0
+      version: 3.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -20,30 +20,29 @@ spec:
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: longhron
+      namespace: longhron-system
     - name: volsync
-      namespace: volsync
+      namespace: volsync-system
   values:
     controllers:
-      main:
+      recyclarr:
         type: cronjob
         annotations:
           reloader.stakater.com/auto: "true"
         cronjob:
           schedule: "@daily"
+          successfulJobsHistory: 1
+          failedJobsHistory: 1
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/recyclarr/recyclarr
               tag: 6.0.2@sha256:02add40feae0569401b5020528e06419b47046723d0bb4bef1e82325e9eefdad
             env:
-              # https://github.com/Radarr/Radarr/issues/7030#issuecomment-1039689518
-              # https://github.com/dotnet/runtime/issues/9336
               COMPlus_EnableDiagnostics: "0"
               TZ: America/Santiago
             envFrom:
@@ -57,23 +56,19 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 64M
               limits:
-                memory: 128M
-        pod:
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
-    service:
-      main:
-        enabled: false
+                memory: 128Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
     persistence:
       config:
-        enabled: true
-        existingClaim: config-recyclarr-0
+        existingClaim: recyclarr
       config-file:
         type: configMap
         name: recyclarr-configmap
