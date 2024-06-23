@@ -23,8 +23,8 @@ spec:
       strategy: rollback
       retries: 3
   dependsOn:
-    - name: longhron
-      namespace: longhron-system
+    - name: longhorn
+      namespace: longhorn-system
     - name: volsync
       namespace: volsync-system
   values:
