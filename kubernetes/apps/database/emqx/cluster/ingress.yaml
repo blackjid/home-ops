@@ -4,11 +4,11 @@ kind: Ingress
 metadata:
   name: emqx-dashboard
   annotations:
-    external-dns.alpha.kubernetes.io/target: internal.devbu.io
+    external-dns.alpha.kubernetes.io/target: internal.donoso.family
 spec:
   ingressClassName: internal
   rules:
-    - host: emqx.devbu.io
+    - host: emqx.donoso.family
       http:
         paths:
           - path: /

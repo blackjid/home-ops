@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
-  path: ./kubernetes/main/apps/database/emqx/app
+  path: ./kubernetes/apps/database/emqx/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -35,7 +35,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: emqx
-  path: ./kubernetes/main/apps/database/emqx/cluster
+  path: ./kubernetes/apps/database/emqx/cluster
   prune: true
   sourceRef:
     kind: GitRepository
