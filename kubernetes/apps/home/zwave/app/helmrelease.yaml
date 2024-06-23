@@ -70,6 +70,8 @@ spec:
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
+      nodeSelector:
+        aeotec.feature.node.kubernetes.io/zwave: "true"
     service:
       app:
         controller: zwave
