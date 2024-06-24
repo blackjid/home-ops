@@ -7,4 +7,5 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./home-assistant/ks.yaml
+  - ./zigbee2mqtt/ks.yaml
   - ./zwave/ks.yaml
