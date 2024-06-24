@@ -1,6 +1,6 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: zigbee2mqtt
@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.4.0
+      version: 3.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -20,26 +20,23 @@ spec:
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
   dependsOn:
-    - name: emqx
-      namespace: home
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: longhorn
+      namespace: longhorn-system
     - name: volsync
-      namespace: volsync
+      namespace: volsync-system
   values:
     controllers:
-      main:
+      zigbee2mqtt:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/koenkk/zigbee2mqtt
-              tag: 1.35.2@sha256:131560ae1e3f859159d677aebe89443760483f5310e0885e258383f416be4329
+              tag: 1.38.0@sha256:8a893949ab01ea25fe1189a02a24f7fee3d7e8717d0973bd3dd6989a3a45a6bf
             env:
               TZ: America/Santiago
               ZIGBEE2MQTT_DATA: /config
@@ -57,77 +54,63 @@ spec:
               ZIGBEE2MQTT_CONFIG_DEVICE_OPTIONS_LEGACY: "false"
               ZIGBEE2MQTT_CONFIG_DEVICE_OPTIONS_RETAIN: "true"
               ZIGBEE2MQTT_CONFIG_EXPERIMENTAL_NEW_API: "true"
-              ZIGBEE2MQTT_CONFIG_FRONTEND: "false"
               ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &port 80
               ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://zigbee.donoso.family
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT: "true"
               ZIGBEE2MQTT_CONFIG_MQTT_INCLUDE_DEVICE_INFORMATION: "true"
               ZIGBEE2MQTT_CONFIG_MQTT_KEEPALIVE: 60
               ZIGBEE2MQTT_CONFIG_MQTT_REJECT_UNAUTHORIZED: "true"
-              ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://emqx.home.svc.cluster.local
+              ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://emqx-listeners.database.svc.cluster.local:1883
               ZIGBEE2MQTT_CONFIG_MQTT_VERSION: 5
               ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: "false"
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: &serial-port /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
             envFrom:
               - secretRef:
                   name: zigbee2mqtt-secret
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
             securityContext:
               privileged: true
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
-                memory: 128Mi
               limits:
                 memory: 512Mi
         pod:
           nodeSelector:
             zzh.feature.node.kubernetes.io/zigbee: "true"
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 20
-            runAsNonRoot: true
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
     service:
-      main:
+      app:
+        controller: zigbee2mqtt
         ports:
           http:
             port: *port
     ingress:
-      main:
-        enabled: true
-        className: external
+      app:
         annotations:
-          external-dns.alpha.kubernetes.io/target: ingress.donoso.family
-          nginx.ingress.kubernetes.io/auth-url: "https://auth.donoso.family/oauth2/auth"
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
-          hajimari.io/icon: mdi:z-wave
+          external-dns.alpha.kubernetes.io/target: internal.donoso.family
+        className: internal
         hosts:
-          - host: &host "{{ .Release.Name }}.donoso.family"
+          - host: zigbee.donoso.family
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: app
                   port: http
-          - host: &customHost "zigbee.donoso.family"
-            paths:
-              - path: /
-                service:
-                  name: main
-                  port: http
-        tls:
-          - hosts:
-              - *host
-              - *customHost
     persistence:
       config:
-        enabled: true
-        existingClaim: config-zigbee2mqtt-0
+        existingClaim: zigbee2mqtt
       usb:
         type: hostPath
-        hostPath: *serial-port
+        hostPath: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
         hostPathType: CharDevice
         globalMounts:
-          - path: *serial-port
+          - path: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
