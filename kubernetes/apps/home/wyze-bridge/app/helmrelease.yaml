@@ -1,37 +1,40 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: wyze-bridge
-  namespace: home
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 2.2.0
+      version: 3.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
   install:
-    createNamespace: true
     remediation:
-      retries: 5
+      retries: 3
   upgrade:
+    cleanupOnFail: true
     remediation:
-      retries: 5
-
+      strategy: rollback
+      retries: 3
+  dependsOn:
+    - name: intel-device-plugin-gpu
+      namespace: kube-system
   values:
     controllers:
-      main:
+      wyze:
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
-          main:
+          app:
             image:
               repository: mrlt8/wyze-bridge
               tag: 2.7.0-qsv
-
             env:
               TZ: America/Santiago
               H264_ENC: h264_qsv
@@ -43,25 +46,30 @@ spec:
             envFrom:
               - secretRef:
                   name: wyze-secret
-
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
             securityContext:
               privileged: true
-
             resources:
               requests:
-                cpu: 1000m
-                memory: 500M
-                gpu.intel.com/i915: 1
+                cpu: 200m
               limits:
-                memory: 2000M
+                memory: 1000Mi
                 gpu.intel.com/i915: 1
-
         pod:
           nodeSelector:
             intel.feature.node.kubernetes.io/gpu: "true"
-
     service:
-      main:
+      app:
+        controller: wyze
         ports:
           http:
             enabled: true
@@ -78,3 +86,15 @@ spec:
           webrtc:
             enabled: true
             port: 8889
+    ingress:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/target: internal.donoso.family
+        className: internal
+        hosts:
+          - host: wyze.donoso.family
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
