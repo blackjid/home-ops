@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
-  path: ./kubernetes/apps/home/zigbee2mqtt/app
+  path: ./kubernetes/apps/home/wyze-bridge/app
   prune: true
   sourceRef:
     kind: GitRepository
