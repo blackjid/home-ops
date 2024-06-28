@@ -34,7 +34,7 @@ spec:
           app:
             image:
               repository: mrlt8/wyze-bridge
-              tag: 2.9.9-qsv
+              tag: 2.9.10-qsv
             env:
               TZ: America/Santiago
               H264_ENC: h264_qsv
