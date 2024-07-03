@@ -7,3 +7,4 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./minio/ks.yaml
+  - ./obsidian-couchdb/ks.yaml
