@@ -1,109 +1,82 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: esphome
-  namespace: home
 spec:
   interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
-      interval: 30m
+      version: 3.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  dependsOn:
+    - name: longhorn
+      namespace: longhorn-system
+    - name: volsync
+      namespace: volsync-system
   values:
-    controller:
-      type: statefulset
-
-    image:
-      repository: ghcr.io/esphome/esphome
-      tag: 2024.2.0
-
+    controllers:
+      esphome:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          main:
+            image:
+              repository: ghcr.io/esphome/esphome
+              tag: 2024.6.6@sha256:96fd7ac51b4a0005266786007bba806be77f5d706716608b09546ce9d4316d12
+            env:
+              ESPHOME_DASHBOARD_USE_PING: true
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                memory: 512Mi
+                cpu: 100m
+              limits:
+                memory: 2Gi
     service:
-      main:
+      app:
+        controller: esphome
         ports:
           http:
             port: 6052
-
-    hostNetwork: true
-
     ingress:
-      main:
-        enabled: true
-        ingressClassName: external
+      app:
+        className: internal
         annotations:
-          external-dns.alpha.kubernetes.io/target: ingress.donoso.family
-          monitor.stakater.com/enabled: "true"
-          nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth
-          nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
+          external-dns.alpha.kubernetes.io/target: internal.donoso.family
         hosts:
-          - host: &host "esphome.donoso.family"
+          - host: esphome.donoso.family
             paths:
               - path: /
-        tls:
-          - hosts:
-              - *host
-
+                service:
+                  identifier: app
+                  port: http
     persistence:
-      esphome-cache:
-        enabled: true
+      config:
+        existingClaim: esphome
+      cache:
         type: emptyDir
-        mountPath: /config/.esphome
-
-    volumeClaimTemplates:
-      - name: config
-        mountPath: /config
-        accessMode: ReadWriteOnce
-        size: 4Gi
-        storageClass: ceph-block
-
-    addons:
-      codeserver:
-        enabled: true
-        image:
-          repository: ghcr.io/coder/code-server
-          tag: 4.21.1
-        env:
-          TZ: America/Santiago
-          EMAIL: jidonoso@gmail.com
-          GIT_AUTHOR_NAME: Juan Ignacio Donoso
-        workingDir: '/config'
-        args:
-          - --auth
-          - 'none'
-          - --user-data-dir
-          - '/config/.vscode'
-          - --extensions-dir
-          - '/config/.vscode'
-        ingress:
-          enabled: true
-          ingressClassName: external
-          annotations:
-            external-dns.alpha.kubernetes.io/target: ingress.donoso.family
-            nginx.ingress.kubernetes.io/auth-url: https://auth.donoso.family/oauth2/auth
-            nginx.ingress.kubernetes.io/auth-signin: https://auth.donoso.family/oauth2/start
-            hajimari.io/appName: 'EspHome Config'
-            hajimari.io/icon: cib:visual-studio-code
-          hosts:
-            - host: &hostvs 'esphome-vscode.donoso.family'
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - hosts:
-                - *hostvs
-        volumeMounts:
-          - name: config
-            mountPath: /config
-
-    resources:
-      requests:
-        cpu: 300m
-        memory: 512M
-      limits:
-        memory: 2048M
+        globalMounts:
+          - path: /config/.esphome
