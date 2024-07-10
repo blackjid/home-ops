@@ -51,6 +51,8 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
+        pod:
+          hostNetwork: true
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
