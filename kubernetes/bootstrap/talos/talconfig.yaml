@@ -6,13 +6,13 @@ talosVersion: v1.7.5
 kubernetesVersion: v1.30.3
 
 clusterName: "home-kubernetes"
-endpoint: https://192.168.86.210:6443
+endpoint: https://192.168.86.9:6443
 clusterPodNets:
   - "10.69.0.0/16"
 clusterSvcNets:
   - "10.96.0.0/16"
 additionalApiServerCertSans: &sans
-  - "192.168.86.210"
+  - "192.168.86.9"
   - 127.0.0.1 # KubePrism
 additionalMachineCertSans: *sans
 
@@ -22,7 +22,7 @@ cniConfig:
 
 nodes:
   - hostname: "k8s-a"
-    ipAddress: "192.168.86.164"
+    ipAddress: "192.168.86.21"
     installDisk: "/dev/nvme0n1"
     talosImageURL: factory.talos.dev/installer/2dcd442954d67662d41c61bdb92165aaf7189aff9997bd011b6968c12ce8d9c0
     controlPlane: true
@@ -31,15 +31,15 @@ nodes:
           hardwareAddr: "d8:c4:97:bf:6e:b7"
         dhcp: false
         addresses:
-          - "192.168.86.164/24"
+          - "192.168.86.21/24"
         routes:
           - network: 0.0.0.0/0
             gateway: "192.168.86.1"
         mtu: 1500
         vip:
-          ip: "192.168.86.210"
+          ip: "192.168.86.9"
   - hostname: "k8s-b"
-    ipAddress: "192.168.86.157"
+    ipAddress: "192.168.86.22"
     installDisk: "/dev/nvme0n1"
     talosImageURL: factory.talos.dev/installer/2dcd442954d67662d41c61bdb92165aaf7189aff9997bd011b6968c12ce8d9c0
     controlPlane: true
@@ -48,15 +48,15 @@ nodes:
           hardwareAddr: "d8:c4:97:bf:70:20"
         dhcp: false
         addresses:
-          - "192.168.86.157/24"
+          - "192.168.86.22/24"
         routes:
           - network: 0.0.0.0/0
             gateway: "192.168.86.1"
         mtu: 1500
         vip:
-          ip: "192.168.86.210"
+          ip: "192.168.86.9"
   - hostname: "k8s-c"
-    ipAddress: "192.168.86.155"
+    ipAddress: "192.168.86.23"
     installDisk: "/dev/nvme0n1"
     talosImageURL: factory.talos.dev/installer/2dcd442954d67662d41c61bdb92165aaf7189aff9997bd011b6968c12ce8d9c0
     controlPlane: true
@@ -65,13 +65,13 @@ nodes:
           hardwareAddr: "1c:69:7a:02:5d:87"
         dhcp: false
         addresses:
-          - "192.168.86.155/24"
+          - "192.168.86.23/24"
         routes:
           - network: 0.0.0.0/0
             gateway: "192.168.86.1"
         mtu: 1500
         vip:
-          ip: "192.168.86.210"
+          ip: "192.168.86.9"
     patches:
       - "@./patches/k8s-c/longhorn.yaml"
 
@@ -93,4 +93,3 @@ controlPlane:
     - "@./patches/controller/cluster.yaml"
     - "@./patches/controller/disable-admission-controller.yaml"
     - "@./patches/controller/etcd.yaml"
-

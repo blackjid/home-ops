@@ -41,7 +41,7 @@ spec:
               tag: 1.40.4.8679-424562606@sha256:6caeca24f3b08206a94a6a9c102e2c0c14d46d5a9163241716559e8c83f53ff8
             env:
               TZ: America/Santiago
-              PLEX_ADVERTISE_URL: https://plex.donoso.family:443,http://192.168.86.217:32400
+              PLEX_ADVERTISE_URL: https://plex.donoso.family:443,http://192.168.86.33:32400
               PLEX_NO_AUTH_NETWORKS: 192.168.86.0/24
             probes:
               liveness: &probes
@@ -87,7 +87,7 @@ spec:
         controller: plex
         type: LoadBalancer
         annotations:
-          io.cilium/lb-ipam-ips: 192.168.86.217
+          io.cilium/lb-ipam-ips: 192.168.86.33
         ports:
           http:
             port: 32400
