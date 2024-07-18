@@ -1,0 +1,10 @@
+---
+originRequest:
+  originServerName: external.donoso.family
+
+ingress:
+  - hostname: donoso.family
+    service: https://nginx-external-controller.network.svc.cluster.local:443
+  - hostname: "*.donoso.family"
+    service: https://nginx-external-controller.network.svc.cluster.local:443
+  - service: http_status:404
