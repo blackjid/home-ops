@@ -43,7 +43,6 @@ spec:
               repository: ghcr.io/recyclarr/recyclarr
               tag: 7.2.0@sha256:bc7a7b940e9f42b9ee7df31d85e180b13a968f0a86ce58838376c052db381b05
             env:
-              COMPlus_EnableDiagnostics: "0"
               TZ: America/Santiago
             envFrom:
               - secretRef:
@@ -76,3 +75,7 @@ spec:
           - path: /config/recyclarr.yml
             subPath: recyclarr.yml
             readOnly: true
+      config-logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/logs
