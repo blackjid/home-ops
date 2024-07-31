@@ -33,7 +33,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/esphome/esphome
               tag: 2024.7.2@sha256:b8209dc73177299341f2c854630ceada16539c8affe73041e40516fc372d4bfd
@@ -53,6 +53,22 @@ spec:
                 cpu: 100m
               limits:
                 memory: 2Gi
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.91.1@sha256:8403442d3472e411f72b6a5267b5ee0e62db27e258d81efebef40c3b41219970
+            args: [
+              "--auth", "none",
+              "--user-data-dir", "/config/.vscode",
+              "--extensions-dir", "/config/.vscode",
+              "--port", "12321",
+              "/config"
+            ]
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
         pod:
           hostNetwork: true
     service:
@@ -61,6 +77,8 @@ spec:
         ports:
           http:
             port: 6052
+          code-server:
+            port: 12321
     ingress:
       app:
         className: internal
@@ -73,9 +91,22 @@ spec:
                 service:
                   identifier: app
                   port: http
+      code-server:
+        annotations:
+          external-dns.alpha.kubernetes.io/target: internal.donoso.family
+        className: internal
+        hosts:
+          - host: esphome-code.donoso.family
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: code-server
     persistence:
       config:
         existingClaim: esphome
+        globalMounts:
+          - path: /config
       secrets:
         type: secret
         name: esphome-secret
