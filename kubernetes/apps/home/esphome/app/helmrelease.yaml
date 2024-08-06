@@ -125,9 +125,12 @@ spec:
         type: secret
         name: esphome-deploykey
         defaultMode: 256
-        globalMounts:
-          - path: /root/.ssh/id_ed25519
-            subPath: id_ed25519
+        advancedMounts:
+          esphome:
+            code-server:
+              - path: /coder/.ssh/id_ed25519
+                readOnly: true
+                subPath: id_ed25519
       cache:
         type: emptyDir
         globalMounts:
