@@ -113,6 +113,16 @@ spec:
         existingClaim: home-assistant
         globalMounts:
           - path: /config
+      deploy-key:
+        type: secret
+        name: home-assistant-deploykey
+        defaultMode: 256
+        advancedMounts:
+          home-assistant:
+            code-server:
+              - path: /coder/.ssh/id_ed25519
+                readOnly: true
+                subPath: id_ed25519
       logs:
         type: emptyDir
         globalMounts:
