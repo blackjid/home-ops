@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: emqx-operator
-      version: 2.2.23
+      version: 2.2.24
       sourceRef:
         kind: HelmRepository
         name: emqx
@@ -28,4 +28,4 @@ spec:
   values:
     fullnameOverride: emqx-operator
     image:
-      repository: ghcr.io/emqx/emqx-operator
+      repository: ghcr.io/emqx/emqx-operator-controller
