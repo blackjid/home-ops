@@ -29,7 +29,7 @@ spec:
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: external.donoso.family
-          io.cilium/lb-ipam-ips: 192.168.86.11
+          lbipam.cilium.io/ips: 192.168.86.11
       ingressClassResource:
         name: external
         default: false
