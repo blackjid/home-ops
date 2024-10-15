@@ -45,6 +45,8 @@ radarr:
           - name: SQP-1 (2160p)
             score: 0
       - trash_ids:
+          - b17886cb4158d9fea189859409975758 # HDR10+ Boost
+          - 55a5b50cb416dea5a50c4955896217ab # DV HDR10+ Boost
           - 7a0d1ad358fee9f5b074af3ef3f9d9ef # hallowed
           - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
           - 90cedc1fea7ea5d11298bebd3d1d3223 # EVO (no WEBDL)
