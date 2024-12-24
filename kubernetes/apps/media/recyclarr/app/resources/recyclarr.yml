@@ -20,6 +20,12 @@ sonarr:
           - 06d66ab109d4d2eddb2794d21526d140 # Retags
         assign_scores_to:
           - name: WEB-2160p
+      #Comment this section if all your devices support Dolbt Vision (DB)
+      - trash_ids:
+          - 6d0d8de7b57e35518ac0308b0ddf404e # DV (WEBDL)
+        assign_scores_to:
+          - name: WEB-2160p
+            score: -10000
       - trash_ids:
           - 1b3994c551cbb92a2c781af061f4ab44 # Scene
         assign_scores_to:
@@ -44,6 +50,12 @@ radarr:
         assign_scores_to:
           - name: SQP-1 (2160p)
             score: 0
+      #Comment this section if all your devices support Dolbt Vision (DB)
+      - trash_ids:
+          - 9b27ab6498ec0f31a3353992e19434ca # DV (WEBDL)
+        assign_scores_to:
+          - name: WEB-2160p
+            score: -10000
       - trash_ids:
           - b17886cb4158d9fea189859409975758 # HDR10+ Boost
           - 55a5b50cb416dea5a50c4955896217ab # DV HDR10+ Boost
