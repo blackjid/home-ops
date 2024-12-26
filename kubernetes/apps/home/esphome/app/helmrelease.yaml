@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: esphome
@@ -9,7 +9,8 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.5.1
+      version: 3.6.0
+      interval: 30m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -32,57 +33,60 @@ spec:
       esphome:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:
-              repository: ghcr.io/esphome/esphome
-              tag: 2024.12.2@sha256:ce313b07edc3d0bde937ce23821b5e0476dcc1cfb62456bef7a6f79b8109f678
+              repository: ghcr.io/bjw-s-labs/esphome
+              tag: 2024.12.2@sha256:cdc5a3f2a0efb321c143317fc1c0d914dc96e4f8d896db2f17632af7a9008814
             env:
               TZ: America/Santiago
-              PLATFORMIO_CORE_DIR: .platformio
-              PLATFORMIO_GLOBALLIB_DIR: .platformiolibs
+              ESPHOME_DASHBOARD_USE_PING: true
             probes:
               liveness:
-                enabled: true
+                enabled: false
               readiness:
-                enabled: true
+                enabled: false
               startup:
-                enabled: true
-                spec:
-                  failureThreshold: 30
-                  periodSeconds: 5
+                enabled: false
             resources:
               requests:
+                cpu: 5m
                 memory: 512Mi
-                cpu: 100m
               limits:
                 memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
           code-server:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.96.1@sha256:2dbf436d68564dfda13b4d4eeb8324704b6b4120f25ca57feaf230228c3d70da
-            args: [
-              "--auth", "none",
-              "--user-data-dir", "/config/.vscode",
-              "--extensions-dir", "/config/.vscode",
-              "--port", "12321",
-              "/config"
-            ]
+              tag: 4.96.2@sha256:6b8c0e944caec80057e71d2c2f352cee38fe00ae4b7515fc4458eb300844f699
+            args:
+              - --auth
+              - none
+              - --disable-telemetry
+              - --disable-update-check
+              - --user-data-dir
+              - /config/.code-server
+              - --extensions-dir
+              - /config/.code-server
+              - --port
+              - "12321"
+              - /config
             resources:
               requests:
                 cpu: 10m
               limits:
                 memory: 512Mi
-        pod:
-          hostNetwork: true
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 100
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: esphome
@@ -96,35 +100,39 @@ spec:
         className: internal
         annotations:
           external-dns.alpha.kubernetes.io/target: internal.donoso.family
+          nginx.ingress.kubernetes.io/rewrite-target: /$1
         hosts:
           - host: esphome.donoso.family
             paths:
-              - path: /
+              - path: /(.*)
                 service:
                   identifier: app
                   port: http
-      code-server:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.donoso.family
-        className: internal
-        hosts:
-          - host: esphome-code.donoso.family
-            paths:
-              - path: /
+              - path: /code/(.*)
                 service:
                   identifier: app
                   port: code-server
     persistence:
       config:
         existingClaim: esphome
-        globalMounts:
-          - path: /config
+        advancedMounts:
+          esphome:
+            app:
+              - path: /config
+            code-server:
+              - path: /config
       secrets:
         type: secret
         name: esphome-secret
         globalMounts:
           - path: /config/secrets.yaml
             subPath: secrets.yaml
+      cache:
+        type: emptyDir
+        advancedMounts:
+          esphome:
+            app:
+              - path: /cache
       deploy-key:
         type: secret
         name: esphome-deploykey
@@ -133,9 +141,4 @@ spec:
           esphome:
             code-server:
               - path: /home/coder/.ssh/id_ed25519
-                readOnly: true
                 subPath: id_ed25519
-      cache:
-        type: emptyDir
-        globalMounts:
-          - path: /config/.esphome
