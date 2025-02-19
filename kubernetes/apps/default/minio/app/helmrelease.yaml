@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: quay.io/minio/minio
-              tag: RELEASE.2024-12-18T13-15-44Z@sha256:1dce27c494a16bae114774f1cec295493f3613142713130c2d22dd5696be6ad3
+              tag: RELEASE.2025-02-18T16-25-55Z@sha256:1df91be8d6a6146001cd6be2569a12785a8ece583b511f56ebed08f1e65d3611
             env:
               MINIO_API_CORS_ALLOW_ORIGIN: https://minio.donoso.family,https://s3.donoso.family
               MINIO_BROWSER_REDIRECT_URL: https://minio.donoso.family
