@@ -72,9 +72,9 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
@@ -113,6 +113,18 @@ spec:
         existingClaim: home-assistant
         globalMounts:
           - path: /config
+      config-logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/logs
+      config-tts:
+        type: emptyDir
+        globalMounts:
+          - path: /config/tts
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
       deploy-key:
         type: secret
         name: home-assistant-deploykey
@@ -123,15 +135,3 @@ spec:
               - path: /home/coder/.ssh/id_ed25519
                 readOnly: true
                 subPath: id_ed25519
-      logs:
-        type: emptyDir
-        globalMounts:
-          - path: /config/logs
-      tts:
-        type: emptyDir
-        globalMounts:
-          - path: /config/tts
-      tmp:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp

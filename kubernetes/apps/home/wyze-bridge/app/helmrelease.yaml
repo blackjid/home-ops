@@ -43,6 +43,7 @@ spec:
               SUBSTREAM: True
               # FFMPEG_LOGLEVEL: debug
               LIBVA_DRIVER_NAME: i965
+              WB_AUTH: false
             envFrom:
               - secretRef:
                   name: wyze-secret
