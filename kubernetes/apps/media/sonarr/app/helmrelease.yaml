@@ -100,11 +100,15 @@ spec:
     persistence:
       config:
         existingClaim: sonarr
-      tmp:
-        type: emptyDir
+      config-cache:
+        existingClaim: sonarr-cache
+        globalMounts:
+          - path: /config/MediaCover
       media:
         type: nfs
         server: 192.168.86.90
         path: /volume1/media
         globalMounts:
           - path: /media
+      tmp:
+        type: emptyDir

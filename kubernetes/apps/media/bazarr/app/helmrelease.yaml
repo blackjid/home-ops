@@ -94,11 +94,19 @@ spec:
     persistence:
       config:
         existingClaim: bazarr
-      tmp:
+      config-cache:
         type: emptyDir
+        globalMounts:
+          - path: /config/cache
+      config-log:
+        type: emptyDir
+        globalMounts:
+          - path: /config/log
       media:
         type: nfs
         server: 192.168.86.90
         path: /volume1/media
         globalMounts:
           - path: /media
+      tmp:
+        type: emptyDir
