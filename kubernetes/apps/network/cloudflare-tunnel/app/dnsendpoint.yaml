@@ -3,9 +3,9 @@
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: cloudflared
+  name: cloudflare-tunnel
 spec:
   endpoints:
     - dnsName: external.donoso.family
       recordType: CNAME
-      targets: ["${CLUSTER_CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"]
+      targets: ["397243cd-c7b6-40cd-8f03-7be2c029033d.cfargotunnel.com"]

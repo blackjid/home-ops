@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app cloudflared
+  name: cloudflare-tunnel
 spec:
   interval: 30m
   chart:
@@ -22,12 +22,9 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
-  dependsOn:
-    - name: nginx-external
-      namespace: network
   values:
     controllers:
-      cloudflared:
+      cloudflare-tunnel:
         replicas: 2
         strategy: RollingUpdate
         annotations:
@@ -49,7 +46,7 @@ spec:
               - --config
               - /etc/cloudflared/config/config.yaml
               - run
-              - "${CLUSTER_CLOUDFLARE_TUNNEL_ID}"
+              - 397243cd-c7b6-40cd-8f03-7be2c029033d
             probes:
               liveness: &probes
                 enabled: true
@@ -75,42 +72,30 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
-        seccompProfile: { type: RuntimeDefault }
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: *app
+        runAsUser: 1000
+        runAsGroup: 1000
     service:
       app:
-        controller: cloudflared
+        controller: cloudflare-tunnel
         ports:
           http:
             port: *port
     serviceMonitor:
       app:
-        serviceName: cloudflared
+        serviceName: cloudflare-tunnel
         endpoints:
           - port: http
-            scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 10s
     persistence:
-      config:
+      config-file:
         type: configMap
-        name: cloudflared-configmap
+        name: cloudflare-tunnel-configmap
         globalMounts:
           - path: /etc/cloudflared/config/config.yaml
             subPath: config.yaml
             readOnly: true
-      creds:
+      secret-file:
         type: secret
-        name: cloudflared-tunnel-secret
+        name: cloudflare-tunnel-secret
         globalMounts:
           - path: /etc/cloudflared/creds/credentials.json
             subPath: credentials.json
