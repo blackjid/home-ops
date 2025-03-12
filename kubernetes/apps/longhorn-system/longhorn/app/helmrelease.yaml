@@ -24,12 +24,12 @@ spec:
       retries: 3
   values:
     csi:
-      attacherReplicaCount: &replicas 2
+      attacherReplicaCount: &replicas 1
       provisionerReplicaCount: *replicas
       resizerReplicaCount: *replicas
       snapshotterReplicaCount: *replicas
     persistence:
-      defaultClassReplicaCount: 2
+      defaultClassReplicaCount: 1
     defaultSettings:
       createDefaultDiskLabeledNodes: true
       defaultDataLocality: true
