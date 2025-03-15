@@ -7,6 +7,6 @@ components:
 resources:
   - ./repos
   - ./cloudflared/ks.yaml
-  # - ./echo-server/ks.yaml
+  - ./echo-server/ks.yaml
   - ./external-dns/ks.yaml
   - ./ingress-nginx/ks.yaml
