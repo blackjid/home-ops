@@ -14,7 +14,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: intel
-        namespace: flux-system
+        namespace: kube-system
   dependsOn:
     - name: intel-device-plugins-operator
       namespace: kube-system
