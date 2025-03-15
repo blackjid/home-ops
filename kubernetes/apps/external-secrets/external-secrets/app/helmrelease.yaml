@@ -1,38 +1,34 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1beta2.json
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: OCIRepository
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/refs/heads/main/helmrepository-source-v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
 metadata:
   name: external-secrets
+  namespace: external-secrets
 spec:
-  interval: 1h
-  layerSelector:
-    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
-    operation: copy
-  ref:
-    tag: 0.14.4
-  url: oci://ghcr.io/external-secrets/charts/external-secrets
-  verify:
-    provider: cosign
+  type: oci
+  interval: 30m
+  url: oci://ghcr.io/external-secrets/charts
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: external-secrets
 spec:
-  interval: 1h
-  chartRef:
-    kind: OCIRepository
-    name: external-secrets
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      strategy: rollback
-      retries: 3
+  interval: 30m
+  chart:
+    spec:
+      chart: external-secrets
+      version: 0.14.4
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: external-secrets
+        namespace: external-secrets
+  dependsOn:
+    - name: onepassword-connect
+      namespace: external-secrets
   valuesFrom:
     - kind: ConfigMap
-      name: external-secrets-values
+      name: external-secrets-helm-values
