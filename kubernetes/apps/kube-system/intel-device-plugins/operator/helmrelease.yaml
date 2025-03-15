@@ -4,37 +4,35 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: intel
-  namespace: kube-system
+  namespace: flux-system
 spec:
   interval: 30m
   url: https://intel.github.io/helm-charts
 
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: intel-device-plugin-operator
+  name: intel-device-plugins-operator
 spec:
   interval: 30m
   chart:
     spec:
       chart: intel-device-plugins-operator
       version: 0.32.0
+      interval: 30m
       sourceRef:
         kind: HelmRepository
         name: intel
-        namespace: kube-system
+        namespace: flux-system
   install:
     crds: CreateReplace
-    remediation:
-      retries: 3
   upgrade:
-    cleanupOnFail: true
     crds: CreateReplace
-    remediation:
-      strategy: rollback
-      retries: 3
   dependsOn:
-    - name: node-feature-discovery
-      namespace: kube-system
+    - name: cert-manager
+      namespace: cert-manager
+  values:
+    controllerExtraArgs: |
+      - --devices=gpu
