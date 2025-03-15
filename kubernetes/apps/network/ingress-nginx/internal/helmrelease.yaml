@@ -87,7 +87,7 @@ spec:
             any: true
 
       extraArgs:
-        default-ssl-certificate: "network/donoso-family-production-tls"
+        default-ssl-certificate: "cert-manager/donoso-family-production-tls"
         publish-status-address: *hostname
 
       topologySpreadConstraints:
