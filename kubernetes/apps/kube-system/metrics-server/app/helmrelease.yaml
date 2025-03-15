@@ -1,10 +1,21 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrepository-source-v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: metrics-server
+  namespace: kube-system # Required for Renovate lookups
+spec:
+  interval: 1h
+  url: https://kubernetes-sigs.github.io/metrics-server
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: metrics-server
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: metrics-server
@@ -12,7 +23,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: metrics-server
-        namespace: flux-system
+        namespace: kube-system
   install:
     remediation:
       retries: 3
@@ -22,9 +33,11 @@ spec:
       retries: 3
   values:
     args:
+      - --kubelet-insecure-tls
       - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
       - --kubelet-use-node-status-port
-      - --metric-resolution=15s
+      - --metric-resolution=10s
+      - --kubelet-request-timeout=2s
     metrics:
       enabled: true
     serviceMonitor:
