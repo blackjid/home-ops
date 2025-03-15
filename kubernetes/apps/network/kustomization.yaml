@@ -1,11 +1,12 @@
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: network
 components:
   - ../../components/repos/app-template
 resources:
   - ./repos
-  # - ./cloudflare-tunnel/ks.yaml
+  - ./cloudflared/ks.yaml
   # - ./echo-server/ks.yaml
   - ./external-dns/ks.yaml
   - ./ingress-nginx/ks.yaml
