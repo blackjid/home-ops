@@ -7,6 +7,5 @@ resources:
   - ./intel-device-plugins/ks.yaml
   - ./node-feature-discovery/ks.yaml
   - ./metrics-server/ks.yaml
-  - ./namespace.yaml
   - ./reloader/ks.yaml
   - ./spegel/ks.yaml
