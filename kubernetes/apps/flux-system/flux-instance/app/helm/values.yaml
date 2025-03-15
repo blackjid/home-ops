@@ -13,7 +13,7 @@ instance:
   sync:
     kind: GitRepository
     url: https://github.com/blackjid/home-ops
-    ref: refs/heads/main
+    ref: refs/heads/refactor
     path: kubernetes/flux/cluster
     interval: 1h
   commonMetadata:
