@@ -4,19 +4,18 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app longhorn
-  namespace: flux-system
+  namespace: longhorn-system
 spec:
   targetNamespace: longhorn-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  # dependsOn:
-  #   - name: external-secrets-stores
   path: ./kubernetes/apps/longhorn-system/longhorn/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false # no flux ks dependents
   interval: 30m
   timeout: 5m
@@ -26,7 +25,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app storageclass
-  namespace: flux-system
+  namespace: longhorn-system
 spec:
   targetNamespace: longhorn-system
   commonMetadata:
@@ -39,6 +38,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false # no flux ks dependents
   interval: 30m
   timeout: 5m

@@ -1,4 +1,16 @@
 ---
+# yaml-language-server: $schema=https://lds-schemas.pages.dev/source.toolkit.fluxcd.io/helmrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: longhorn
+  namespace: longhorn-system
+spec:
+  interval: 30m
+  url: https://charts.longhorn.io
+  timeout: 3m
+
+---
 # yaml-language-server: $schema=https://lds-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -13,7 +25,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: longhorn
-        namespace: flux-system
+        namespace: longhorn-system
   install:
     remediation:
       retries: 3
@@ -24,12 +36,12 @@ spec:
       retries: 3
   values:
     csi:
-      attacherReplicaCount: &replicas 1
+      attacherReplicaCount: &replicas 2
       provisionerReplicaCount: *replicas
       resizerReplicaCount: *replicas
       snapshotterReplicaCount: *replicas
     persistence:
-      defaultClassReplicaCount: 1
+      defaultClassReplicaCount: 2
     defaultSettings:
       createDefaultDiskLabeledNodes: true
       defaultDataLocality: true
@@ -41,12 +53,10 @@ spec:
       concurrentAutomaticEngineUpgradePerNodeLimit: 3
       orphanAutoDeletion: true
     longhornUI:
-      replicas: *replicas
+      replicas: 2
     ingress:
       enabled: true
-      ingressClassName: internal
-      annotations:
-        external-dns.alpha.kubernetes.io/target: internal.donoso.family
+      ingressClassName: internal-nginx
       host: longhorn.donoso.family
       tls: false
     metrics:
