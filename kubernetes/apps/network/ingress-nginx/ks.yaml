@@ -3,9 +3,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname nginx-external
-  namespace: &namespace network
+  namespace: flux-system
 spec:
-  targetNamespace: *namespace
+  targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
@@ -27,9 +27,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname nginx-internal
-  namespace: &namespace network
+  namespace: flux-system
 spec:
-  targetNamespace: *namespace
+  targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
