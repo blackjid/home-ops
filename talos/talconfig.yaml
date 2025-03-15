@@ -5,7 +5,7 @@ clusterName: &clusterName home-ops
 endpoint: https://192.168.86.210:6443
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.9.4
+talosVersion: v1.9.5
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.32.2
 
