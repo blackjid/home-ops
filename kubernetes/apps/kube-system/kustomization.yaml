@@ -6,7 +6,6 @@ resources:
   - ./coredns/ks.yaml
   - ./intel-device-plugin/ks.yaml
   - ./node-feature-discovery/ks.yaml
-  - ./kubelet-csr-approver/ks.yaml
   - ./metrics-server/ks.yaml
   - ./namespace.yaml
   - ./reloader/ks.yaml
