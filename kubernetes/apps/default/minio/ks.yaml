@@ -4,19 +4,21 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app minio
-  namespace: flux-system
+  namespace: default
 spec:
   targetNamespace: default
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
+    - name: onepassword-connect
+      namespace: external-secrets
   path: ./kubernetes/apps/default/minio/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   timeout: 5m
