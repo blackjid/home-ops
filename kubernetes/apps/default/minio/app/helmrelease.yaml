@@ -89,7 +89,7 @@ spec:
             scrapeTimeout: 10s
     ingress:
       app:
-        className: internal-nginx
+        className: internal
         hosts:
           - host: "{{ .Release.Name }}.donoso.family"
             paths:

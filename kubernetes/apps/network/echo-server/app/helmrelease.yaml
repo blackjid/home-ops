@@ -51,7 +51,7 @@ spec:
 
     ingress:
       app:
-        className: "internal-nginx"
+        className: internal
         hosts:
           - host: echo-server.donoso.family
             paths:

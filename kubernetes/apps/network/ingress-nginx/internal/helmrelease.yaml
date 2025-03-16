@@ -38,7 +38,7 @@ spec:
         enabled: false
 
       ingressClassResource:
-        name: internal-nginx
+        name: internal
         default: true
         controllerValue: k8s.io/ingress-nginx-internal
 
@@ -48,7 +48,7 @@ spec:
             - key: ingress-class
               operator: In
               values:
-                - internal-nginx
+                - internal
 
       config:
         annotations-risk-level: Critical
