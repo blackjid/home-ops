@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: onepassword-store
+    - name: external-secrets
       namespace: external-secrets
   interval: 1h
   path: ./kubernetes/apps/network/cloudflared/app
