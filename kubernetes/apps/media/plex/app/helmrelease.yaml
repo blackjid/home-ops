@@ -85,10 +85,7 @@ spec:
             port: 32400
     ingress:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: external.donoso.family
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        className: external
+        className: external-nginx
         hosts:
           - host: "{{ .Release.Name }}.donoso.family"
             paths:
