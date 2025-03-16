@@ -23,7 +23,7 @@ spec:
       strategy: rollback
       retries: 3
   dependsOn:
-    - name: intel-device-plugin-gpu
+    - name: intel-device-plugins-gpu
       namespace: kube-system
     - name: longhorn
       namespace: longhorn-system
