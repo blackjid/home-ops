@@ -78,8 +78,6 @@ spec:
             port: *port
     ingress:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.donoso.family
         className: internal
         hosts:
           - host: "{{ .Release.Name }}.donoso.family"

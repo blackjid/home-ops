@@ -56,7 +56,7 @@ spec:
       replicas: 1
     ingress:
       enabled: true
-      ingressClassName: internal-nginx
+      ingressClassName: internal
       host: longhorn.donoso.family
       tls: false
     metrics:
