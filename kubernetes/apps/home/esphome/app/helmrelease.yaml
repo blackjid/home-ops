@@ -44,7 +44,7 @@ spec:
           app:
             image:
               repository: ghcr.io/bjw-s-labs/esphome
-              tag: 2025.2.2@sha256:fbbb07c8e0c62916f1af4905143b141f8c4647e0ca4f63e5125c56946b291ab4
+              tag: 2025.2.2@sha256:2864e888c7c4e9997ab6193da9a0616e0cd00e0215866675ffa6b1fc3167241e
             env:
               TZ: America/Santiago
               ESPHOME_DASHBOARD_USE_PING: true
