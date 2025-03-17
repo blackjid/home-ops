@@ -4,21 +4,23 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app home-assistant
-  namespace: flux-system
+  namespace: &namespace home
 spec:
-  targetNamespace: home
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   components:
     - ../../../../components/volsync
   dependsOn:
-    - name: external-secrets-stores
+    - name: onepassword-connect
+      namespace: external-secrets
   path: ./kubernetes/apps/home/home-assistant/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   timeout: 5m
