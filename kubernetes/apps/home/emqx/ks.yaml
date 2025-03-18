@@ -4,19 +4,21 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app emqx
-  namespace: flux-system
+  namespace: &namespace home
 spec:
-  targetNamespace: database
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
-  path: ./kubernetes/apps/database/emqx/app
+    - name: onepassword-connect
+      namespace: external-secrets
+  path: ./kubernetes/apps/home/emqx/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m
@@ -26,19 +28,20 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app emqx-cluster
-  namespace: flux-system
+  namespace: &namespace home
 spec:
-  targetNamespace: database
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: emqx
-  path: ./kubernetes/apps/database/emqx/cluster
+  path: ./kubernetes/apps/home/emqx/cluster
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m
