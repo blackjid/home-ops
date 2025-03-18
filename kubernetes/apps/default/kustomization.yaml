@@ -8,4 +8,4 @@ components:
   - ../../components/repos/app-template
 resources:
   - ./minio/ks.yaml
-  # - ./obsidian-couchdb/ks.yaml
+  - ./obsidian-couchdb/ks.yaml
