@@ -4,9 +4,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app zigbee2mqtt
-  namespace: flux-system
+  namespace: &namespace home
 spec:
-  targetNamespace: home
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -14,12 +14,14 @@ spec:
     - ../../../../components/volsync
   dependsOn:
     - name: emqx-cluster
-    - name: external-secrets-stores
+    - name: onepassword-connect
+      namespace: external-secrets
   path: ./kubernetes/apps/home/zigbee2mqtt/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 30m
   timeout: 5m
