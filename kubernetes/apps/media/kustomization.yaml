@@ -15,7 +15,7 @@ resources:
   - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
-  # - ./radarr/ks.yaml
+  - ./radarr/ks.yaml
   # - ./recyclarr/ks.yaml
   # - ./sonarr/ks.yaml
   # - ./tautulli/ks.yaml
