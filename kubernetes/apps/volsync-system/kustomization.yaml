@@ -3,5 +3,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: volsync-system
+components:
+  - ../../components/common
 resources:
   - ./volsync/ks.yaml
