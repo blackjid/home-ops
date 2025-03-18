@@ -6,15 +6,9 @@ metadata:
   name: esphome
 spec:
   interval: 30m
-  chart:
-    spec:
-      chart: app-template
-      version: 3.7.2
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: app-template
   install:
     remediation:
       retries: 3
@@ -100,7 +94,6 @@ spec:
       app:
         className: internal
         annotations:
-          external-dns.alpha.kubernetes.io/target: internal.donoso.family
           nginx.ingress.kubernetes.io/rewrite-target: /$1
         hosts:
           - host: esphome.donoso.family
