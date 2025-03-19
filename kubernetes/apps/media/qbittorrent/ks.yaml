@@ -6,22 +6,26 @@ metadata:
   name: &app qbittorrent
   namespace: &namespace media
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   components:
     - ../../../../components/volsync
+  dependsOn:
+    - name: longhorn
+      namespace: longhorn-system
+  interval: 1h
   path: ./kubernetes/apps/media/qbittorrent/app
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: false
-  interval: 30m
-  timeout: 5m
   postBuild:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 2Gi
+  prune: true
+  retryInterval: 2m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: *namespace
+  timeout: 5m
+  wait: false
