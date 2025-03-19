@@ -10,7 +10,7 @@ spec:
     schedule: "0 * * * *"
   restic:
     copyMethod: "${VOLSYNC_COPYMETHOD:=Snapshot}"
-    pruneIntervalDays: 7
+    pruneIntervalDays: 14
     repository: "${APP}-volsync-secret"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:=longhorn-snapclass}"
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:=2Gi}"
