@@ -8,4 +8,4 @@ spec:
   endpoints:
     - dnsName: external.donoso.family
       recordType: CNAME
-      targets: ["397243cd-c7b6-40cd-8f03-7be2c029033d.cfargotunnel.com"]
+      targets: ["${CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"]
