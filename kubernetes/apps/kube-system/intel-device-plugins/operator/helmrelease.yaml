@@ -1,14 +1,19 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/refs/heads/main/helmrepository-source-v1.json
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1beta2.json
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
 metadata:
-  name: intel
-  namespace: kube-system
+  name: intel-device-plugins-operator
 spec:
-  interval: 30m
-  url: https://intel.github.io/helm-charts
-
+  interval: 1h
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.32.0
+  url: oci://ghcr.io/home-operations/charts-mirror/intel-device-plugins-operator
+  verify:
+    provider: cosign
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -17,22 +22,19 @@ metadata:
   name: intel-device-plugins-operator
 spec:
   interval: 30m
-  chart:
-    spec:
-      chart: intel-device-plugins-operator
-      version: 0.32.0
-      interval: 30m
-      sourceRef:
-        kind: HelmRepository
-        name: intel
-        namespace: kube-system
+  chartRef:
+    kind: OCIRepository
+    name: intel-device-plugins-operator
   install:
     crds: CreateReplace
+    remediation:
+      retries: -1
   upgrade:
+    cleanupOnFail: true
     crds: CreateReplace
-  dependsOn:
-    - name: cert-manager
-      namespace: cert-manager
+    remediation:
+      retries: 3
   values:
-    controllerExtraArgs: |
-      - --devices=gpu
+    manager:
+      devices:
+        gpu: true
