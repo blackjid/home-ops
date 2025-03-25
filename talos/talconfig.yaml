@@ -104,8 +104,10 @@ controlPlane:
           - siderolabs/gasket-driver
           - siderolabs/i915
           - siderolabs/intel-ucode
+          - siderolabs/iscsi-tools
           - siderolabs/mei
           - siderolabs/thunderbolt
+          - siderolabs/util-linux-tools
 
   patches:
     # Configure containerd
