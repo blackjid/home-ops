@@ -178,9 +178,14 @@ controlPlane:
         allowSchedulingOnControlPlanes: true
         coreDNS:
             disabled: true
+        controllerManager:
+          extraArgs:
+            bind-address: 0.0.0.0
         proxy:
           disabled: true
         scheduler:
+          extraArgs:
+            bind-address: 0.0.0.0
           config:
             apiVersion: kubescheduler.config.k8s.io/v1
             kind: KubeSchedulerConfiguration
@@ -199,6 +204,8 @@ controlPlane:
     - |-
       cluster:
         etcd:
+          extraArgs:
+            listen-metrics-urls: http://0.0.0.0:2381
           advertisedSubnets:
             - 192.168.86.0/24
 
