@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: home
 components:
   - ../../../../components/common
-  - ../../../../components/repos/app-template
 resources:
   - externalsecret.yaml
   - helmrelease.yaml
