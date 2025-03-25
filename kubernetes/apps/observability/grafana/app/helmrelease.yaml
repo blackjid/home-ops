@@ -170,6 +170,11 @@ spec:
           gnetId: 11454
           revision: 14
           datasource: Prometheus
+        longhorn:
+          # renovate: depName="Longhorn"
+          gnetId: 16888
+          revision: 8
+          datasource: Prometheus
         node-exporter-full:
           # renovate: depName="Node Exporter Full"
           gnetId: 1860
