@@ -218,7 +218,7 @@ controlPlane:
             permissions: 0o644
             content: |
               [ NFSMount_Global_Options ]
-              nfsvers=4.2
+              nfsvers=4
               hard=True
               noatime=True
               nconnect=16
