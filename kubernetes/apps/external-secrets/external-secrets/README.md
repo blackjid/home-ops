@@ -2,12 +2,12 @@
 
 ## NAS Deployments
 
-### onepassword-connect
+### onepassword
 
 ```yaml
 services:
-  onepassword-connect-api:
-    container_name: onepassword-connect-api
+  onepassword-api:
+    container_name: onepassword-api
     environment:
       OP_HTTP_PORT: 7070
       OP_SESSION: aHVudGVyMgo=
@@ -17,8 +17,8 @@ services:
     restart: unless-stopped
     volumes:
       - data:/config
-  onepassword-connect-sync:
-    container_name: onepassword-connect-sync
+  onepassword-sync:
+    container_name: onepassword-sync
     environment:
       OP_HTTP_PORT: 7071
       OP_SESSION: aHVudGVyMgo=

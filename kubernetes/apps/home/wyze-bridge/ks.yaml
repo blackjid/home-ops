@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: onepassword-connect
+    - name: onepassword
       namespace: external-secrets
   path: ./kubernetes/apps/home/wyze-bridge/app
   prune: true
