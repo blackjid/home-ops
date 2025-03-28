@@ -14,7 +14,7 @@ spec:
     - ../../../../components/volsync
   dependsOn:
     - name: emqx-cluster
-    - name: onepassword-connect
+    - name: onepassword
       namespace: external-secrets
   path: ./kubernetes/apps/home/zigbee2mqtt/app
   prune: true
