@@ -46,24 +46,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 2Gi
-          code-server:
-            image:
-              repository: ghcr.io/coder/code-server
-              tag: 4.98.2@sha256:9ed588a05d4e81aa464e753a409bc3b2b93267323d1c3975fbddf6f9aef84c26
-            args: [
-              "--auth", "none",
-              "--user-data-dir", "/config/.vscode",
-              "--extensions-dir", "/config/.vscode",
-              "--port", "12322",
-              "/config"
-            ]
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 512Mi
-        pod:
-          hostNetwork: true
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -77,8 +59,6 @@ spec:
         ports:
           http:
             port: 8123
-          code-server:
-            port: 12322
     ingress:
       app:
         annotations:
@@ -91,17 +71,6 @@ spec:
                 service:
                   identifier: app
                   port: http
-      code-server:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: internal.blkh.dev
-        className: internal
-        hosts:
-          - host: hass-code.blkh.dev
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: code-server
     persistence:
       config:
         existingClaim: home-assistant
@@ -119,13 +88,3 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
-      deploy-key:
-        type: secret
-        name: home-assistant-deploykey
-        defaultMode: 256
-        advancedMounts:
-          home-assistant:
-            code-server:
-              - path: /home/coder/.ssh/id_ed25519
-                readOnly: true
-                subPath: id_ed25519
