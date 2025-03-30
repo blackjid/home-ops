@@ -68,7 +68,7 @@ spec:
     sources: ["gateway-httproute", "service", "ingress"]
     txtOwnerId: main
     txtPrefix: k8s.main.
-    domainFilters: ["devbu.io"]
+    domainFilters: ["blkh.dev"]
     serviceMonitor:
       enabled: true
     podAnnotations:
