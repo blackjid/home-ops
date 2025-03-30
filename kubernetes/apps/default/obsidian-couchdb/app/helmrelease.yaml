@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: obsidian-couchdb
+  name: &app obsidian-couchdb
 spec:
   interval: 30m
   chartRef:
@@ -62,20 +62,20 @@ spec:
         controller: obsidian-couchdb
         ports:
           http:
-            port: 5984
-    ingress:
+            port: &port 5984
+    route:
       app:
-        className: external
-        hosts:
-          - host: &hostName obsidian-db.blkh.dev
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *hostName
+        hostnames:
+          - "{{ .Release.Name }}.blkh.dev"
+          - obsidian-db.blkh.dev
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config:
         type: configMap

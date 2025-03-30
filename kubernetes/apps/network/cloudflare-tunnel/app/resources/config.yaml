@@ -3,12 +3,8 @@ originRequest:
   originServerName: external.blkh.dev
 
 ingress:
-  - hostname: "blkh.dev"
-    service: https://nginx-external-controller.network.svc.cluster.local:443
-    originRequest:
-      originServerName: external.blkh.dev
+  - hostname: blkh.dev
+    service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
   - hostname: "*.blkh.dev"
-    service: https://nginx-external-controller.network.svc.cluster.local:443
-    originRequest:
-      originServerName: external.blkh.dev
+    service: *svc
   - service: http_status:404

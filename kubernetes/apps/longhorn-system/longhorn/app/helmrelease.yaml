@@ -50,10 +50,7 @@ spec:
       storageMinimalAvailablePercentage: 1
       storageReservedPercentageForDefaultDisk: 10
     ingress:
-      enabled: true
-      ingressClassName: internal
-      host: longhorn.blkh.dev
-      tls: false
+      enabled: false
     metrics:
       serviceMonitor:
         enabled: true
