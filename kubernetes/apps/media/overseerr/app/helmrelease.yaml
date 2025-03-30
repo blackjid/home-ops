@@ -76,7 +76,7 @@ spec:
       app:
         className: external
         hosts:
-          - host: requests.donoso.family
+          - host: requests.blkh.dev
             paths:
               - path: /
                 service:

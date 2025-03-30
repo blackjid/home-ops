@@ -1,14 +1,14 @@
 ---
 originRequest:
-  originServerName: external.donoso.family
+  originServerName: external.blkh.dev
 
 ingress:
-  - hostname: "donoso.family"
+  - hostname: "blkh.dev"
     service: https://nginx-external-controller.network.svc.cluster.local:443
     originRequest:
-      originServerName: external.donoso.family
-  - hostname: "*.donoso.family"
+      originServerName: external.blkh.dev
+  - hostname: "*.blkh.dev"
     service: https://nginx-external-controller.network.svc.cluster.local:443
     originRequest:
-      originServerName: external.donoso.family
+      originServerName: external.blkh.dev
   - service: http_status:404

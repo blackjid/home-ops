@@ -82,10 +82,10 @@ spec:
     ingress:
       app:
         annotations:
-          external-dns.alpha.kubernetes.io/target: external.donoso.family
+          external-dns.alpha.kubernetes.io/target: external.blkh.dev
         className: external
         hosts:
-          - host: hass.donoso.family
+          - host: hass.blkh.dev
             paths:
               - path: /
                 service:
@@ -93,10 +93,10 @@ spec:
                   port: http
       code-server:
         annotations:
-          external-dns.alpha.kubernetes.io/target: internal.donoso.family
+          external-dns.alpha.kubernetes.io/target: internal.blkh.dev
         className: internal
         hosts:
-          - host: hass-code.donoso.family
+          - host: hass-code.blkh.dev
             paths:
               - path: /
                 service:

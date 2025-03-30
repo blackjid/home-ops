@@ -96,7 +96,7 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/rewrite-target: /$1
         hosts:
-          - host: esphome.donoso.family
+          - host: esphome.blkh.dev
             paths:
               - path: /(.*)
                 service:

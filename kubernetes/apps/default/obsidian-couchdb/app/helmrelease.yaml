@@ -67,7 +67,7 @@ spec:
       app:
         className: external
         hosts:
-          - host: &hostName obsidian-db.donoso.family
+          - host: &hostName obsidian-db.blkh.dev
             paths:
               - path: /
                 service:

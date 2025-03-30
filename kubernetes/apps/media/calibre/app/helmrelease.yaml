@@ -78,9 +78,9 @@ spec:
       main:
         className: internal
         annotations:
-          external-dns.alpha.kubernetes.io/target: internal.donoso.family
+          external-dns.alpha.kubernetes.io/target: internal.blkh.dev
         hosts:
-          - host: calibre.donoso.family
+          - host: calibre.blkh.dev
             paths:
               - path: /
                 pathType: Prefix

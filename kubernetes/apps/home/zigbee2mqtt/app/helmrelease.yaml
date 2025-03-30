@@ -46,7 +46,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_AVAILABILITY_PASSIVE_TIMEOUT: 2000
               ZIGBEE2MQTT_CONFIG_DEVICE_OPTIONS_RETAIN: "true"
               ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &port 80
-              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://zigbee.donoso.family
+              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://zigbee.blkh.dev
               ZIGBEE2MQTT_CONFIG_MQTT_INCLUDE_DEVICE_INFORMATION: "true"
               ZIGBEE2MQTT_CONFIG_MQTT_KEEPALIVE: 60
               ZIGBEE2MQTT_CONFIG_MQTT_REJECT_UNAUTHORIZED: "true"
@@ -88,7 +88,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: zigbee.donoso.family
+          - host: zigbee.blkh.dev
             paths:
               - path: /
                 service:

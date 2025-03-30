@@ -66,10 +66,10 @@ spec:
     ingress:
       app:
         annotations:
-          external-dns.alpha.kubernetes.io/target: internal.donoso.family
+          external-dns.alpha.kubernetes.io/target: internal.blkh.dev
         className: internal
         hosts:
-          - host: calibre-web.donoso.family
+          - host: calibre-web.blkh.dev
             paths:
               - path: /
                 service:
