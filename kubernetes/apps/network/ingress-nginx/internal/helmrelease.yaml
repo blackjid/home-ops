@@ -31,7 +31,7 @@ spec:
         enabled: true
         type: LoadBalancer
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: &hostname internal.blkh.dev
+          external-dns.alpha.kubernetes.io/hostname: &hostname internal-ng.blkh.dev
           lbipam.cilium.io/ips: 192.168.86.10
 
       publishService:
