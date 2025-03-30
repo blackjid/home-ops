@@ -82,16 +82,19 @@ spec:
             enabled: true
             port: *torrentPort
             protocol: TCP
-    ingress:
+    route:
       app:
-        className: internal
-        hosts:
-          - host: qb.blkh.dev
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - "{{ .Release.Name }}.blkh.dev"
+          - qb.blkh.dev
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config:
         existingClaim: qbittorrent
