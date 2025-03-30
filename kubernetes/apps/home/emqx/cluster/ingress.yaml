@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: internal
   rules:
-    - host: emqx.donoso.family
+    - host: emqx.blkh.dev
       http:
         paths:
           - path: /

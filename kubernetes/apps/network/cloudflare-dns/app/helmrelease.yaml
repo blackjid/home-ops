@@ -61,7 +61,7 @@ spec:
     sources: ["crd", "gateway-httproute", "ingress"]
     txtOwnerId: default
     txtPrefix: k8s.
-    domainFilters: ["donoso.family"]
+    domainFilters: ["blkh.dev"]
     serviceMonitor:
       enabled: true
     podAnnotations:

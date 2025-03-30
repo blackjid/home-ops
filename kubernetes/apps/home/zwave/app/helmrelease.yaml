@@ -70,7 +70,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: "{{ .Release.Name }}.donoso.family"
+          - host: "{{ .Release.Name }}.blkh.dev"
             paths:
               - path: /
                 service:

@@ -86,7 +86,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: wyze.donoso.family
+          - host: wyze.blkh.dev
             paths:
               - path: /
                 service:

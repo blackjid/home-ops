@@ -53,7 +53,7 @@ spec:
       app:
         className: internal
         hosts:
-          - host: echo-server.donoso.family
+          - host: echo-server.blkh.dev
             paths:
               - path: /
                 service:

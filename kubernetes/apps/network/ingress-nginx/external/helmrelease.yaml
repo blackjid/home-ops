@@ -31,7 +31,7 @@ spec:
         enabled: true
         type: LoadBalancer
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: &hostname external.donoso.family
+          external-dns.alpha.kubernetes.io/hostname: &hostname external.blkh.dev
           lbipam.cilium.io/ips: 192.168.86.11
 
 
@@ -88,7 +88,7 @@ spec:
             any: true
 
       extraArgs:
-        default-ssl-certificate: "cert-manager/donoso-family-production-tls"
+        default-ssl-certificate: "cert-manager/blkh-dev-production-tls"
         publish-status-address: *hostname
 
       topologySpreadConstraints:

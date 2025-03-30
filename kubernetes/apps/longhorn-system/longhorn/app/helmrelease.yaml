@@ -52,7 +52,7 @@ spec:
     ingress:
       enabled: true
       ingressClassName: internal
-      host: longhorn.donoso.family
+      host: longhorn.blkh.dev
       tls: false
     metrics:
       serviceMonitor:

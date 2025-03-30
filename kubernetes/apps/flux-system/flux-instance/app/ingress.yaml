@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: external
   rules:
-    - host: flux-webhook.donoso.family
+    - host: flux-webhook.blkh.dev
       http:
         paths:
           - path: /hook/
