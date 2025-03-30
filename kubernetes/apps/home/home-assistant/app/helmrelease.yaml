@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: home-assistant
+  name: &app home-assistant
 spec:
   interval: 30m
   chartRef:
@@ -34,6 +34,8 @@ spec:
               tag: 2025.3.4@sha256:f1d4348c42ca825969f5d48b50bb53aaebd501b0cad16cb56e7ac8e31387fbb8
             env:
               TZ: America/Santiago
+              HASS_HTTP_TRUSTED_PROXY_1: 192.168.86.0/24
+              HASS_HTTP_TRUSTED_PROXY_2: 10.42.0.0/16
             envFrom:
               - secretRef:
                   name: home-assistant-secret
@@ -58,24 +60,29 @@ spec:
         controller: home-assistant
         ports:
           http:
-            port: 8123
-    ingress:
+            port: &port 8123
+    route:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/target: external.blkh.dev
-        className: external
-        hosts:
-          - host: hass.blkh.dev
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - "{{ .Release.Name }}.blkh.dev"
+          - hass.blkh.dev
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config:
         existingClaim: home-assistant
         globalMounts:
           - path: /config
+      config-cache:
+        existingClaim: home-assistant-cache
+        globalMounts:
+          - path: /config/.venv
       config-logs:
         type: emptyDir
         globalMounts:
