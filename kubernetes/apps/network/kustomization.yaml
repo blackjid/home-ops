@@ -5,9 +5,7 @@ namespace: network
 components:
   - ../../components/common
 resources:
-  - ./repos
   - ./cloudflare-dns/ks.yaml
   - ./cloudflare-tunnel/ks.yaml
   - ./echo-server/ks.yaml
-  - ./ingress-nginx/ks.yaml
   - ./unifi-dns/ks.yaml
