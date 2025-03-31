@@ -9,7 +9,7 @@ bpf:
   preallocateMaps: true
   # tproxy: true
 bgpControlPlane:
-  enabled: false
+  enabled: true
 cgroup:
   automount:
     enabled: false
