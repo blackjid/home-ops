@@ -1,0 +1,22 @@
+---
+api:
+  listen: :80
+rtsp:
+  listen: :554
+webrtc:
+  listen: :8555
+  candidates:
+    - 192.168.86.215:8555
+    - stun:8555
+  ice_servers:
+    - urls:
+       - stun:stun.cloudflare.com:3478
+log:
+  level: debug
+streams:
+  entrance_fluent:
+    - onvif://192.168.20.223:8000?subtype=000
+  backyard_fluent:
+    - onvif://192.168.20.238:8000?subtype=000
+  backyard_pool_fluent:
+    - onvif://192.168.20.42:8000?subtype=000
