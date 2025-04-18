@@ -32,7 +32,7 @@ spec:
           app:
             image:
               repository: lscr.io/linuxserver/calibre
-              tag: 8.0.1
+              tag: 8.3.0
             env:
               TZ: America/Santiago
               TITLE: Calibre
