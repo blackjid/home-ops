@@ -5,15 +5,13 @@ kind: OCIRepository
 metadata:
   name: cert-manager
 spec:
-  interval: 1h
+  interval: 5m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: v1.17.1
-  url: oci://ghcr.io/home-operations/charts-mirror/cert-manager
-  verify:
-    provider: cosign
+    tag: v1.17.2
+  url: oci://quay.io/jetstack/charts/cert-manager
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -27,7 +25,7 @@ spec:
     name: cert-manager
   install:
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
