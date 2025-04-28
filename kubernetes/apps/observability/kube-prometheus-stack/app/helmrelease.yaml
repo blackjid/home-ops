@@ -87,6 +87,16 @@ spec:
           - memory-snapshot-on-shutdown
         retention: 14d
         retentionSize: 50GB
+        additionalScrapeConfigs:
+          - job_name: 'synology-nas'
+            static_configs:
+              - targets: ['black-station.internal:9100']
+            metrics_path: '/metrics'
+            scheme: 'http'
+            relabel_configs:
+              - source_labels: ['__address__']
+                target_label: 'instance'
+                replacement: 'black-station'
         resources:
           requests:
             cpu: 100m
