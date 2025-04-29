@@ -21,7 +21,7 @@ kind: HelmRelease
 metadata:
   name: flux-operator
 spec:
-  interval: 5m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: flux-operator
