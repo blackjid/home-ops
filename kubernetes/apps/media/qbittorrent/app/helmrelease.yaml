@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &app qbittorrent
 spec:
-  interval: 1h
+  interval: 5m
   chartRef:
     kind: OCIRepository
     name: app-template

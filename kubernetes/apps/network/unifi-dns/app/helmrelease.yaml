@@ -24,7 +24,7 @@ kind: HelmRelease
 metadata:
   name: &app unifi-dns
 spec:
-  interval: 1h
+  interval: 5m
   chartRef:
     kind: OCIRepository
     name: unifi-dns
