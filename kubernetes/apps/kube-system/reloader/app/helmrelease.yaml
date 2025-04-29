@@ -5,7 +5,7 @@ kind: OCIRepository
 metadata:
   name: reloader
 spec:
-  interval: 1h
+  interval: 5m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
@@ -19,13 +19,13 @@ kind: HelmRelease
 metadata:
   name: reloader
 spec:
-  interval: 1h
+  interval: 5m
   chartRef:
     kind: OCIRepository
     name: reloader
   install:
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
     remediation:
