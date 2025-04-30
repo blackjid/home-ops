@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: network
@@ -7,5 +8,5 @@ components:
 resources:
   - ./cloudflare-dns/ks.yaml
   - ./cloudflare-tunnel/ks.yaml
-  - ./echo-server/ks.yaml
+  - ./echo/ks.yaml
   - ./unifi-dns/ks.yaml

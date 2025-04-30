@@ -6,22 +6,22 @@ metadata:
   name: &app zwave
   namespace: &namespace home
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   components:
     - ../../../../components/volsync
+  interval: 30m
   path: ./kubernetes/apps/home/zwave/app
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: false
-  interval: 30m
+  targetNamespace: *namespace
   timeout: 5m
-  postBuild:
-    substitute:
-      APP: *app
-      VOLSYNC_CAPACITY: 1Gi
+  wait: false

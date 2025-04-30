@@ -6,24 +6,24 @@ metadata:
   name: &app calibre-web
   namespace: flux-system
 spec:
-  targetNamespace: media
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   components:
     - ../../../../components/volsync
-  interval: 30m
-  timeout: 5m
-  path: ./kubernetes/apps/media/calibre-web/app
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  wait: false
   dependsOn:
     - name: external-secrets-stores
     - name: volsync
+  interval: 30m
+  path: ./kubernetes/apps/media/calibre-web/app
   postBuild:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 2Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: media
+  timeout: 5m
+  wait: false
