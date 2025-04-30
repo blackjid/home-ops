@@ -12,7 +12,8 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
-    - name: recyclarr
+    - name: longhorn
+      namespace: longhorn-system
   interval: 30m
   path: ./kubernetes/apps/media/sonarr/app
   postBuild:

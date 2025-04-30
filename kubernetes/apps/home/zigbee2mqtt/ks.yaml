@@ -12,6 +12,8 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
+    - name: longhorn
+      namespace: longhorn-system
     - name: emqx-cluster
     - name: onepassword
       namespace: external-secrets

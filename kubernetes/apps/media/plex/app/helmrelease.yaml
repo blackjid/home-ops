@@ -19,10 +19,6 @@ spec:
   dependsOn:
     - name: intel-device-plugins-gpu
       namespace: kube-system
-    - name: longhorn
-      namespace: longhorn-system
-    - name: volsync
-      namespace: volsync-system
   values:
     controllers:
       plex:
