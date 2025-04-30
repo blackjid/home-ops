@@ -9,6 +9,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/gatus/guarded
   dependsOn:
     - name: longhorn
       namespace: longhorn-system
@@ -17,6 +19,7 @@ spec:
   postBuild:
     substitute:
       APP: kube-prometheus-stack
+      GATUS_SUBDOMAIN: prometheus
   prune: true
   retryInterval: 2m
   sourceRef:
