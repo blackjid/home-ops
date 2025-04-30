@@ -11,6 +11,9 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../../components/volsync
+  dependsOn:
+    - name: longhorn
+      namespace: longhorn-system
   interval: 30m
   path: ./kubernetes/apps/media/tautulli/app
   postBuild:

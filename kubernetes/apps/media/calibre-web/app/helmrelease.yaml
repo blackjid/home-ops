@@ -15,11 +15,6 @@ spec:
         name: bjw-s
         namespace: flux-system
   interval: 30m
-  dependsOn:
-    - name: longhorn
-      namespace: longhorn-system
-    - name: volsync
-      namespace: volsync-system
   values:
     controllers:
       calibre-web:
