@@ -24,18 +24,16 @@ spec:
     kind: OCIRepository
     name: cloudflare-dns
   install:
-    disableSchemaValidation: true # Ref: https://github.com/kubernetes-sigs/external-dns/issues/5206
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
-    disableSchemaValidation: true # Ref: https://github.com/kubernetes-sigs/external-dns/issues/5206
     remediation:
-      strategy: rollback
       retries: 3
   values:
     fullnameOverride: *app
-    provider: cloudflare
+    provider:
+      name: cloudflare
     env:
       - name: &name CF_API_TOKEN
         valueFrom:
@@ -56,10 +54,10 @@ spec:
       - --zone-id-filter=$(CF_ZONE_ID)
     triggerLoopOnEvent: true
     policy: sync
-    sources: ["crd", "gateway-httproute", "ingress"]
+    sources: ["crd", "gateway-httproute"]
     txtOwnerId: default
     txtPrefix: k8s.
-    domainFilters: ["blkh.dev"]
+    domainFilters: ["devbu.io"]
     serviceMonitor:
       enabled: true
     podAnnotations:

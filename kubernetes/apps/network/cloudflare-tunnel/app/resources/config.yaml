@@ -5,6 +5,6 @@ originRequest:
 ingress:
   - hostname: blkh.dev
     service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
-  - hostname: "*.blkh.dev"
+  - hostname: "*.devbu.io"
     service: *svc
   - service: http_status:404
