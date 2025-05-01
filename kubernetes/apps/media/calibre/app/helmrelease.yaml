@@ -91,7 +91,7 @@ spec:
       # TODO: move metadata.db to a separate volume
       media:
         type: nfs
-        server: 192.168.86.90
+        server: black-station.internal
         path: /volume1/media
         globalMounts:
           - path: /media
