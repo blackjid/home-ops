@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app music-assistant
+  namespace: &namespace music
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/gatus/guarded
+    - ../../../../components/volsync
+  dependsOn:
+    - name: longhorn
+      namespace: longhorn-system
+    - name: onepassword
+      namespace: external-secrets
+  interval: 30m
+  path: ./kubernetes/apps/home/music-assistant/app
+  postBuild:
+    substitute:
+      APP: *app
+      GATUS_SUBDOMAIN: hass
+      VOLSYNC_CAPACITY: 10Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: *namespace
+  timeout: 5m
+  wait: false
