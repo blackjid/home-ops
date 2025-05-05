@@ -7,7 +7,7 @@ endpoint: https://192.168.86.210:6443
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.9.5
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
-kubernetesVersion: v1.32.2
+kubernetesVersion: v1.32.4
 
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
