@@ -1,0 +1,11 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: test
+  namespace: flux-system
+spec:
+  interval: 1h0m0s
+  ref:
+    name: refs/heads/music-assistant
+  timeout: 60s
+  url: https://github.com/blackjid/home-ops
