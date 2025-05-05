@@ -47,6 +47,9 @@ spec:
     service:
       app:
         controller: music-assistant
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 192.168.86.216, ::ffff:192.168.86.216
         ports:
           http:
             port: &port 8095
