@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &app prowlarr
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template
@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/prowlarr
-              tag: 1.35.1.5034@sha256:f9c4e4c7dedcbc9ec9c9616cbaacc5ca908a063b86d4f052db0e83f27c48bf3f
+              tag: 1.36.1.5049@sha256:94504dfaeccc5a72ae5cb9c8d776ebdddf91ab709a40bbacaf68bf7509f368d4
             env:
               PROWLARR__APP__INSTANCENAME: Prowlarr
               PROWLARR__APP__THEME: dark
@@ -36,7 +36,7 @@ spec:
               PROWLARR__SERVER__PORT: &port 80
               PROWLARR__UPDATE__BRANCH: develop
               TZ: America/Santiago
-            envFrom: &envFrom
+            envFrom:
               - secretRef:
                   name: prowlarr-secret
             probes:
@@ -58,17 +58,16 @@ spec:
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
-                cpu: 10m
+                cpu: 100m
               limits:
                 memory: 1Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     service:
       app:
         controller: prowlarr
