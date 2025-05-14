@@ -17,13 +17,14 @@ spec:
       namespace: longhorn-system
     - name: onepassword
       namespace: external-secrets
-  interval: 30m
+  interval: 1h
   path: ./kubernetes/apps/media/radarr/app
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 15Gi
+      VOLSYNC_CAPACITY: 5Gi
   prune: true
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
