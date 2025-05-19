@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
-  name: intel-device-plugins-operator
+  name: intel-device-plugins-gpu
 spec:
   interval: 5m
   layerSelector:
@@ -11,28 +11,26 @@ spec:
     operation: copy
   ref:
     tag: 0.32.1
-  url: oci://ghcr.io/home-operations/charts-mirror/intel-device-plugins-operator
+  url: oci://ghcr.io/home-operations/charts-mirror/intel-device-plugins-gpu
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: intel-device-plugins-operator
+  name: intel-device-plugin-gpu
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
-    name: intel-device-plugins-operator
+    name: intel-device-plugins-gpu
   install:
-    crds: CreateReplace
     remediation:
       retries: -1
   upgrade:
     cleanupOnFail: true
-    crds: CreateReplace
     remediation:
       retries: 3
   values:
-    manager:
-      devices:
-        gpu: true
+    name: i915
+    nodeFeatureRule: false
+    sharedDevNum: 99
