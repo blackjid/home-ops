@@ -39,8 +39,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 128Mi
-        serviceAccount:
-          identifier: gatus
         containers:
           app:
             image:
@@ -73,6 +71,8 @@ spec:
                 cpu: 100m
               limits:
                 memory: 256Mi
+        serviceAccount:
+          identifier: gatus
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -104,6 +104,21 @@ spec:
           - backendRefs:
               - identifier: app
                 port: *port
+    rbac:
+      roles:
+        gatus:
+          type: Role
+          rules:
+            - apiGroups: [""]
+              resources: ["configmaps", "secrets"]
+              verbs: ["get", "watch", "list"]
+      bindings:
+        gatus:
+          type: RoleBinding
+          roleRef:
+            identifier: gatus
+          subjects:
+            - identifier: gatus
     serviceAccount:
       gatus: {}
     persistence:
