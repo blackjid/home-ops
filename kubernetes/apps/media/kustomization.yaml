@@ -9,6 +9,7 @@ resources:
   - ./bazarr/ks.yaml
   # - ./calibre/ks.yaml
   # - ./calibre-web/ks.yaml
+  - ./calibre-web-automated/ks.yaml
   - ./flaresolverr/ks.yaml
   - ./overseerr/ks.yaml
   - ./plex/ks.yaml
