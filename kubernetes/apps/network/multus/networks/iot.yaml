@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/refs/heads/main/k8s.cni.cncf.io/networkattachmentdefinition_v1.json
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
@@ -11,7 +12,7 @@ spec:
       "plugins": [
         {
           "type": "macvlan",
-          "master": "bond0.303",
+          "master": "bond0.120",
           "mode": "bridge",
           "ipam": {
             "type": "static",
