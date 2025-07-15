@@ -30,15 +30,21 @@ nodes:
     talosImageURL: &imageUrl factory.talos.dev/installer/2dcd442954d67662d41c61bdb92165aaf7189aff9997bd011b6968c12ce8d9c0
     controlPlane: true
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "d8:c4:97:bf:6e:b7"
+      - interface: bond0
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: d8:c4:97:bf:6e:b7
         dhcp: true
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "192.168.86.1"
-        mtu: 1500
         vip:
           ip: *talosControlplaneVip
+        vlans:
+          - &vlan120
+            vlanId: 120
+            mtu: 1500
+            dhcp: false
+            dhcpOptions:
+              routeMetric: 4096
   - hostname: "k8s-b"
     ipAddress: "192.168.86.22"
     installDisk: "/dev/nvme0n1"
@@ -47,15 +53,16 @@ nodes:
     talosImageURL: *imageUrl
     controlPlane: true
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "d8:c4:97:bf:70:20"
+      - interface: bond0
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: d8:c4:97:bf:70:20
         dhcp: true
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "192.168.86.1"
-        mtu: 1500
         vip:
           ip: *talosControlplaneVip
+        vlans:
+          - *vlan120
   - hostname: "k8s-c"
     ipAddress: "192.168.86.23"
     installDisk: "/dev/nvme0n1"
@@ -64,15 +71,16 @@ nodes:
     talosImageURL: *imageUrl
     controlPlane: true
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "1c:69:7a:02:5d:87"
+      - interface: bond0
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: 1c:69:7a:02:5d:87
         dhcp: true
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "192.168.86.1"
-        mtu: 1500
         vip:
           ip: *talosControlplaneVip
+        vlans:
+          - *vlan120
     patches:
       - "@./patches/k8s-c/longhorn.yaml"
 
