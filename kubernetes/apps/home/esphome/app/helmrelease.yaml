@@ -20,7 +20,7 @@ spec:
     controllers:
       esphome:
         annotations:
-          reloader.stakater.com/auto: "true"
+          secret.reloader.stakater.com/reload: esphome-secrets,esphome-deploykey
         pod:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
@@ -38,11 +38,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/bjw-s-labs/esphome
-              tag: 2025.2.2@sha256:2864e888c7c4e9997ab6193da9a0616e0cd00e0215866675ffa6b1fc3167241e
-            env:
-              TZ: America/Santiago
-              ESPHOME_DASHBOARD_USE_PING: true
+              repository: ghcr.io/home-operations/esphome
+              tag: 2025.7.2@sha256:863d5dd690b0ae4eee52b2be9cf811d3a4f00236d2cec2e840bd098425a00439
             probes:
               liveness:
                 enabled: false
@@ -62,23 +59,39 @@ spec:
               capabilities:
                 drop:
                   - ALL
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.102.1@sha256:8e54ed8a175d4dc223186078dc0c89157887ad8a2c17b41b2ff6f1a0b3d724d9
+            args:
+              - --auth
+              - none
+              - --disable-telemetry
+              - --disable-update-check
+              - --user-data-dir
+              - /config/.code-server
+              - --extensions-dir
+              - /config/.code-server
+              - --port
+              - "12321"
+              - /config
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+
     service:
       app:
-        controller: esphome
+        forceRename: "{{.Release.Name}}"
         ports:
           http:
-            port: &port 6052
-    route:
-      app:
-        hostnames: ["{{ .Release.Name }}.blkh.dev"]
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
+            port: &esphome-port 6052
+      code-server:
+        ports:
+          http:
+            port: &code-server-port 12321
+
     persistence:
       config:
         existingClaim: esphome
@@ -88,18 +101,24 @@ spec:
               - path: /config
             code-server:
               - path: /config
-      config-secrets:
+      secrets:
         type: secret
-        name: esphome-secret
+        name: esphome-secrets
         globalMounts:
           - path: /config/secrets.yaml
             subPath: secrets.yaml
-      cache:
+      tmpfs:
         type: emptyDir
         advancedMounts:
           esphome:
             app:
               - path: /cache
+                subPath: cache
+            code-server:
+              - path: /tmp
+                subPath: code-server-tmp
+              - path: /nonexistent
+                subPath: nonexistent
       deploy-key:
         type: secret
         name: esphome-deploykey
@@ -109,3 +128,29 @@ spec:
             code-server:
               - path: /home/coder/.ssh/id_ed25519
                 subPath: id_ed25519
+
+    route:
+      app:
+        hostnames:
+          - esphome.blkh.dev
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /code/
+            filters:
+              - type: URLRewrite
+                urlRewrite:
+                  path:
+                    type: ReplacePrefixMatch
+                    replacePrefixMatch: /
+            backendRefs:
+              - identifier: code-server
+                port: *code-server-port
+          - backendRefs:
+              - identifier: app
+                port: *esphome-port
