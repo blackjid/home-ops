@@ -17,8 +17,7 @@ metadata:
 spec:
   loadBalancerIPs: true
   interfaces:
-  - bond0.120
-  - "^eno.*"
+  - bond0
   nodeSelector:
     matchLabels:
       kubernetes.io/os: linux
