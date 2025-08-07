@@ -21,6 +21,13 @@
     "prEditedNotification",
     "prIgnoreNotification",
   ],
+  packageRules: [
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["docker.io/crocodilestick/calibre-web-automated"],
+      "versioning": "loose"
+    }
+  ],
   ignorePaths: [
     "**/*.sops.*",
     "**/resources/**",
