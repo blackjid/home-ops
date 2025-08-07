@@ -34,6 +34,11 @@ spec:
               TZ: America/Santiago
               PUID: 1000
               PGID: 1000
+              HARDCOVER_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: cwa-secret
+                    key: HARDCOVER_TOKEN
             probes:
               liveness: &probes
                 enabled: true
