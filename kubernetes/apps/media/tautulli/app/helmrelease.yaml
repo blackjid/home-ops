@@ -28,7 +28,11 @@ spec:
               tag: 2.15.3@sha256:3e0eaca8c082ebe121a0ae9125bea1b4e2d177fca34ac8df4ec14a28e62f63a4
             env:
               TZ: America/Santiago
-              TAUTULLI__PORT: &port 80
+              TAUTULLI_HTTP_BASE_URL: https://tautulli.blkh.dev
+              TAUTULLI_HTTP_PORT: &port 80
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness: &probes
                 enabled: true
@@ -60,7 +64,6 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: tautulli
         ports:
           http:
             port: *port
@@ -71,20 +74,19 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
     persistence:
       config:
-        existingClaim: tautulli
+        existingClaim: "{{ .Release.Name }}"
       config-cache:
-        existingClaim: tautulli-cache
+        existingClaim: "{{ .Release.Name }}-cache"
         globalMounts:
           - path: /config/cache
-      config-logs:
+      tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /config/logs
-      tmp:
-        type: emptyDir
+        advancedMounts:
+          tautulli:
+            app:
+              - path: /config/logs
+                subPath: logs
+              - path: /tmp
+                subPath: tmp
