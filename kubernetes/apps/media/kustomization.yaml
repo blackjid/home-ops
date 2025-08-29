@@ -19,3 +19,4 @@ resources:
   - ./recyclarr/ks.yaml
   - ./sonarr/ks.yaml
   - ./tautulli/ks.yaml
+  - ./tqm/ks.yaml
