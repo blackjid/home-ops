@@ -1,0 +1,34 @@
+---
+clients:
+  qb:
+    download_path: /downloads
+    enabled: true
+    filter: default
+    type: qbittorrent
+    url: http://qbittorrent.media.svc.cluster.local
+
+filters:
+  default:
+    MapHardlinksFor:
+      - retag
+
+    ignore:
+      - IsTrackerDown()
+      - Downloaded == false && !IsUnregistered()
+      - SeedingHours < 26 && !IsUnregistered()
+
+    remove:
+      - IsUnregistered()
+      - HasAnyTag("not-linked") && SeedingDays >= 15.0
+      - HasAnyTag("site:ipt") && (Ratio >= 1.05 || SeedingDays >= 14.5)
+
+    tag:
+      - { name: added:1d,     mode: full, update: ['AddedDays < 7'] }
+      - { name: added:7d,     mode: full, update: ['AddedDays >= 7 && AddedDays < 14'] }
+      - { name: added:14d,    mode: full, update: ['AddedDays >= 14 && AddedDays < 30'] }
+      - { name: added:30d,    mode: full, update: ['AddedDays >= 30 && AddedDays < 180'] }
+      - { name: added:180d,   mode: full, update: ['AddedDays >= 180'] }
+      - { name: not-linked,   mode: full, update: ['HardlinkedOutsideClient == false && Label in ["sonarr", "radarr"]'] }
+      - { name: site:ipt,     mode: full, update: ['TrackerName in ["bgp.technology", "empirehost.me", "stackoverflow.tech"]'] }
+      - { name: tracker-down, mode: full, update: ['IsTrackerDown()'] }
+      - { name: unregistered, mode: full, update: ['IsUnregistered()'] }
