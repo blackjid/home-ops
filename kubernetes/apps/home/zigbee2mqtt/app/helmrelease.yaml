@@ -80,7 +80,7 @@ spec:
             port: *port
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.blkh.dev"]
+        hostnames: ["zigbee.blkh.dev"]
         parentRefs:
           - name: internal
             namespace: kube-system
