@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app system-upgrade-controller
+  name: system-upgrade-controller
 spec:
   interval: 1h
   chartRef:
@@ -20,7 +20,6 @@ spec:
     controllers:
       system-upgrade-controller:
         strategy: RollingUpdate
-        replicas: 2
         containers:
           app:
             image:
@@ -28,11 +27,8 @@ spec:
               tag: v0.16.2@sha256:ae933d9d81e9c42e316989a0ce7b1fb0dfe93afe5469631b8f384141b89b106a
             env:
               SYSTEM_UPGRADE_CONTROLLER_LEADER_ELECT: true
-              SYSTEM_UPGRADE_CONTROLLER_NAME: *app
-              SYSTEM_UPGRADE_CONTROLLER_NAMESPACE:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.namespace
+              SYSTEM_UPGRADE_CONTROLLER_NAME: "{{ .Release.Name }}"
+              SYSTEM_UPGRADE_CONTROLLER_NAMESPACE: "{{ .Release.Namespace }}"
               SYSTEM_UPGRADE_CONTROLLER_NODE_NAME:
                 valueFrom:
                   fieldRef:
@@ -43,8 +39,6 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-        serviceAccount:
-          identifier: system-upgrade-controller
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
