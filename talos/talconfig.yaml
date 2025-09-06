@@ -87,8 +87,8 @@ nodes:
 # Controller patches
 controlPlane:
   nodeLabels:
-    topology.kubernetes.io/region: *clusterName
-    topology.kubernetes.io/zone: m
+    intel.feature.node.kubernetes.io/gpu: "true"
+    topology.kubernetes.io/region: main
 
   schematic:
     customization:
