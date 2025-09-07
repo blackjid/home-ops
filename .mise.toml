@@ -9,6 +9,6 @@ _.file = [
 
 [tools]
 "aqua:astral-sh/uv" = ["latest"]
-"pipx:flux-local" = ["7.8.0"]
+"pipx:flux-local" = ["7.9.0"]
 talhelper = "latest"
 talosctl = "1.11.0"
