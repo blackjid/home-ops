@@ -167,6 +167,8 @@ controlPlane:
       machine:
         kubelet:
           extraConfig:
+            featureGates:
+              ImageVolume: true
             maxPods: 150
           nodeIP:
             validSubnets:
