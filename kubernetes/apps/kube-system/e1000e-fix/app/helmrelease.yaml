@@ -9,7 +9,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: app-template
+    name: e1000e-fix
   values:
     controllers:
       e1000e-fix:

@@ -6,5 +6,6 @@ namespace: home
 components:
   - ../../../../components/common
 resources:
-  - externalsecret.yaml
-  - helmrelease.yaml
+  - ./externalsecret.yaml
+  - ./helmrelease.yaml
+  - ./ocirepository.yaml
