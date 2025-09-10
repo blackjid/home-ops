@@ -120,5 +120,10 @@ spec:
         image: ghcr.io/buroa/qbrr:0.1.1@sha256:fe4a1d100ba896999253a5122d9c77cc4920779d618c23f765458cb6ec7383ca
         globalMounts:
           - readOnly: true
+      vuetorrent:
+        type: image
+        image: ghcr.io/vuetorrent/vuetorrent-lsio-mod:sha-9b8332c@sha256:3d7997e3caa640642d01abbafc3c6335cb8765405bd44b54f8cec6aa52a5c3ae
+        globalMounts:
+          - readOnly: true
       tmp:
         type: emptyDir
