@@ -5,14 +5,14 @@ kind: HelmRelease
 metadata:
   name: flux-instance
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: flux-instance
+  interval: 1h
   values:
     instance:
       distribution:
-        artifact: oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests:v0.30.0
+        artifact: oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests:v0.32.0
         version: 2.x
       cluster:
         networkPolicy: false
@@ -27,9 +27,6 @@ spec:
         ref: refs/heads/main
         path: kubernetes/flux/cluster
         interval: 1h
-      commonMetadata:
-        labels:
-          app.kubernetes.io/name: flux
       kustomize:
         patches:
           - # Increase the number of workers
@@ -111,7 +108,7 @@ spec:
               kind: Deployment
               name: helm-controller
           - # Controller-level SOPS decryption
-            patch: |
+            patch: |-
               - op: add
                 path: /spec/template/spec/containers/0/args/-
                 value: --sops-age-secret=sops-age-secret
@@ -119,7 +116,7 @@ spec:
               kind: Deployment
               name: kustomize-controller
           - # Watch configmaps and secrets attached to HelmReleases and Kustomizations
-            patch: |
+            patch: |-
               - op: add
                 path: /spec/template/spec/containers/0/args/-
                 value: --watch-configs-label-selector=owner!=helm
@@ -127,7 +124,7 @@ spec:
               kind: Deployment
               name: (helm-controller|kustomize-controller)
           - # Cancel health checks on new Kustomizations revisions
-            patch: |
+            patch: |-
               - op: add
                 path: /spec/template/spec/containers/0/args/-
                 value: --feature-gates=CancelHealthCheckOnNewRevision=true
