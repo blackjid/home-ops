@@ -9,7 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  components:
   interval: 30m
   path: ./kubernetes/apps/longhorn-system/longhorn/app
   postBuild:
