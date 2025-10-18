@@ -3,28 +3,23 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app zwave
-  namespace: &namespace home
+  name: zwave
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   components:
     - ../../../../components/volsync
   dependsOn:
     - name: longhorn
       namespace: longhorn-system
-  interval: 30m
+  interval: 1h
   path: ./kubernetes/apps/home/zwave/app
   postBuild:
     substitute:
-      APP: *app
+      APP: zwave
       VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: *namespace
-  timeout: 5m
+  targetNamespace: home
   wait: false
