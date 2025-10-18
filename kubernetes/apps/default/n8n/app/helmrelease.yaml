@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: n8n
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: n8n

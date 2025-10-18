@@ -3,12 +3,8 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app obsidian-couchdb
-  namespace: &namespace default
+  name: obsidian-couchdb
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   components:
     - ../../../../components/volsync
   dependsOn:
@@ -16,17 +12,16 @@ spec:
       namespace: longhorn-system
     - name: onepassword
       namespace: external-secrets
-  interval: 30m
+  interval: 1h
   path: ./kubernetes/apps/default/obsidian-couchdb/app
   postBuild:
     substitute:
-      APP: *app
+      APP: obsidian-couchdb
       VOLSYNC_CAPACITY: 30Gi
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: *namespace
-  timeout: 5m
+  targetNamespace: default
   wait: false
