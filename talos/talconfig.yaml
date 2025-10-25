@@ -251,6 +251,7 @@ controlPlane:
           fs.inotify.max_user_watches: 1048576   # Watchdog
           net.core.rmem_max: 67108864            # Cloudflared / QUIC
           net.core.wmem_max: 67108864            # Cloudflared / QUIC
+          user.max_user_namespaces: "11255"
 
     # Configure udev rules
     - |-
