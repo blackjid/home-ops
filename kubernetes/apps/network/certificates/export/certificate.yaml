@@ -10,4 +10,6 @@ spec:
     name: letsencrypt-production
     kind: ClusterIssuer
   commonName: blkh.dev
-  dnsNames: ["blkh.dev", "*.blkh.dev"]
+  dnsNames:
+    - blkh.dev
+    - "*.blkh.dev"
