@@ -33,10 +33,11 @@ spec:
   advertisements:
     - advertisementType: Service
       service:
-        addresses: ["LoadBalancerIP"]
+        addresses:
+          - LoadBalancerIP
       selector:
         matchExpressions:
-          - { key: somekey, operator: NotIn, values: ["never-used-value"] }
+          - {key: somekey, operator: NotIn, values: ["never-used-value"]}
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumbgppeerconfig_v2.json
 apiVersion: cilium.io/v2
@@ -69,3 +70,19 @@ spec:
           peerAddress: 192.168.1.1
           peerConfigRef:
             name: l3-bgp-peer-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-api
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: k8s.blkh.dev
+    lbipam.cilium.io/ips: 192.168.86.120
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  selector:
+    k8s-app: kube-apiserver
+    tier: control-plane
+  ports:
+    - port: 6443

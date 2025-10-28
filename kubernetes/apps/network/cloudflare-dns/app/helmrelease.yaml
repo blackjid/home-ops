@@ -5,17 +5,10 @@ kind: HelmRelease
 metadata:
   name: &app cloudflare-dns
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: cloudflare-dns
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 1h
   values:
     fullnameOverride: *app
     provider:
@@ -36,14 +29,17 @@ spec:
       - --cloudflare-proxied
       - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
       - --crd-source-kind=DNSEndpoint
-      - --gateway-name=external
+      - --gateway-name=envoy-external
       - --zone-id-filter=$(CF_ZONE_ID)
     triggerLoopOnEvent: true
     policy: sync
-    sources: ["crd", "gateway-httproute"]
+    sources:
+      - crd
+      - gateway-httproute
     txtOwnerId: default
     txtPrefix: k8s.
-    domainFilters: ["blkh.dev"]
+    domainFilters:
+      - blkh.dev
     serviceMonitor:
       enabled: true
     podAnnotations:
