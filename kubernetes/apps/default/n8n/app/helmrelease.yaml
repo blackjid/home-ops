@@ -70,17 +70,15 @@ spec:
         hostnames:
           - *hostName
         parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
+          - name: envoy-internal
+            namespace: network
 
       webhooks:
         hostnames:
           - n8n-webhook.blkh.dev
         parentRefs:
-          - name: external
-            namespace: kube-system
-            sectionName: https
+          - name: envoy-external
+            namespace: network
         rules:
           - matches:
               - path:

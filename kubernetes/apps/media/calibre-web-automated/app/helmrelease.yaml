@@ -82,9 +82,8 @@ spec:
         - "{{ .Release.Name }}.blkh.dev"
         - cwa.blkh.dev
         parentRefs:
-          - name: external
-            namespace: kube-system
-            sectionName: https
+          - name: envoy-external
+            namespace: network
         rules:
           - backendRefs:
               - identifier: app
