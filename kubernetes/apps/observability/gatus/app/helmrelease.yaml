@@ -37,12 +37,8 @@ spec:
               tag: v5.29.0@sha256:b4afbcaf1cdfcda0b87e732914f101b0e2fab71485ae5d691ceb7b97d021b642
             env:
               GATUS_CONFIG_PATH: /config
-              GATUS_DELAY_START_SECONDS: 5
               GATUS_WEB_PORT: &port 80
               TZ: America/Santiago
-            envFrom:
-              - secretRef:
-                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness: &probes
                 enabled: true
