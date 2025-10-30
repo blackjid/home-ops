@@ -7,9 +7,8 @@ metadata:
 spec:
   hostnames: ["longhorn.blkh.dev"]
   parentRefs:
-    - name: internal
-      namespace: kube-system
-      sectionName: https
+    - name: envoy-internal
+      namespace: network
   rules:
     - backendRefs:
         - name: longhorn-frontend

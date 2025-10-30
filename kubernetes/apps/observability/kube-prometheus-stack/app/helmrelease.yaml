@@ -29,9 +29,8 @@ spec:
           enabled: true
           hostnames: ["alertmanager.blkh.dev"]
           parentRefs:
-            - name: internal
-              namespace: kube-system
-              sectionName: https
+            - name: envoy-internal
+              namespace: network
       alertmanagerSpec:
         alertmanagerConfiguration:
           name: alertmanager
@@ -57,9 +56,8 @@ spec:
           enabled: true
           hostnames: ["prometheus.blkh.dev"]
           parentRefs:
-            - name: internal
-              namespace: kube-system
-              sectionName: https
+            - name: envoy-internal
+              namespace: network
       prometheusSpec:
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
