@@ -12,4 +12,4 @@ _.file = [
 helm = "3.19.0"
 "pipx:flux-local" = ["7.11.0"]
 talhelper = "latest"
-talosctl = "1.11.4"
+talosctl = "1.11.5"
