@@ -2,6 +2,16 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      description: "1Password Connect Group",
+      groupName: "1password-connect",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/1password/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
       description: "Actions Runner Controller Group",
       groupName: "actions-runner-controller",
       matchDatasources: ["docker"],
@@ -15,11 +25,11 @@
       description: "Flux Operator Group",
       groupName: "flux-operator",
       matchDatasources: ["docker"],
-      matchPackageNames: ["/flux-operator/", "/flux-instance/"],
+      matchPackageNames: ["/flux-operator/", "/flux-instance/", "/flux-operator-manifests/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
-      minimumGroupSize: 2,
+      minimumGroupSize: 3,
     },
     {
       description: "Intel Device Plugins Group",
@@ -61,7 +71,7 @@
       description: "Talos Group",
       groupName: "talos",
       matchDatasources: ["docker"],
-      matchPackageNames: ["/installer/", "/talosctl/"],
+      matchPackageNames: ["/installer/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },

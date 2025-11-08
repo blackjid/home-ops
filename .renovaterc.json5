@@ -5,10 +5,12 @@
     "docker:enableMajor",
     "helpers:pinGitHubActionDigests",
     "github>blackjid/home-ops//.renovate/autoMerge.json5",
+    "github>blackjid/home-ops//.renovate/changelogs.json5",
     "github>blackjid/home-ops//.renovate/customManagers.json5",
     "github>blackjid/home-ops//.renovate/grafanaDashboards.json5",
     "github>blackjid/home-ops//.renovate/groups.json5",
     "github>blackjid/home-ops//.renovate/labels.json5",
+    "github>blackjid/home-ops//.renovate/overrides.json5",
     "github>blackjid/home-ops//.renovate/semanticCommits.json5",
     ":automergeBranch",
     ":disableRateLimiting",
@@ -21,24 +23,17 @@
     "prEditedNotification",
     "prIgnoreNotification",
   ],
-  packageRules: [
-    {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["docker.io/crocodilestick/calibre-web-automated"],
-      "versioning": "loose"
-    }
-  ],
   ignorePaths: [
     "**/*.sops.*",
     "**/resources/**",
   ],
   flux: {
-    managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml$/"]
+    managerFilePatterns: ["/\\.yaml(?:\\.j2)?$/"],
   },
   "helm-values": {
-    managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml$/"]
+    managerFilePatterns: ["/\\.yaml(?:\\.j2)?$/"],
   },
   kubernetes: {
-    managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml$/"]
+    managerFilePatterns: ["/\\.yaml(?:\\.j2)?$/"],
   },
 }
