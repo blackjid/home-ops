@@ -5,7 +5,8 @@ name: Labeler
 on:
   workflow_dispatch:
   pull_request:
-    branches: ["main"]
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -20,14 +21,14 @@ jobs:
       pull-requests: write
     steps:
       - name: Generate Token
-        uses: actions/create-github-app-token@a8d616148505b5069dccd32f177bb87d7f39123b # v2.1.1
+        uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
         id: app-token
         with:
-          app-id: "${{ secrets.BOT_APP_ID }}"
-          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
 
       - name: Labeler
-        uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        uses: actions/labeler@634933edcd8ababfe52f92936142cc22ac488b1b # v6.0.1
         with:
-          repo-token: "${{ steps.app-token.outputs.token }}"
+          repo-token: ${{ steps.app-token.outputs.token }}
           configuration-path: .github/labeler.yaml
