@@ -5,17 +5,22 @@ kind: HelmRelease
 metadata:
   name: spegel
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: spegel
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  valuesFrom:
-    - kind: ConfigMap
-      name: spegel-values
+  interval: 1h
+  values:
+    grafanaDashboard:
+      enabled: true
+      mode: GrafanaOperator
+      grafanaOperator:
+        matchLabels:
+          grafana.internal/instance: grafana
+    service:
+      registry:
+        hostPort: 29999
+    serviceMonitor:
+      enabled: true
+    spegel:
+      containerdSock: /run/containerd/containerd.sock
+      containerdRegistryConfigPath: /etc/cri/conf.d/hosts
