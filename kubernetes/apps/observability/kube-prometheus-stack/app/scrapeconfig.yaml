@@ -3,7 +3,7 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: &name node-exporter
+  name: node-exporter
 spec:
   staticConfigs:
     - targets:
@@ -12,4 +12,4 @@ spec:
   relabelings:
     - action: replace
       targetLabel: job
-      replacement: *name
+      replacement: node-exporter
