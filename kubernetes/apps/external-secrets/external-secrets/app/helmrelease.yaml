@@ -5,17 +5,20 @@ kind: HelmRelease
 metadata:
   name: external-secrets
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: external-secrets
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  valuesFrom:
-    - kind: ConfigMap
-      name: external-secrets-values
+  interval: 1h
+  values:
+    leaderElect: true
+    serviceMonitor:
+      enabled: true
+    grafanaDashboard:
+      enabled: true
+    certController:
+      serviceMonitor:
+        enabled: true
+    webhook:
+      replicaCount: 2
+      serviceMonitor:
+        enabled: true
