@@ -36,7 +36,6 @@ storage:
 ui:
   title: Status | Gatus
   header: Status
-  logo: https://avatars.githubusercontent.com/u/213795
   link: https://github.com/blackjid
   buttons:
     - name: Github
