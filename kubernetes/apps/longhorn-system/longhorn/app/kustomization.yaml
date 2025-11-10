@@ -6,3 +6,4 @@ resources:
 - ./grafanadashboard.yaml
 - ./helmrepository.yaml
 - ./httproute.yaml
+- ./prometheusrule.yaml
