@@ -11,7 +11,7 @@ spec:
   targets:
     staticConfig:
       static:
-        - black-staging.internal
+        - black-station.internal
         - k8s-0.internal
         - k8s-1.internal
         - k8s-2.internal
@@ -32,7 +32,7 @@ spec:
   targets:
     staticConfig:
       static:
-        - black-staging.internal:2049
+        - black-station.internal:2049
   metricRelabelings:
     - targetLabel: service
       replacement: blackbox-exporter-lan
