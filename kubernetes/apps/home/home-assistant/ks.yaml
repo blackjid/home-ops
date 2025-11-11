@@ -9,10 +9,10 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
+    - name: multus-networks
+      namespace: kube-system
     - name: longhorn
       namespace: longhorn-system
-    - name: onepassword
-      namespace: external-secrets
   interval: 1h
   path: ./kubernetes/apps/home/home-assistant/app
   postBuild:

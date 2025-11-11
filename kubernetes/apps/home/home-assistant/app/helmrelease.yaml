@@ -5,31 +5,15 @@ kind: HelmRelease
 metadata:
   name: home-assistant
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: home-assistant
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 1h
   values:
     controllers:
       home-assistant:
         annotations:
           reloader.stakater.com/auto: "true"
-        pod:
-          annotations:
-            k8s.v1.cni.cncf.io/networks: |
-              [{
-                "name":"iot",
-                "namespace": "kube-system",
-                "ips": ["192.168.20.30/24"],
-                "mac": "76:d5:80:89:b1:85"
-              }]
         containers:
           app:
             image:
@@ -37,21 +21,29 @@ spec:
               tag: 2025.11.1@sha256:36619b3746910f9b3d21e02c4e8090b837be4bacf88987755d09988cec2dfb1f
             env:
               TZ: America/Santiago
-              HASS_HTTP_TRUSTED_PROXY_1: 192.168.86.0/24
+              HASS_HTTP_TRUSTED_PROXY_1: 192.168.69.0/24
               HASS_HTTP_TRUSTED_PROXY_2: 10.42.0.0/16
             envFrom:
               - secretRef:
-                  name: home-assistant-secret
+                  name: "{{ .Release.Name }}-secret"
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
               limits:
                 memory: 2Gi
     defaultPodOptions:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [{
+            "name": "iot",
+            "namespace": "kube-system",
+            "ips": ["192.168.20.30/24"],
+            "mac": "76:d5:80:89:b1:85"
+          }]
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -60,40 +52,29 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: home-assistant
         ports:
           http:
-            port: &port 8123
+            appProtocol: kubernetes.io/ws
+            port: 8123
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 200"]
         hostnames:
           - "{{ .Release.Name }}.blkh.dev"
           - hass.blkh.dev
         parentRefs:
           - name: envoy-external
             namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
     persistence:
       config:
-        existingClaim: home-assistant
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
       config-cache:
-        existingClaim: home-assistant-cache
+        existingClaim: "{{ .Release.Name }}-cache"
         globalMounts:
           - path: /config/.venv
-      config-logs:
-        type: emptyDir
-        globalMounts:
-          - path: /config/logs
-      config-tts:
-        type: emptyDir
-        globalMounts:
-          - path: /config/tts
       tmp:
         type: emptyDir
-        globalMounts:
-          - path: /tmp
