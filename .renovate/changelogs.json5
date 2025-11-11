@@ -12,6 +12,11 @@
       changelogUrl: "https://github.com/cloudflare/cloudflared/blob/master/RELEASE_NOTES",
     },
     {
+      description: "Changelog URL for n8n",
+      matchPackageNames: ["/n8n/"],
+      changelogUrl: "https://github.com/n8n-io/n8n/blob/master/CHANGELOG.md",
+    },
+    {
       description: "Changelog URL for Spegel",
       matchPackageNames: ["/spegel/"],
       changelogUrl: "https://github.com/spegel-org/spegel/blob/main/CHANGELOG.md",
