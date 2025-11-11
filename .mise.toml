@@ -9,7 +9,7 @@ _.file = [
 
 [tools]
 "aqua:astral-sh/uv" = ["latest"]
-helm = "3.19.0"
+helm = "3.19.1"
 "pipx:flux-local" = ["7.11.0"]
 talhelper = "latest"
 talosctl = "1.11.5"
