@@ -2,14 +2,11 @@
 # Config Files
 KUBECONFIG = '{{config_root}}/kubeconfig'
 TALOSCONFIG = '{{config_root}}/talosconfig'
-# Included file paths
-_.file = [
-  "{{config_root}}/kubernetes/apps/system-upgrade/versions.env"
-]
 
 [tools]
-"aqua:astral-sh/uv" = ["latest"]
-helm = "3.19.2"
-"pipx:flux-local" = ["7.11.0"]
-talhelper = "latest"
-talosctl = "1.11.5"
+"aqua:helm/helm" = "3.19.2"
+"aqua:helmfile/helmfile" = "1.1.9"
+"pipx:flux-local" = "latest"
+"uv" = "latest"
+"talhelper" = "latest"
+"talosctl" = "1.11.5"
