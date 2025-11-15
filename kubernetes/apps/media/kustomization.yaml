@@ -14,12 +14,12 @@ resources:
   # - ./calibre-web/ks.yaml
   - ./calibre-web-automated/ks.yaml
   - ./flaresolverr/ks.yaml
-  - ./overseerr/ks.yaml
   - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
   - ./recyclarr/ks.yaml
+  - ./seerr/ks.yaml
   - ./sonarr/ks.yaml
   - ./tautulli/ks.yaml
   - ./tqm/ks.yaml
