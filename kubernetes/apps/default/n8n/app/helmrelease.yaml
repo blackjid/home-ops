@@ -21,22 +21,24 @@ spec:
               tag: 1.120.3@sha256:e047444709aa5ce8e2be7c952b51d95c35989ea8a36ed7b4ed478c2193df5825
             env:
               DB_SQLITE_VACUUM_ON_STARTUP: true
-              EXECUTIONS_DATA_PRUNE: true
               EXECUTIONS_DATA_MAX_AGE: 7
               EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
+              EXECUTIONS_DATA_PRUNE: true
               GENERIC_TIMEZONE: "America/Santiago"
-              WEBHOOK_URL: "https://{{ .Release.Name }}.blkh.dev/"
-              N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
-              N8N_PROTOCOL: "https"
-              N8N_PORT: &port 8080
-              N8N_HOST: &hostName "{{ .Release.Name }}.blkh.dev"
-              N8N_LOG_LEVEL: info
-              N8N_LOG_OUTPUT: console
               N8N_ENCRYPTION_KEY:
                 valueFrom:
                   secretKeyRef:
                     name: "{{ .Release.Name }}-secret"
                     key: N8N_ENCRYPTION_KEY
+              N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
+              N8N_HOST: &hostName "{{ .Release.Name }}.blkh.dev"
+              N8N_LOG_LEVEL: info
+              N8N_LOG_OUTPUT: console
+              N8N_PORT: &port 8080
+              N8N_PROTOCOL: "https"
+              N8N_PROXY_HOPS: 1
+              WEBHOOK_URL: "https://{{ .Release.Name }}.blkh.dev/"
+
             probes:
               liveness: &probes
                 enabled: true
@@ -85,6 +87,9 @@ spec:
           - name: envoy-internal
             namespace: network
       webhooks:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 404"]
         hostnames:
           - *hostName
         parentRefs:
@@ -103,3 +108,9 @@ spec:
           n8n:
             app:
               - path: /home/node/.n8n
+      tmp:
+        type: emptyDir
+        advancedMounts:
+          n8n:
+            app:
+              - path: /home/node/.cache
