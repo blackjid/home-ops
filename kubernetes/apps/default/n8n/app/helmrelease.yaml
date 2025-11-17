@@ -89,7 +89,10 @@ spec:
       webhooks:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            conditions: ["[STATUS] == 404"]
+            url: https://{{ .Release.Name }}.blkh.dev/webhook/any
+            conditions:
+              - "[STATUS] == 404"
+              - "[BODY].code == 404"
         hostnames:
           - *hostName
         parentRefs:
