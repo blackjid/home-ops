@@ -5,66 +5,78 @@ kind: HelmRelease
 metadata:
   name: n8n
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: n8n
+  interval: 1h
   values:
     controllers:
       n8n:
         annotations:
           reloader.stakater.com/auto: "true"
-
-        pod:
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: "OnRootMismatch"
-
         containers:
           app:
             image:
               repository: ghcr.io/n8n-io/n8n
-              tag: 1.120.3
+              tag: 1.120.3@sha256:e047444709aa5ce8e2be7c952b51d95c35989ea8a36ed7b4ed478c2193df5825
             env:
               DB_SQLITE_VACUUM_ON_STARTUP: true
               EXECUTIONS_DATA_PRUNE: true
               EXECUTIONS_DATA_MAX_AGE: 7
               EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
               GENERIC_TIMEZONE: "America/Santiago"
+              WEBHOOK_URL: "https://{{ .Release.Name }}.blkh.dev/"
               N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
               N8N_PROTOCOL: "https"
               N8N_PORT: &port 8080
-              N8N_HOST: &hostName n8n.blkh.dev
+              N8N_HOST: &hostName "{{ .Release.Name }}.blkh.dev"
               N8N_LOG_LEVEL: info
               N8N_LOG_OUTPUT: console
               N8N_ENCRYPTION_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: n8n-secret
+                    name: "{{ .Release.Name }}-secret"
                     key: N8N_ENCRYPTION_KEY
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness:
+                <<: *probes
+                spec:
+                  httpGet:
+                    path: /healthz/readiness
+                    port: *port
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 5m
                 memory: 128Mi
               limits:
                 memory: 2Gi
-
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
     service:
       app:
         ports:
           http:
             port: *port
-
-    persistence:
-      data:
-        existingClaim: n8n
-        advancedMounts:
-          n8n:
-            app:
-              - path: /home/node/.n8n
-
     route:
       app:
         hostnames:
@@ -72,15 +84,22 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: network
-
       webhooks:
         hostnames:
-          - n8n-webhook.blkh.dev
+          - *hostName
         parentRefs:
           - name: envoy-external
             namespace: network
         rules:
           - matches:
               - path:
+                  type: PathPrefix
                   value: /webhook
             backendRefs: [{}]
+    persistence:
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        advancedMounts:
+          n8n:
+            app:
+              - path: /home/node/.n8n
