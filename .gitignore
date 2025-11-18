@@ -1,26 +1,14 @@
-# Trash
+.private/
+.pytest_cache/
+.task/
+.venv/
+*.crt
+*.env
+*.iso
+*.key
+.decrypted~*
 .DS_Store
+Brewfile.lock.json
 Thumbs.db
-# k8s
 kubeconfig
 talosconfig
-.decrypted~*.yaml
-.config.env
-*.agekey
-*.pub
-*.key
-# Private
-.private
-.bin
-# Ansible
-.venv*
-# Taskfile
-.task
-# Brew
-Brewfile.lock.json
-# intellij
-.idea
-# wiki
-wiki
-# Bootstrap
-/config.yaml
