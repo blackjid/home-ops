@@ -1,12 +1,20 @@
 [env]
-# Config Files
-KUBECONFIG = '{{config_root}}/kubeconfig'
-TALOSCONFIG = '{{config_root}}/talosconfig'
+KUBECONFIG = "{{config_root}}/kubeconfig"
+MINIJINJA_CONFIG_FILE = "{{config_root}}/.minijinja.toml"
+SOPS_AGE_KEY_FILE = "{{config_root}}/age.key"
+TALOSCONFIG = "{{config_root}}/talosconfig"
+JUST_UNSTABLE = "1"
+LEFTHOOK_OUTPUT = "false"
+
+_.file = [
+  "{{config_root}}/.secrets.env",
+]
 
 [tools]
 "aqua:helm/helm" = "3.19.2"
 "aqua:helmfile/helmfile" = "1.1.9"
 "pipx:flux-local" = "latest"
 "uv" = "latest"
-"talhelper" = "latest"
+talhelper = "latest"
 "talosctl" = "1.11.5"
+gum = "latest"

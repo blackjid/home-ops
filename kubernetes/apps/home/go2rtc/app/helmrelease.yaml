@@ -1,0 +1,112 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: go2rtc
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: go2rtc
+  interval: 1h
+  values:
+    controllers:
+      go2rtc:
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: ghcr.io/alexxit/go2rtc
+              tag: 1.9.11@sha256:64ab39fdcf7571075f4ef1a818a1019aa359e2e730600771d265b50a94449532
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: &port 80
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+    service:
+      app:
+        forceRename: "{{ .Release.Name }}"
+        primary: true
+        ports:
+          http:
+            port: *port
+      streams:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 192.168.69.215
+        externalTrafficPolicy: Local
+        ports:
+          streams-rtsp:
+            port: 554
+          streams-webrtc-tcp:
+            port: 8555
+            protocol: TCP
+          streams-webrtc-udp:
+            port: 8555
+            protocol: UDP
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.blkh.dev"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    configMaps:
+      config:
+        data:
+          go2rtc.yaml: |-
+            log:
+              streams: error # Prevent log spam from UniFi Protect
+            api:
+              listen: :80
+              origin: "*"
+            rtsp:
+              listen: :554
+            webrtc:
+              listen: :8555
+              candidates:
+                - 192.168.69.215:8555
+                - stun:8555
+              ice_servers:
+                - urls:
+                    - stun:stun.cloudflare.com:3478
+            streams:
+              driveway:
+                - rtspx://192.168.1.1:7441/SB74mRIu1CkoPcEq
+              garage:
+                - rtspx://192.168.1.1:7441/dFl352XtCUFREtRz
+              porch:
+                - rtspx://192.168.1.1:7441/ezkTDbaOR71GUE67
+    persistence:
+      config-file:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /config/go2rtc.yaml
+            subPath: go2rtc.yaml

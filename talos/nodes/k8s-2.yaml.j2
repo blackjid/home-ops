@@ -1,0 +1,15 @@
+---
+machine:
+  network:
+    hostname: k8s-2
+  nodeLabels:
+    topology.kubernetes.io/zone: m
+  type: controlplane
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: local-hostpath
+provisioning:
+  diskSelector:
+    match: disk.model == "CT1000MX500SSD1" && !system_disk
+  minSize: 1TB
