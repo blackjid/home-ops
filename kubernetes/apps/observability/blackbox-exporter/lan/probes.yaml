@@ -12,9 +12,9 @@ spec:
     staticConfig:
       static:
         - black-station.internal
-        - k8s-a.internal
-        - k8s-b.internal
-        - k8s-c.internal
+        - k8s-0.internal
+        - k8s-1.internal
+        - k8s-2.internal
   metricRelabelings:
     - targetLabel: service
       replacement: blackbox-exporter-lan
