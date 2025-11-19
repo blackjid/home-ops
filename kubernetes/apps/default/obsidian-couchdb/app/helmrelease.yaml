@@ -52,7 +52,7 @@ spec:
     configMaps:
       config:
         data:
-          mosquitto.conf: |-
+          config.ini: |-
             [couchdb]
             single_node = true
             max_document_size = 50000000
