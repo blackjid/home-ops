@@ -5,17 +5,10 @@ kind: HelmRelease
 metadata:
   name: obsidian-couchdb
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: obsidian-couchdb
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 1h
   values:
     controllers:
       obsidian-couchdb:
@@ -32,7 +25,7 @@ spec:
               - "-c"
               - "cp /tmp/config/*.ini /opt/couchdb/etc/default.d/; ls -lrt /opt/couchdb/etc/default.d;"
         containers:
-          main:
+          app:
             image:
               repository: public.ecr.aws/docker/library/couchdb
               tag: 3.5.1
@@ -53,12 +46,44 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: obsidian-couchdb
         ports:
           http:
             port: &port 5984
+    configMaps:
+      config:
+        data:
+          mosquitto.conf: |-
+            [couchdb]
+            single_node = true
+            max_document_size = 50000000
+
+            [chttpd]
+            require_valid_user = true
+            bind_address = any
+            max_http_request_size = 4294967296
+
+            [chttpd_auth]
+            require_valid_user = true
+            authentication_redirect = /_utils/session.html
+
+            [httpd]
+            WWW-Authenticate = Basic realm="couchdb"
+            enable_cors = true
+
+            [cors]
+            origins = app://obsidian.md,capacitor://localhost,http://localhost
+            credentials = true
+            headers = accept, authorization, content-type, origin, referer
+            methods = GET, PUT, POST, HEAD, DELETE
+            max_age = 3600
+
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: https://obsidian-db.blkh.dev
+            conditions:
+              - "[STATUS] == 401"
         hostnames:
           - "{{ .Release.Name }}.blkh.dev"
           - obsidian-db.blkh.dev
@@ -72,13 +97,13 @@ spec:
     persistence:
       config:
         type: configMap
-        name: obsidian-couchdb-configmap
+        identifier: config
         advancedMounts:
           obsidian-couchdb:
             init-config:
               - path: /tmp/config
       data:
-        existingClaim: obsidian-couchdb
+        existingClaim: "{{ .Release.Name }}"
         advancedMounts:
           obsidian-couchdb:
             app:
