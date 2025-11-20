@@ -10,3 +10,7 @@ spec:
   eventSources:
     - kind: Kustomization
       name: "*"
+  eventMetadata:
+    env: "production"
+    cluster: "my-cluster"
+    target_url: "https://github.com/blackjid/home-ops"
