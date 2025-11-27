@@ -2,6 +2,12 @@
 machine:
   network:
     hostname: k8s-1
+    interfaces:
+      - interface: bond0
+        bond:
+          deviceSelectors:
+            - hardwareAddr: d8:c4:97:bf:70:20
+              driver: r8169
   nodeLabels:
     topology.kubernetes.io/zone: m
   type: controlplane

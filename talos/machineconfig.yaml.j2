@@ -72,9 +72,6 @@ machine:
     interfaces:
       - interface: bond0
         bond:
-          deviceSelectors:
-            - hardwareAddr: d8:c4:97:bf:*
-            - hardwareAddr: 1c:69:7a:02:5d:87
           mode: active-backup
         dhcp: true
         mtu: 1500
