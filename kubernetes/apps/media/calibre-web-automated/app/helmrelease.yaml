@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: ghcr.io/crocodilestick/calibre-web-automated
-              tag: latest
+              tag: dev
             env:
               TZ: America/Santiago
               PUID: 1000
