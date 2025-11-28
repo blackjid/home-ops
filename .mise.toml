@@ -7,7 +7,7 @@ JUST_UNSTABLE = "1"
 
 [tools]
 "aqua:helm/helm" = "3.19.2"
-"aqua:helmfile/helmfile" = "1.2.1"
+"aqua:helmfile/helmfile" = "1.2.2"
 "gum" = "latest"
 "pipx:flux-local" = "latest"
 "talosctl" = "1.11.5"
