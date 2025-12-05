@@ -5,17 +5,10 @@ kind: HelmRelease
 metadata:
   name: esphome
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: esphome
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 1h
   values:
     controllers:
       esphome:
@@ -30,11 +23,6 @@ spec:
                 "ips": ["192.168.20.31/24"],
                 "mac": "3e:59:e4:f7:43:08"
               }]
-          securityContext:
-            runAsUser: 2000
-            runAsGroup: 2000
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:
@@ -69,9 +57,9 @@ spec:
               - --disable-telemetry
               - --disable-update-check
               - --user-data-dir
-              - /config/.code-server
+              - /mnt/code-server
               - --extensions-dir
-              - /config/.code-server
+              - /mnt/code-server
               - --port
               - "12321"
               - /config
@@ -80,7 +68,12 @@ spec:
                 cpu: 10m
               limits:
                 memory: 512Mi
-
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 2000
+        runAsUser: 2000
     service:
       app:
         forceRename: "{{.Release.Name}}"
@@ -91,7 +84,6 @@ spec:
         ports:
           http:
             port: &code-server-port 12321
-
     persistence:
       config:
         existingClaim: esphome
@@ -101,19 +93,29 @@ spec:
               - path: /config
             code-server:
               - path: /config
+              - path: /mnt/code-server
+                subPath: code-server
       secrets:
         type: secret
         name: esphome-secrets
         globalMounts:
           - path: /config/secrets.yaml
             subPath: secrets.yaml
+      buildcache:
+        suffix: buildcache
+        size: 50Gi
+        accessMode: ReadWriteOnce
+        advancedMounts:
+          esphome:
+            app:
+              - path: /cache
       tmpfs:
         type: emptyDir
         advancedMounts:
           esphome:
             app:
-              - path: /cache
-                subPath: cache
+              - path: /tmp
+                subPath: esphome-tmp
             code-server:
               - path: /tmp
                 subPath: code-server-tmp
@@ -128,7 +130,6 @@ spec:
             code-server:
               - path: /home/coder/.ssh/id_ed25519
                 subPath: id_ed25519
-
     route:
       app:
         hostnames:
