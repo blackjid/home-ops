@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: docker.io/seerr/seerr
-              tag: develop@sha256:e3287fcaaafc898f3844899bd91cdc08771a5f4b231eb2cfa1c4dcc4f4f06f22
+              tag: develop@sha256:cebdcb3d23986bef88221717ed3352a595a05d4168409d69efa10f5fc5be19ff
             env:
               TZ: America/New_York
               LOG_LEVEL: "info"
