@@ -47,7 +47,7 @@ spec:
         controller: music-assistant
         ports:
           http:
-            port: 8095
+            port: &port 443
           stream:
             port: 8097
     route:
@@ -61,6 +61,10 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
     persistence:
       data:
         existingClaim: "{{ .Release.Name }}"
