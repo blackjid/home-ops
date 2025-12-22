@@ -57,6 +57,7 @@ spec:
             conditions: ["[STATUS] == 200"]
         hostnames:
           - "{{ .Release.Name }}.blkh.dev"
+          - mass.blkh.dev
         parentRefs:
           - name: envoy-external
             namespace: network
