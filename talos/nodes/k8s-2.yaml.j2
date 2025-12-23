@@ -1,7 +1,6 @@
 ---
 machine:
   network:
-    hostname: k8s-2
     interfaces:
       - interface: bond0
         bond:
@@ -11,6 +10,10 @@ machine:
   nodeLabels:
     topology.kubernetes.io/zone: m
   type: controlplane
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: k8s-2
 ---
 apiVersion: v1alpha1
 kind: VolumeConfig
