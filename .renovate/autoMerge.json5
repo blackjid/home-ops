@@ -3,16 +3,15 @@
   packageRules: [
     {
       description: "Pin and automerge latest board-game-collection images (dev only)",
-      matchManagers: ["helm-values"],
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/blackjid/board-game-collection"],
       matchFileNames: ["kubernetes/apps/development/**"],
-      pinDigests: true,
       automerge: true,
       automergeType: "branch",
       matchUpdateTypes: ["digest"],
       schedule: ["at any time"],
       ignoreTests: true,
+      commitMessageSuffix: "[dev]",
     },
     {
       description: "Auto-merge trusted container digests",
