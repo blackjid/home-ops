@@ -77,3 +77,12 @@ spec:
           - path: /data
       tmp:
         type: emptyDir
+      # Chromium needs writable directories for cache and crash handling
+      chromium-cache:
+        type: emptyDir
+        globalMounts:
+          - path: /home/node/.cache
+      chromium-config:
+        type: emptyDir
+        globalMounts:
+          - path: /home/node/.config
