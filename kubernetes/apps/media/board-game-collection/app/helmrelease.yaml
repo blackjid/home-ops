@@ -75,9 +75,12 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /data
+      app-cache:
+        type: emptyDir
+        globalMounts:
+          - path: /app/.next/cache
       tmp:
         type: emptyDir
-      # Chromium needs writable directories for cache and crash handling
       chromium-cache:
         type: emptyDir
         globalMounts:
