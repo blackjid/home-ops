@@ -50,6 +50,21 @@ spec:
                 imagePullPolicy: "IfNotPresent",
                 command: ["sh", "-c", "sleep $(shuf -i 0-30 -n 1)"]
               }
+            },
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/affinity",
+              value: Object.spec.template.spec.affinity{
+                podAntiAffinity: Object.spec.template.spec.affinity.podAntiAffinity{
+                  requiredDuringSchedulingIgnoredDuringExecution: [
+                    Object.spec.template.spec.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution{
+                      labelSelector: Object.spec.template.spec.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution.labelSelector{
+                        matchLabels: {"app.kubernetes.io/created-by": "volsync"}
+                      },
+                      topologyKey: "kubernetes.io/hostname"
+                    }
+                  ]
+                }
+              }
             }
           ]
 ---
