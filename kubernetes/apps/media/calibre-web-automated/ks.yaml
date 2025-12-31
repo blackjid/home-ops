@@ -16,6 +16,7 @@ spec:
     substitute:
       APP: calibre-web-automated
       VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_SCHEDULE: "25 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: GitRepository

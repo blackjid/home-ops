@@ -19,6 +19,7 @@ spec:
     substitute:
       APP: home-assistant
       VOLSYNC_CAPACITY: 10Gi
+      VOLSYNC_SCHEDULE: "0 */2 * * *"
   prune: true
   sourceRef:
     kind: GitRepository

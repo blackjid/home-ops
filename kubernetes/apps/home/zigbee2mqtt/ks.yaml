@@ -19,6 +19,7 @@ spec:
     substitute:
       APP: zigbee2mqtt
       VOLSYNC_CAPACITY: 1Gi
+      VOLSYNC_SCHEDULE: "35 */2 * * *"
   prune: true
   sourceRef:
     kind: GitRepository

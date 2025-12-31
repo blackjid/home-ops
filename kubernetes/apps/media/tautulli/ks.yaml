@@ -16,6 +16,7 @@ spec:
     substitute:
       APP: tautulli
       VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_SCHEDULE: "15 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: GitRepository
