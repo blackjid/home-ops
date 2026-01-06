@@ -13,6 +13,7 @@ spec:
     spec:
       activeDeadlineSeconds: 10800 # 3 hours
       backoffLimit: 5
+      concurrencyPolicy: Forbid
       template:
         spec:
           restartPolicy: OnFailure
@@ -48,6 +49,7 @@ spec:
                   kopia repository sync-to s3 \
                     --bucket "${S3_BUCKET}" \
                     --endpoint "${S3_ENDPOINT}" \
+                    --parallel=4 \
                     --delete \
                     --no-progress
 
