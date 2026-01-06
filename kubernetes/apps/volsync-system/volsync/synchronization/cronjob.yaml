@@ -13,7 +13,6 @@ spec:
     spec:
       activeDeadlineSeconds: 10800 # 3 hours
       backoffLimit: 5
-      concurrencyPolicy: Forbid
       template:
         spec:
           restartPolicy: OnFailure
@@ -53,6 +52,7 @@ spec:
                     --delete \
                     --no-progress
 
+                  echo "Disconnecting from Kopia repository"
                   kopia repository disconnect
 
                   echo "Synchronization completed successfully"
@@ -60,7 +60,7 @@ spec:
                 - name: KOPIA_CHECK_FOR_UPDATES
                   value: "false"
                 - name: KOPIA_CACHE_DIR
-                  value: /cache
+                  value: /tmp/cache
                 - name: HOME
                   value: /tmp
               envFrom:
@@ -79,8 +79,6 @@ spec:
                   mountPath: /repository
                 - name: tmp
                   mountPath: /tmp
-                - name: kopia-cache
-                  mountPath: /cache
           volumes:
             - name: repository
               nfs:
@@ -88,6 +86,3 @@ spec:
                 path: /volume1/VolsyncKopia
             - name: tmp
               emptyDir: {}
-            - name: kopia-cache
-              emptyDir:
-                sizeLimit: 8Gi
