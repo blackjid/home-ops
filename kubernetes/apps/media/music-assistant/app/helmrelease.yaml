@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/music-assistant/server
-              tag: 2.7.3@sha256:f25a959247df34ed83e756900b775a2ae26fb24b0cc5fa220b70d03e71395ad7
+              tag: nightly@sha256:698854b0dd81c778f43e2a161babf5ed697d4cd07a710b2539035971baf176f3
             env:
               TZ: America/Santiago
               LOG_LEVEL: info
@@ -47,7 +47,7 @@ spec:
         controller: music-assistant
         ports:
           http:
-            port: &port 443
+            port: &port 8095
           stream:
             port: 8097
     route:
