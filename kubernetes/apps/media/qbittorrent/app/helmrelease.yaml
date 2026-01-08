@@ -110,7 +110,7 @@ spec:
       vuetorrent:
         type: image
         # renovate: datasource=docker depName=vuetorrent/vuetorrent-lsio-mod
-        image: ghcr.io/vuetorrent/vuetorrent-lsio-mod:2.31.1@sha256:b3516684cfe241372f672b951b1fcf71b98514031c33dc3b6cdf368a6e090d80
+        image: ghcr.io/vuetorrent/vuetorrent-lsio-mod:2.31.2@sha256:4ab2a6e014b5631b87505ea782054ae0fe39104ae8e29628b409848d1864d3bd
         globalMounts:
           - readOnly: true
       tmp:
