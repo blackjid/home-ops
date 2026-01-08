@@ -109,7 +109,8 @@ spec:
             subPath: downloads
       vuetorrent:
         type: image
-        image: ghcr.io/vuetorrent/vuetorrent-lsio-mod:sha-9b8332c@sha256:3d7997e3caa640642d01abbafc3c6335cb8765405bd44b54f8cec6aa52a5c3ae
+        # renovate: datasource=docker depName=vuetorrent/vuetorrent-lsio-mod
+        image: ghcr.io/vuetorrent/vuetorrent-lsio-mod:2.31.1@sha256:b3516684cfe241372f672b951b1fcf71b98514031c33dc3b6cdf368a6e090d80
         globalMounts:
           - readOnly: true
       tmp:
