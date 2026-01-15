@@ -5,9 +5,6 @@ TALOSCONFIG = "{{config_root}}/talosconfig"
 JUST_UNSTABLE = "1"
 
 [tools]
-"aqua:helm/helm" = "3.19.4"
-"aqua:helmfile/helmfile" = "1.2.3"
-"gum" = "latest"
-"pipx:flux-local" = "latest"
-"talosctl" = "1.12.1"
 "uv" = "latest"
+"pipx:flux-local" = "latest"
+talosctl = { version = "latest", exe = "talosctl" }
