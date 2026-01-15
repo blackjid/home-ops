@@ -1,36 +1,26 @@
----
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: snapshot-controller
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: snapshot-controller
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    crds: CreateReplace
-    remediation:
-      strategy: rollback
-      retries: 3
+  interval: 1h
   values:
     controller:
-      replicaCount: 2
       serviceMonitor:
         create: true
-      volumeSnapshotClasses:
-        - name: longhorn-snapclass
-          annotations:
-            snapshot.storage.kubernetes.io/is-default-class: "true"
-          driver: driver.longhorn.io
-          deletionPolicy: Delete
-          parameters:
-            # needed for successful VolumeSnapshots
-            # see: https://github.com/longhorn/longhorn/issues/2534#issuecomment-1010508714
-            type: snap
+    volumeSnapshotClasses:
+      - name: longhorn-snapclass
+        annotations:
+          snapshot.storage.kubernetes.io/is-default-class: "true"
+        driver: driver.longhorn.io
+        deletionPolicy: Delete
+        parameters:
+          # needed for successful VolumeSnapshots
+          # see: https://github.com/longhorn/longhorn/issues/2534#issuecomment-1010508714
+          type: snap
+    webhook:
+      enabled: false
