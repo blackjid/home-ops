@@ -24,6 +24,9 @@ spec:
               DATA_PATH: /data
               PORT: &port 3000
               NEXT_PUBLIC_BASE_URL: "https://ludo-test.blkh.dev"
+            envFrom:
+              - secretRef:
+                  name: board-game-collection-secret
             probes:
               liveness: &probes
                 enabled: true
