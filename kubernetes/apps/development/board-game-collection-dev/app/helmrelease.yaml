@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/blackjid/board-game-collection
-              tag: latest@sha256:2de5178d20820ae5bd9168b41b4807375c41e3bbffdc1ed799f9ad995e63c7e7
+              tag: latest@sha256:ec12b65b3c944eb1ebc18d0627f85896e56a9ad905f5cfccb97f04101a4f2001
             env:
               TZ: America/Santiago
               DATA_PATH: /data
