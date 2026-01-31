@@ -22,20 +22,24 @@ spec:
             env:
               TZ: America/Santiago
               QBT_WEBUI_PORT: &port 80
-              QBT_TORRENTING_PORT: &torrentPort 50413
+              QBT_TORRENTING_PORT: &torrentPort 50469
             probes:
-              liveness: &probes
+              liveness:
+                enabled: true
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     path: /api/v2/app/version
                     port: *port
-                  initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
+                  timeoutSeconds: 5
+                  failureThreshold: 5
               startup:
                 enabled: true
                 spec:
@@ -85,33 +89,14 @@ spec:
           - backendRefs:
               - identifier: app
                 port: *port
-    configMaps:
-      config:
-        data:
-          .qbt.toml: |-
-            [qbittorrent]
-            addr = "http://localhost:80"
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
-      config-file:
-        type: configMap
-        identifier: config
-        globalMounts:
-          - path: /config/.qbt.toml
-            subPath: .qbt.toml
       media:
         type: nfs
         server: black-station.internal
         path: /volume1/media
         globalMounts:
-          - path: /downloads
-            subPath: downloads
-      vuetorrent:
-        type: image
-        # renovate: datasource=docker depName=vuetorrent/vuetorrent-lsio-mod
-        image: ghcr.io/vuetorrent/vuetorrent-lsio-mod:2.31.3@sha256:0fdd85cac4b304bcc087c5611a01e47fff6e0c52b926f65dfb55fe429bb94ea9
-        globalMounts:
-          - readOnly: true
+          - path: /media
       tmp:
         type: emptyDir
