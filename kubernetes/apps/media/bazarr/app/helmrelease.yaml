@@ -5,17 +5,10 @@ kind: HelmRelease
 metadata:
   name: bazarr
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: bazarr
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 1h
   values:
     controllers:
       bazarr:
@@ -27,24 +20,34 @@ spec:
               repository: ghcr.io/home-operations/bazarr
               tag: 1.5.4@sha256:7ff11ddc4bec111ef8f4b58e95d1df8b980835f78c5087c0a95c6e74908a1d29
             env:
+              BAZARR__PORT: &port 80
               TZ: America/Santiago
             probes:
-              liveness: &probes
+              liveness:
+                enabled: true
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /health
-                    port: &port 6767
-                  initialDelaySeconds: 0
+                    path: /api/system/ping
+                    port: *port
                   periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -59,31 +62,19 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: bazarr
         ports:
           http:
             port: *port
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.blkh.dev"]
+        hostnames:
+          - "{{ .Release.Name }}.blkh.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
     persistence:
       config:
-        existingClaim: bazarr
-      config-cache:
-        type: emptyDir
-        globalMounts:
-          - path: /config/cache
-      config-log:
-        type: emptyDir
-        globalMounts:
-          - path: /config/log
+        existingClaim: "{{ .Release.Name }}"
       media:
         type: nfs
         server: black-station.internal
