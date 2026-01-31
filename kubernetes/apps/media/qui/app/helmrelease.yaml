@@ -75,5 +75,4 @@ spec:
         server: black-station.internal
         path: /volume1/media
         globalMounts:
-          - path: /downloads
-            subPath: downloads
+          - path: /media
