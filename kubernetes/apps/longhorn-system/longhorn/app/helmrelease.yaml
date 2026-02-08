@@ -5,14 +5,9 @@ kind: HelmRelease
 metadata:
   name: longhorn
 spec:
-  chart:
-    spec:
-      chart: longhorn
-      version: 1.11.0
-      sourceRef:
-        kind: HelmRepository
-        name: longhorn
-        namespace: longhorn-system
+  chartRef:
+    kind: OCIRepository
+    name: longhorn
   interval: 1h
   values:
     persistence:
