@@ -133,7 +133,7 @@ spec:
     route:
       app:
         hostnames:
-          - esphome.blkh.dev
+          - "{{ .Release.Name }}.blkh.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network

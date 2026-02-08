@@ -44,7 +44,6 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: music-assistant
         ports:
           http:
             port: &port 8095
@@ -61,10 +60,6 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
     persistence:
       data:
         existingClaim: "{{ .Release.Name }}"

@@ -66,20 +66,16 @@ spec:
             zzh.feature.node.kubernetes.io/zigbee: "true"
     service:
       app:
-        controller: zigbee2mqtt
         ports:
           http:
             port: *port
     route:
       app:
-        hostnames: ["zigbee.blkh.dev"]
+        hostnames:
+          - "zigbee.blkh.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"

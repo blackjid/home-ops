@@ -63,7 +63,6 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: board-game-collection
         ports:
           http:
             port: *port
@@ -78,10 +77,6 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
     persistence:
       data:
         existingClaim: "{{ .Release.Name }}"

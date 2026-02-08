@@ -56,7 +56,6 @@ spec:
             aeotec.feature.node.kubernetes.io/zwave: "true"
     service:
       app:
-        controller: zwave
         ports:
           http:
             port: *port
