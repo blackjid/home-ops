@@ -5,17 +5,10 @@ kind: HelmRelease
 metadata:
   name: calibre-web-automated
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: calibre-web-automated
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 1h
   values:
     controllers:
       calibre-web-automated:
@@ -84,13 +77,9 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
     persistence:
       config:
-        existingClaim: calibre-web-automated
+        existingClaim: "{{ .Release.Name }}"
       cache:
         type: emptyDir
       media:

@@ -5,7 +5,6 @@ kind: HelmRelease
 metadata:
   name: longhorn
 spec:
-  interval: 1h
   chart:
     spec:
       chart: longhorn
@@ -14,13 +13,7 @@ spec:
         kind: HelmRepository
         name: longhorn
         namespace: longhorn-system
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 1h
   values:
     persistence:
       defaultDataLocality: best-effort
