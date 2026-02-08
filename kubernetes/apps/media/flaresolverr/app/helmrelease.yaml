@@ -56,3 +56,11 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+      local:
+        type: emptyDir
+        globalMounts:
+          - path: /app/.local
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /app/.cache
