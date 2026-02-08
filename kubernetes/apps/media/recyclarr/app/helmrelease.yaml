@@ -27,12 +27,13 @@ spec:
               tag: 7.5.2@sha256:2550848d43a453f2c6adf3582f2198ac719f76670691d76de0819053103ef2fb
             envFrom:
               - secretRef:
-                  name: recyclarr-secret
-            args: ["sync"]
+                  name: "{{ .Release.Name }}-secret"
+            args:
+              - sync
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -49,21 +50,12 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     persistence:
       config:
-        existingClaim: recyclarr
+        existingClaim: "{{ .Release.Name }}"
       config-file:
         type: configMap
-        name: recyclarr-configmap
+        name: "{{ .Release.Name }}-configmap"
         globalMounts:
           - path: /config/recyclarr.yml
             subPath: recyclarr.yml
-            readOnly: true
-      config-logs:
-        type: emptyDir
-        globalMounts:
-          - path: /config/logs
-      config-repositories:
-        type: emptyDir
-        globalMounts:
-          - path: /config/repositories
       tmp:
         type: emptyDir
