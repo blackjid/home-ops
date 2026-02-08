@@ -19,7 +19,17 @@ spec:
               repository: public.ecr.aws/docker/library/eclipse-mosquitto
               tag: 2.0.22
             env:
-              TZ: America/New_York
+              TZ: America/Santiago
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

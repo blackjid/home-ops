@@ -23,18 +23,27 @@ spec:
               TZ: America/Santiago
               PORT: &port 80
             probes:
-              liveness: &probes
+              liveness:
+                enabled: true
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     path: /health
                     port: *port
-                  initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
             securityContext:
               privileged: true
             resources:
@@ -62,11 +71,11 @@ spec:
             namespace: network
     persistence:
       config:
-        existingClaim: zwave
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /usr/src/app/store
       config-cache:
-        existingClaim: zwave-cache
+        existingClaim: "{{ .Release.Name }}-cache"
         globalMounts:
           - path: /usr/src/app/store/.config-db
       usb:

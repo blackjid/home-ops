@@ -43,7 +43,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: &serial-port /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
             envFrom:
               - secretRef:
-                  name: zigbee2mqtt-secret
+                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness:
                 enabled: true
@@ -82,7 +82,7 @@ spec:
                 port: *port
     persistence:
       config:
-        existingClaim: zigbee2mqtt
+        existingClaim: "{{ .Release.Name }}"
       usb:
         type: hostPath
         hostPath: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
