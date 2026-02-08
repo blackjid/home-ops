@@ -29,38 +29,14 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 10
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
                 memory: 300Mi
               limits:
                 memory: 1Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
     service:
       app:
         ports:
           http:
             port: 8191
-    persistence:
-      tmp:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
-      local:
-        type: emptyDir
-        globalMounts:
-          - path: /app/.local
-      cache:
-        type: emptyDir
-        globalMounts:
-          - path: /app/.cache
