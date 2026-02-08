@@ -5,20 +5,10 @@ kind: HelmRelease
 metadata:
   name: flaresolverr
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: flaresolverr
-  maxHistory: 2
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
+  interval: 1h
   values:
     controllers:
       flaresolverr:
@@ -35,7 +25,6 @@ spec:
                 memory: 1Gi
     service:
       app:
-        controller: flaresolverr
         ports:
           http:
             port: 8191

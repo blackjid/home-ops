@@ -5,18 +5,12 @@ kind: HelmRelease
 metadata:
   name: tuppr
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: tuppr
-  install:
-    disableHooks: true
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    disableHooks: true
-    remediation:
-      retries: 3
+  interval: 1h
   values:
     replicaCount: 2
+    monitoring:
+      serviceMonitor:
+        enabled: true
