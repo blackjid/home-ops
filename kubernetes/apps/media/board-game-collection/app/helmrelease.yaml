@@ -72,7 +72,6 @@ spec:
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 200"]
         hostnames:
-          - "{{ .Release.Name }}.blkh.dev"
           - "ludo.blkh.dev"
         parentRefs:
           - name: envoy-external
@@ -88,11 +87,3 @@ spec:
           - path: /app/.next/cache
       tmp:
         type: emptyDir
-      chromium-cache:
-        type: emptyDir
-        globalMounts:
-          - path: /home/node/.cache
-      chromium-config:
-        type: emptyDir
-        globalMounts:
-          - path: /home/node/.config

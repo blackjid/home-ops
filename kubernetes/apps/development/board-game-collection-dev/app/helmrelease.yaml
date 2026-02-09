@@ -3,15 +3,15 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: board-game-collection-dev
+  name: board-game-collection
 spec:
   chartRef:
     kind: OCIRepository
-    name: board-game-collection-dev
-  interval: 15m
+    name: board-game-collection
+  interval: 1h
   values:
     controllers:
-      board-game-collection-dev:
+      board-game-collection:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -23,10 +23,10 @@ spec:
               TZ: America/Santiago
               DATA_PATH: /data
               PORT: &port 3000
-              NEXT_PUBLIC_BASE_URL: "https://ludo-test.blkh.dev"
+              NEXT_PUBLIC_BASE_URL: "https://ludo.blkh.dev"
             envFrom:
               - secretRef:
-                  name: board-game-collection-secret
+                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness:
                 enabled: true
@@ -52,9 +52,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
+              capabilities: {drop: ["ALL"]}
             resources: {}
     defaultPodOptions:
       securityContext:
@@ -89,11 +87,3 @@ spec:
           - path: /app/.next/cache
       tmp:
         type: emptyDir
-      chromium-cache:
-        type: emptyDir
-        globalMounts:
-          - path: /home/node/.cache
-      chromium-config:
-        type: emptyDir
-        globalMounts:
-          - path: /home/node/.config
