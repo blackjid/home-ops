@@ -5,5 +5,4 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./grafanadashboard.yaml
-  - ./httproute.yaml
   - ./prometheusrule.yaml

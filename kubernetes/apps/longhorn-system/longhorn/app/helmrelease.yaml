@@ -37,6 +37,13 @@ spec:
       storageReservedPercentageForDefaultDisk: "10"
     ingress:
       enabled: false
+    httproute:
+      enabled: true
+      hostnames:
+        - "{{ .Release.Name }}.blkh.dev"
+      parentRefs:
+        - name: envoy-internal
+          namespace: network
     metrics:
       serviceMonitor:
         enabled: true
