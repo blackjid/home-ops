@@ -6,4 +6,4 @@ namespace: development
 
 resources:
   - ./namespace.yaml
-  - ./board-game-collection-dev/ks.yaml
+  - ./board-game-collection/ks.yaml
