@@ -40,7 +40,7 @@ spec:
     httproute:
       enabled: true
       hostnames:
-        - "{{ .Release.Name }}.blkh.dev"
+        - "longhorn.blkh.dev"
       parentRefs:
         - name: envoy-internal
           namespace: network
