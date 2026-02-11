@@ -10,5 +10,6 @@ components:
 resources:
   - ./namespace.yaml
   - ./actual/ks.yaml
+  - ./atuin/ks.yaml
   - ./n8n/ks.yaml
   - ./obsidian-couchdb/ks.yaml
