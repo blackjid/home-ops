@@ -9,8 +9,9 @@ components:
 
 resources:
   - ./namespace.yaml
-  - ./board-game-collection/ks.yaml
+  - ./agregarr/ks.yaml
   - ./bazarr/ks.yaml
+  - ./board-game-collection/ks.yaml
   # - ./calibre/ks.yaml
   # - ./calibre-web/ks.yaml
   - ./calibre-web-automated/ks.yaml
