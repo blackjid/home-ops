@@ -52,7 +52,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources: {}
     defaultPodOptions:
       securityContext:
@@ -81,9 +81,5 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /data
-      app-cache:
-        type: emptyDir
-        globalMounts:
-          - path: /app/.next/cache
       tmp:
         type: emptyDir

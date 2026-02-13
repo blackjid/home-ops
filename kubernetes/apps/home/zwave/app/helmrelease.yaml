@@ -73,10 +73,6 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /usr/src/app/store
-      config-cache:
-        existingClaim: "{{ .Release.Name }}-cache"
-        globalMounts:
-          - path: /usr/src/app/store/.config-db
       usb:
         type: hostPath
         hostPath: /dev/serial/by-id/usb-0658_0200-if00
