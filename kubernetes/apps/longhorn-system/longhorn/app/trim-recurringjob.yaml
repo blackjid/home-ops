@@ -1,0 +1,10 @@
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: recurring-fs-trim
+spec:
+  task: filesystem-trim
+  cron: "0 3 * * 0"
+  concurrency: 2
+  retain: 0

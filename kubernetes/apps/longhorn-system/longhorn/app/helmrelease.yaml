@@ -21,6 +21,10 @@ spec:
           tag: v1.11.0-hotfix-1
     persistence:
       defaultDataLocality: best-effort
+      recurringJobSelector:
+        enable: true
+        jobList:
+          - recurring-fs-trim
     defaultSettings:
       defaultDataPath: "/var/mnt/longhorn"
       replicaDiskSoftAntiAffinity: false
