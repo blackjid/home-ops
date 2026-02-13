@@ -23,8 +23,7 @@ spec:
       defaultDataLocality: best-effort
       recurringJobSelector:
         enable: true
-        jobList:
-          - recurring-fs-trim
+        jobList: '[{"name":"recurring-fs-trim", "isGroup":false}]'
     defaultSettings:
       defaultDataPath: "/var/mnt/longhorn"
       replicaDiskSoftAntiAffinity: false
