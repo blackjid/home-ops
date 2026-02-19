@@ -18,12 +18,12 @@ machine:
       port: 7445
     {% if ENV.IS_CONTROLLER %}
     kubernetesTalosAPIAccess:
+      enabled: true
       allowedKubernetesNamespaces:
         - actions-runner-system
         - system-upgrade
       allowedRoles:
         - os:admin
-      enabled: true
     {% endif %}
     rbac: true
   files:
@@ -65,18 +65,6 @@ machine:
     nodeIP:
       validSubnets:
         - 192.168.42.0/24
-  network:
-    interfaces:
-      - interface: bond0
-        bond:
-          mode: active-backup
-        dhcp: true
-        mtu: 1500
-        vlans:
-          - # IOT
-            vlanId: 120
-            dhcp: false
-            mtu: 1500
   nodeLabels:
     node.kubernetes.io/gpu: "true"
     topology.kubernetes.io/region: main
@@ -193,6 +181,34 @@ cluster:
   {% endif %}
 ---
 apiVersion: v1alpha1
+kind: BondConfig
+name: bond0
+links:
+  - net0
+bondMode: active-backup
+mtu: 1500
+---
+apiVersion: v1alpha1
+kind: DHCPv4Config
+name: bond0
+clientIdentifier: mac
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: bond0.120
+vlanID: 120
+parent: bond0
+mtu: 1500
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: system_disk
+  maxSize: 200GiB
+---
+apiVersion: v1alpha1
 kind: WatchdogTimerConfig
 device: /dev/watchdog0
-timeout: 5m
+timeout: 10m

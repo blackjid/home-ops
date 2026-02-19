@@ -1,12 +1,5 @@
 ---
 machine:
-  network:
-    interfaces:
-      - interface: bond0
-        bond:
-          deviceSelectors:
-            - hardwareAddr: d8:c4:97:bf:6e:b7
-              driver: r8169
   nodeLabels:
     topology.kubernetes.io/zone: m
   type: controlplane
@@ -16,12 +9,10 @@ kind: HostnameConfig
 hostname: k8s-0
 ---
 apiVersion: v1alpha1
-kind: VolumeConfig
-name: EPHEMERAL
-provisioning:
-  diskSelector:
-    match: system_disk
-  maxSize: 200GiB
+kind: LinkAliasConfig
+name: net0
+selector:
+  match: link.driver == "r8169" && mac(link.permanent_addr).startsWith("d8:c4:97:bf:")
 ---
 apiVersion: v1alpha1
 kind: UserVolumeConfig

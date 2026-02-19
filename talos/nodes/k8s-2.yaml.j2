@@ -1,12 +1,5 @@
 ---
 machine:
-  network:
-    interfaces:
-      - interface: bond0
-        bond:
-          deviceSelectors:
-            - hardwareAddr: 1c:69:7a:02:5d:87
-              driver: e1000e
   nodeLabels:
     topology.kubernetes.io/zone: m
   type: controlplane
@@ -16,12 +9,10 @@ kind: HostnameConfig
 hostname: k8s-2
 ---
 apiVersion: v1alpha1
-kind: VolumeConfig
-name: EPHEMERAL
-provisioning:
-  diskSelector:
-    match: system_disk
-  maxSize: 200GiB
+kind: LinkAliasConfig
+name: net0
+selector:
+  match: link.driver == "e1000e" && mac(link.permanent_addr).startsWith("1c:69:7a:02:")
 ---
 apiVersion: v1alpha1
 kind: UserVolumeConfig
