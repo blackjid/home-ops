@@ -23,7 +23,7 @@ spec:
             runAsUser: 1000
           containers:
             - name: kopia-sync
-              image: ghcr.io/perfectra1n/volsync:0.17.7
+              image: ghcr.io/perfectra1n/volsync:v0.17.8
               imagePullPolicy: IfNotPresent
               command:
                 - /bin/sh
