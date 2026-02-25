@@ -12,3 +12,13 @@ spec:
   values:
     serviceMonitor:
       create: true
+    web:
+      config:
+        authentication:
+          type: Anonymous
+          anonymous:
+            username: flux
+            groups:
+              - flux-admin
+      networkPolicy:
+        create: false
