@@ -5,11 +5,16 @@ kind: Kustomization
 metadata:
   name: board-game-collection
 spec:
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: longhorn
       namespace: longhorn-system
   interval: 30m
   path: ./kubernetes/apps/development/board-game-collection/app
+  postBuild:
+    substitute:
+      APP: board-game-collection
   prune: true
   sourceRef:
     kind: GitRepository
