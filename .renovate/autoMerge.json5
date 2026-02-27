@@ -5,7 +5,7 @@
       description: "Pin and automerge latest board-game-collection images (dev only)",
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/blackjid/board-game-collection"],
-      matchFileNames: ["kubernetes/apps/development/board-game-collection-dev/**"],
+      matchFileNames: ["kubernetes/apps/development/board-game-collection/**"],
       groupName: "board-game-collection-dev",
       additionalBranchPrefix: "dev/",
       automerge: true,
