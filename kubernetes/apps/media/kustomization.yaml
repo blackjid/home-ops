@@ -24,5 +24,6 @@ resources:
   - ./radarr/ks.yaml
   - ./recyclarr/ks.yaml
   - ./seerr/ks.yaml
+  - ./shelfmark/ks.yaml
   - ./sonarr/ks.yaml
   - ./tautulli/ks.yaml
