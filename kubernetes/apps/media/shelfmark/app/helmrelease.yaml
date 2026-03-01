@@ -90,8 +90,11 @@ spec:
         path: /volume1/media/books
         advancedMounts:
           shelfmark:
-            app:
+            shelfmark:
               - path: /bookdrop
-                subPath: shelfmark/bookdrop
+                subPath: Downloads/Books
       tmp:
         type: emptyDir
+        globalMounts:
+          - path: /tmp
+          - path: /var/log
