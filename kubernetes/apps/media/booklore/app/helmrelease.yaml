@@ -184,7 +184,7 @@ spec:
         annotations:
           gatus.home-operations.com/enabled: "false"
         hostnames:
-          - "{{ .Release.Name }}.blkh.dev"
+          - kobo.blkh.dev
         parentRefs:
           - name: envoy-external
             namespace: network
