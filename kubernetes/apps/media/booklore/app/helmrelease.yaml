@@ -180,6 +180,23 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: network
+      kobo:
+        annotations:
+          gatus.home-operations.com/enabled: "false"
+        hostnames:
+          - "{{ .Release.Name }}.blkh.dev"
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+        rules:
+          - backendRefs:
+              - kind: Service
+                name: booklore
+                port: *httpPort
+            matches:
+              - path:
+                  type: PathPrefix
+                  value: /api/kobo
     service:
       booklore:
         ports:
