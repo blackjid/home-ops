@@ -87,11 +87,11 @@ spec:
       media:
         type: nfs
         server: black-station.internal
-        path: /volume1/media/books
-        advancedMounts:
-          shelfmark:
-            app:
-              - path: /bookdrop
-                subPath: shelfmark/bookdrop
+        path: /volume1/media
+        globalMounts:
+          - path: /media
       tmp:
         type: emptyDir
+        globalMounts:
+          - path: /tmp
+          - path: /var/log
