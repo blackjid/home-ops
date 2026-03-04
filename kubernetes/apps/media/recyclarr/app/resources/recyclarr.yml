@@ -29,9 +29,9 @@ sonarr:
         trash_ids:
           - 5d9fd1b1e06cd8a475462f40214b7df6 # FLUX
         assign_scores_to:
-          - name: WEB-1080p
+          - trash_id: 72dae194fc92bf828f32cde7744e51a1 # WEB-1080p
             score: 100
-          - name: WEB-2160p
+          - trash_id: d1498e7d189fbe6c7110ceaabb7473e6 # WEB-2160p
             score: 100
       - # Unwanted
         trash_ids:
@@ -40,22 +40,22 @@ sonarr:
           - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
           - 06d66ab109d4d2eddb2794d21526d140 # Retags
         assign_scores_to:
-          - name: WEB-1080p
-          - name: WEB-2160p
+          - trash_id: 72dae194fc92bf828f32cde7744e51a1 # WEB-1080p
+          - trash_id: d1498e7d189fbe6c7110ceaabb7473e6 # WEB-2160p
       - # DV (w/o HDR fallback) - disable if devices don't support Dolby Vision
         trash_ids:
           - 9b27ab6498ec0f31a3353992e19434ca # DV (w/o HDR fallback)
         assign_scores_to:
-          - name: WEB-1080p
+          - trash_id: 72dae194fc92bf828f32cde7744e51a1 # WEB-1080p
             score: -10000
-          - name: WEB-2160p
+          - trash_id: d1498e7d189fbe6c7110ceaabb7473e6 # WEB-2160p
             score: -10000
       - trash_ids:
           - 1b3994c551cbb92a2c781af061f4ab44 # Scene
         assign_scores_to:
-          - name: WEB-1080p
+          - trash_id: 72dae194fc92bf828f32cde7744e51a1 # WEB-1080p
             score: 0
-          - name: WEB-2160p
+          - trash_id: d1498e7d189fbe6c7110ceaabb7473e6 # WEB-2160p
             score: 0
 
 radarr:
@@ -73,7 +73,7 @@ radarr:
     quality_definition:
       type: sqp-uhd
     quality_profiles:
-      - trash_id: 5128baeb2b081b72126bc8482b2a86a0 # SQP-1 (2160p)
+      - trash_id: 5128baeb2b081b72126bc8482b2a86a0 # [SQP] SQP-1 (2160p)
         reset_unmatched_scores:
           enabled: true
       - name: SQP-1 Multi
@@ -93,13 +93,13 @@ radarr:
           - f537cf427b64c38c8e36298f657e4828 # Scene
           - e204b80c87be9497a8a6eaff48f72905 # LQ (Release Title)
         assign_scores_to:
-          - name: SQP-1 (2160p)
+          - trash_id: 5128baeb2b081b72126bc8482b2a86a0 # [SQP] SQP-1 (2160p)
           - name: SQP-1 Multi
       - # x265 (no HDR/DV) - score override
         trash_ids:
           - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
         assign_scores_to:
-          - name: SQP-1 (2160p)
+          - trash_id: 5128baeb2b081b72126bc8482b2a86a0 # [SQP] SQP-1 (2160p)
             score: 0
           - name: SQP-1 Multi
             score: 0
@@ -107,7 +107,7 @@ radarr:
         trash_ids:
           - 923b6abef9b17f937fab56cfcf89e1f1 # DV (w/o HDR fallback)
         assign_scores_to:
-          - name: SQP-1 (2160p)
+          - trash_id: 5128baeb2b081b72126bc8482b2a86a0 # [SQP] SQP-1 (2160p)
             score: -10000
           - name: SQP-1 Multi
             score: -10000
@@ -116,5 +116,5 @@ radarr:
           - caa37d0df9c348912df1fb1d88f9273a # HDR10+ Boost
           - 7a0d1ad358fee9f5b074af3ef3f9d9ef # hallowed
         assign_scores_to:
-          - name: SQP-1 (2160p)
+          - trash_id: 5128baeb2b081b72126bc8482b2a86a0 # [SQP] SQP-1 (2160p)
           - name: SQP-1 Multi
