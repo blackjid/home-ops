@@ -77,5 +77,11 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /app/config
+      media:
+        type: nfs
+        server: black-station.internal
+        path: /volume1/media/placeholders
+        globalMounts:
+          - path: /placeholders
       tmp:
         type: emptyDir
