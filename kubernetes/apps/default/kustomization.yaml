@@ -13,3 +13,4 @@ resources:
   - ./atuin/ks.yaml
   - ./n8n/ks.yaml
   - ./obsidian-couchdb/ks.yaml
+  - ./thelounge/ks.yaml
