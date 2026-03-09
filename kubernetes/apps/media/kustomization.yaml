@@ -14,9 +14,6 @@ resources:
   - ./bazarr/ks.yaml
   - ./board-game-collection/ks.yaml
   - ./booklore/ks.yaml
-  # - ./calibre/ks.yaml
-  # - ./calibre-web/ks.yaml
-  - ./calibre-web-automated/ks.yaml
   - ./flaresolverr/ks.yaml
   - ./music-assistant/ks.yaml
   - ./plex/ks.yaml
