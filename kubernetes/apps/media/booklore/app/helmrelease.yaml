@@ -78,8 +78,8 @@ spec:
         containers:
           booklore:
             image:
-              repository: ghcr.io/booklore-app/booklore
-              tag: v2.2.1
+              repository: ghcr.io/grimmory/grimmory
+              tag: v2.2.6
             command:
               - java
             args:
