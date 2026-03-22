@@ -4,10 +4,15 @@ apiVersion: volsync.backube/v1alpha1
 kind: KopiaMaintenance
 metadata:
   name: daily
-  namespace: volsync
 spec:
   enabled: true
   trigger:
-    schedule: 30 5 * * *
+    schedule: 30 3,15 * * *
+  moverVolumes:
+      - mountPath: repository
+        volumeSource:
+          nfs:
+            path: /volume1/VolsyncKopia
+            server: black-station.internal
   repository:
     repository: volsync-maintenance-secret

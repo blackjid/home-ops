@@ -12,6 +12,10 @@ spec:
   kopia:
     accessModes:
       - ${VOLSYNC_ACCESSMODES:=ReadWriteOnce}
+    cacheAccessModes:
+      - ${VOLSYNC_CACHE_ACCESSMODES:=ReadWriteOnce}
+    cacheCapacity: ${VOLSYNC_CAPACITY:=5Gi}
+    cacheStorageClassName: ${VOLSYNC_CACHE_STORAGECLASS:=openebs-hostpath}
     capacity: ${VOLSYNC_CAPACITY:=5Gi}
     # cleanupCachePVC: true
     # cleanupTempPVC: true
@@ -21,6 +25,12 @@ spec:
       runAsUser: ${VOLSYNC_PUID:=1000}
       runAsGroup: ${VOLSYNC_PGID:=1000}
       fsGroup: ${VOLSYNC_PGID:=1000}
+    moverVolumes:
+      - mountPath: repository
+        volumeSource:
+          nfs:
+            path: /volume1/VolsyncKopia
+            server: black-station.internal
     repository: ${APP}-volsync-secret
     sourceIdentity:
       sourceName: ${APP}
