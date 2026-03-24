@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/n8n-io/n8n
-              tag: 2.14.0@sha256:d476521e7dc1b0a768011f278a537c7a04081792603805e4eafea35e69db5deb
+              tag: 2.14.0@sha256:e0ed9b5468d57dc46f6c015065a7e531b1463507bdccb7382135db3b364ac6a7
             env:
               DB_SQLITE_VACUUM_ON_STARTUP: true
               EXECUTIONS_DATA_MAX_AGE: 7
