@@ -26,17 +26,21 @@ spec:
             probes:
               liveness:
                 enabled: true
+                custom: true
                 spec:
+                  httpGet:
+                    path: /identity
+                    port: &port 32400
                   periodSeconds: 30
-                  timeoutSeconds: 5
-                  failureThreshold: 5
+                  timeoutSeconds: 10
+                  failureThreshold: 10
               readiness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     path: /identity
-                    port: &port 32400
+                    port: *port
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 5
@@ -106,9 +110,7 @@ spec:
       config:
         existingClaim: "{{ .Release.Name }}"
       media:
-        type: nfs
-        server: black-station.internal
-        path: /volume1/media
+        existingClaim: plex-media-nfs
         globalMounts:
           - path: /media
             readOnly: true
