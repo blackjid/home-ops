@@ -9,6 +9,8 @@ spec:
     - ../../../../components/nfs-scaler
     - ../../../../components/volsync
   dependsOn:
+    - name: csi-driver-nfs
+      namespace: kube-system
     - name: intel-gpu-resource-driver
       namespace: kube-system
     - name: longhorn
@@ -21,7 +23,6 @@ spec:
     substitute:
       APP: plex
       VOLSYNC_CAPACITY: 30Gi
-      VOLSYNC_SCHEDULE: "5 */2 * * *"
   prune: true
   sourceRef:
     kind: GitRepository

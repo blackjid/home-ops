@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: csi-driver-nfs
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: csi-driver-nfs
+  interval: 1h
+  values:
+    controller:
+      replicas: 1
+    storageClass:
+      create: false
