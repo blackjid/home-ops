@@ -10,8 +10,9 @@ spec:
     - ReadOnlyMany
   persistentVolumeReclaimPolicy: Retain
   mountOptions:
-    - nfsvers=4
+    - nfsvers=3
     - soft
+    - nolock
     - timeo=30
     - retrans=3
     - noatime
