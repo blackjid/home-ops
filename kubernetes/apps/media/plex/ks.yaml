@@ -15,8 +15,6 @@ spec:
       namespace: kube-system
     - name: longhorn
       namespace: longhorn-system
-    - name: onepassword
-      namespace: external-secrets
   interval: 1h
   path: ./kubernetes/apps/media/plex/app
   postBuild:

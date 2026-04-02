@@ -11,8 +11,6 @@ spec:
     - name: longhorn
       namespace: longhorn-system
     - name: mosquitto
-    - name: onepassword
-      namespace: external-secrets
   interval: 1h
   path: ./kubernetes/apps/home/zigbee2mqtt/app
   postBuild:
