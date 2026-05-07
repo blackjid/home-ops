@@ -24,8 +24,9 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: Probe
 metadata:
-  name: lan-tcp
+  name: lan-nfs
 spec:
+  jobName: nfs_probe
   module: tcp_connect
   prober:
     url: blackbox-exporter-lan.observability.svc.cluster.local:9115

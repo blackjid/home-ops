@@ -136,6 +136,7 @@ cluster:
     disablePodSecurityPolicy: true
     extraArgs:
       enable-aggregator-routing: "true"
+      feature-gates: HPAScaleToZero=true
     image: registry.k8s.io/kube-apiserver:v1.36.0
   controllerManager:
     extraArgs:
