@@ -6,8 +6,8 @@ metadata:
   name: actual
 spec:
   components:
-    - ../../../../components/nfs-scaler
     - ../../../../components/volsync
+    - ../../../../components/zeroscaler
   dependsOn:
     - name: longhorn
       namespace: longhorn-system
