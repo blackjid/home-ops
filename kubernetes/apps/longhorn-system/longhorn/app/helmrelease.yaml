@@ -26,7 +26,7 @@ spec:
         jobList: '[{"name":"recurring-fs-trim", "isGroup":false}]'
     defaultSettings:
       defaultDataPath: "/var/mnt/longhorn"
-      replicaDiskSoftAntiAffinity: false
+      replicaDiskSoftAntiAffinity: true
       replicaSoftAntiAffinity: "true"
       createDefaultDiskLabeledNodes: true
       defaultDataLocality: best-effort
