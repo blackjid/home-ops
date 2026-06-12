@@ -39,7 +39,8 @@ spec:
       replicaAutoBalance: best-effort
       storageMinimalAvailablePercentage: "1"
       storageReservedPercentageForDefaultDisk: "10"
-      nodeDrainPolicy: block-for-eviction
+      nodeDrainPolicy: allow-if-replica-is-stopped
+      replicaReplenishmentWaitInterval: "3600"
     ingress:
       enabled: false
     httproute:
