@@ -15,4 +15,4 @@ spec:
       - o11y
   selector:
     matchLabels:
-      grafana.internal/instance: grafana
+      dashboards: grafana
