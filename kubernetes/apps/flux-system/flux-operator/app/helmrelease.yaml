@@ -22,3 +22,10 @@ spec:
               - flux-admin
       networkPolicy:
         create: false
+      httpRoute:
+        enabled: true
+        hostnames:
+          - flux-operator.blkh.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
