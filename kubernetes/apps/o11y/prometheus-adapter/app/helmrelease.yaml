@@ -11,7 +11,7 @@ spec:
   interval: 1h
   values:
     prometheus:
-      url: http://prometheus-operated.observability.svc.cluster.local
+      url: http://prometheus-operated.o11y.svc.cluster.local
       port: 9090
     rules:
       default: false
