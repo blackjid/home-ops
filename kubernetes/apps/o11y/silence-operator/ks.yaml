@@ -3,34 +3,32 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: grafana
+  name: silence-operator
 spec:
   interval: 1h
-  path: ./kubernetes/apps/observability/grafana/app
+  path: ./kubernetes/apps/o11y/silence-operator/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: observability
+  targetNamespace: o11y
   wait: true
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: grafana-instance
+  name: silence-operator-silences
 spec:
   dependsOn:
-    - name: grafana
-    - name: longhorn
-      namespace: longhorn-system
+    - name: silence-operator
   interval: 1h
-  path: ./kubernetes/apps/observability/grafana/instance
+  path: ./kubernetes/apps/o11y/silence-operator/silences
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: observability
+  targetNamespace: o11y
   wait: false

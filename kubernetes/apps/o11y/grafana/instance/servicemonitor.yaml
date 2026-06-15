@@ -12,7 +12,7 @@ spec:
   jobLabel: grafana
   namespaceSelector:
     matchNames:
-      - observability
+      - o11y
   selector:
     matchLabels:
       grafana.internal/instance: grafana
