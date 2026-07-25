@@ -5,6 +5,8 @@ kind: SnapshotPolicy
 metadata:
   name: ${APP}
 spec:
+  compression:
+    compressor: zstd-fastest
   copyMethod: Snapshot
   credentialProjection:
     enabled: true
@@ -13,9 +15,11 @@ spec:
       capacity: ${KOPIUR_CAPACITY:=5Gi}
       mode: Persistent
       storageClassName: ${KOPIUR_CACHE_STORAGECLASS:=openebs-hostpath}
-    securityContext:
+    podSecurityContext:
       runAsUser: ${KOPIUR_PUID:=1000}
       runAsGroup: ${KOPIUR_PGID:=1000}
+      fsGroup: ${KOPIUR_PGID:=1000}
+      fsGroupChangePolicy: OnRootMismatch
   repository:
     kind: ClusterRepository
     name: nas
