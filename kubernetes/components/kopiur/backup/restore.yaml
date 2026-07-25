@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/restore_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Restore
+metadata:
+  name: ${APP}
+spec:
+  credentialProjection:
+    enabled: true
+  policy:
+    # Empty volume if no snapshot exists yet (deploy-or-restore), instead of
+    # failing a brand-new app that has never been backed up.
+    onMissingSnapshot: Continue
+  source:
+    fromPolicy:
+      name: ${APP}
+      offset: 0 # 0 = latest snapshot
+  target:
+    populator: {}
