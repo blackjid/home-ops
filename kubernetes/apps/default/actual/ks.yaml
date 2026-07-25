@@ -6,16 +6,45 @@ metadata:
   name: actual
 spec:
   components:
+    - ../../../../components/kopiur/backup
     - ../../../../components/volsync
     - ../../../../components/zeroscaler
   dependsOn:
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: longhorn
       namespace: longhorn-system
   interval: 1h
+  patches:
+    # Pin the kopiur snapshot identity to the one the perfectra1n/volsync
+    # fork already wrote to this repo (see `kubectl kopiur migrate volsync`
+    # output), so kopiur's snapshots continue the same history instead of
+    # starting a new lineage. Test-only: kopiur and volsync both back up
+    # this PVC in parallel for now, nothing else changes yet.
+    #
+    # metadata.name/sources[].pvc.name must stay "${APP}" (not "actual"):
+    # postBuild.substitute runs as a text pass AFTER kustomize patches, so
+    # at patch time the SnapshotPolicy's name is still the literal token.
+    - patch: |-
+        apiVersion: kopiur.home-operations.com/v1alpha1
+        kind: SnapshotPolicy
+        metadata:
+          name: ${APP}
+        spec:
+          identity:
+            hostname: default
+            username: actual
+          sources:
+            - pvc:
+                name: ${APP}
+              sourcePathOverride: /data
+      target:
+        kind: SnapshotPolicy
   path: ./kubernetes/apps/default/actual/app
   postBuild:
     substitute:
       APP: actual
+      KOPIUR_CAPACITY: 2Gi
       VOLSYNC_CAPACITY: 2Gi
   prune: true
   sourceRef:
