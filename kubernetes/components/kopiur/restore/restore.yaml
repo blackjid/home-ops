@@ -6,12 +6,10 @@ metadata:
   name: ${APP}
 spec:
   policy:
-    # Empty volume if no snapshot exists yet (deploy-or-restore), instead of
-    # failing a brand-new app that has never been backed up.
     onMissingSnapshot: Continue
   source:
     fromPolicy:
       name: ${APP}
-      offset: 0 # 0 = latest snapshot
+      offset: 0
   target:
     populator: {}

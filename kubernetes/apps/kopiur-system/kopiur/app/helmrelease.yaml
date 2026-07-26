@@ -10,9 +10,6 @@ spec:
     name: kopiur
   interval: 1h
   values:
-    # Filesystem/NFS backend: the controller needs the repo mounted in-process
-    # to connect/list/discover snapshots, the same NFS export volsync's kopia
-    # mover already writes to.
     extraVolumes:
       - name: repo
         nfs:
