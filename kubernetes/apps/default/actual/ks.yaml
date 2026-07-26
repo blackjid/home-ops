@@ -6,9 +6,12 @@ metadata:
   name: actual
 spec:
   components:
+    - ../../../../components/kopiur/backup
     - ../../../../components/volsync
     - ../../../../components/zeroscaler
   dependsOn:
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: longhorn
       namespace: longhorn-system
   interval: 1h
@@ -16,6 +19,7 @@ spec:
   postBuild:
     substitute:
       APP: actual
+      KOPIUR_CAPACITY: 2Gi
       VOLSYNC_CAPACITY: 2Gi
   prune: true
   sourceRef:
