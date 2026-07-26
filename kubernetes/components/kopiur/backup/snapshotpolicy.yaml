@@ -8,8 +8,6 @@ spec:
   compression:
     compressor: zstd-fastest
   copyMethod: Snapshot
-  credentialProjection:
-    enabled: true
   mover:
     cache:
       capacity: ${KOPIUR_CAPACITY:=5Gi}
