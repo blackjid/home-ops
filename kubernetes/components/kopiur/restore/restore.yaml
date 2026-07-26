@@ -5,8 +5,6 @@ kind: Restore
 metadata:
   name: ${APP}
 spec:
-  credentialProjection:
-    enabled: true
   policy:
     # Empty volume if no snapshot exists yet (deploy-or-restore), instead of
     # failing a brand-new app that has never been backed up.
