@@ -12,7 +12,12 @@ spec:
     cache:
       capacity: ${KOPIUR_CAPACITY:=5Gi}
       mode: Persistent
-      storageClassName: ${KOPIUR_CACHE_STORAGECLASS:=openebs-hostpath}
+      # Must be network-attachable, NOT node-local: kopiur pins the mover pod
+      # itself (sourceColocation), so a Persistent cache on openebs-hostpath
+      # welds to whichever node created it and deadlocks every run pinned
+      # elsewhere. longhorn-cache is 1 replica (cheap, disposable) but
+      # attachable from any node, so the cache follows the mover.
+      storageClassName: ${KOPIUR_CACHE_STORAGECLASS:=longhorn-cache}
     podSecurityContext:
       runAsUser: ${KOPIUR_PUID:=1000}
       runAsGroup: ${KOPIUR_PGID:=1000}
