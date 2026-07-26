@@ -27,4 +27,13 @@ spec:
   sources:
     - pvc:
         name: ${APP}
+  staging:
+    # WaitForFirstConsumer (unlike the default "longhorn" class, which binds
+    # Immediate) delays placing the staged clone until the mover pod is
+    # scheduled, so the volume follows the pod instead of racing it — the
+    # same class volsync always used the staged copy for, and for the same
+    # reason. Without this, a scheduled snapshot for actual failed: the mover
+    # pod got pinned to one node while Longhorn placed the clone's replica on
+    # another, and the two could never agree (0/3 nodes schedulable).
+    storageClassName: ${KOPIUR_STAGING_STORAGECLASS:=longhorn-snapshot}
   volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=longhorn-snapclass}
