@@ -8,8 +8,5 @@ spec:
   policyRef:
     name: ${APP}
   schedule:
-    # Jenkins-style H pins a deterministic per-app minute so schedules spread
-    # out instead of every app snapshotting at exactly 04:00:00.
-    cron: "H 4 * * *"
-    jitter: 2m
+    cron: H 4 * * *
     timezone: America/Santiago

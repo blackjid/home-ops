@@ -15,16 +15,13 @@ spec:
           server: black-station.internal
           path: /volume1/VolsyncKopia
   create:
-    # This repo already exists and is written to by volsync's kopia mover.
-    # Adopt it in place, never re-initialize it.
-    enabled: false
+    enabled: false # adopt volsync's existing repo, never re-initialize
   encryption:
     passwordSecretRef:
       name: kopiur-repository-secret
       namespace: kopiur-system
       key: KOPIA_PASSWORD
   maintenance:
-    # volsync's KopiaMaintenance CronJob still owns compaction on this repo.
-    # Flip this on only after that's decommissioned, to avoid two maintenance
-    # schedulers racing on the same repo.
-    enabled: false
+    enabled: false # volsync's KopiaMaintenance still owns compaction
+  scheduleDefaults:
+    timezone: America/Santiago
