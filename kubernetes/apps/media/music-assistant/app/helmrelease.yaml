@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/music-assistant/server
-              tag: nightly@sha256:e3c16a08bd860d91d1a458e356841e37ca94323c3d8b8498f38c98f5bcc4698f
+              tag: nightly@sha256:bb744cce1d37253ce2ef4e78da3a38d11c2ad2e4ecd4843e14f62aa106ae4d45
             env:
               TZ: America/Santiago
               LOG_LEVEL: info
