@@ -137,12 +137,12 @@ spec:
               enabled: true
               fps: 5
 
+            # Baseline; each camera narrows this to what can plausibly appear in
+            # its frame. person and car surface as alerts, everything else as
+            # the quieter detections bucket.
             objects:
               track:
                 - person
-                - car
-                - dog
-                - cat
 
             # Recording lives on the UniFi Dream Machine; Frigate only detects.
             # Main streams stay defined in go2rtc below so the UI can pull them
@@ -193,6 +193,8 @@ spec:
                   streams:
                     Main: backyard
                     Sub: backyard_sub
+                objects:
+                  track: [person, dog, cat]
               backyard_pool:
                 ffmpeg:
                   inputs:
@@ -203,6 +205,8 @@ spec:
                   streams:
                     Main: backyard_pool
                     Sub: backyard_pool_sub
+                objects:
+                  track: [person, dog, cat]
               entrance:
                 ffmpeg:
                   inputs:
@@ -213,6 +217,8 @@ spec:
                   streams:
                     Main: entrance
                     Sub: entrance_sub
+                objects:
+                  track: [person, car]
               living_room:
                 ffmpeg:
                   inputs:
@@ -223,6 +229,8 @@ spec:
                   streams:
                     Main: living_room
                     Sub: living_room_sub
+                objects:
+                  track: [person, dog, cat]
               family_room:
                 ffmpeg:
                   inputs:
@@ -233,6 +241,8 @@ spec:
                   streams:
                     Main: family_room
                     Sub: family_room_sub
+                objects:
+                  track: [person, dog, cat]
               service_yard:
                 ffmpeg:
                   inputs:
@@ -243,6 +253,8 @@ spec:
                   streams:
                     Main: service_yard
                     Sub: service_yard_sub
+                objects:
+                  track: [person, car, dog, cat]
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
