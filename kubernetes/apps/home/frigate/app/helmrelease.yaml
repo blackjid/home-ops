@@ -122,13 +122,16 @@ spec:
                 type: openvino
                 device: GPU
 
+            # Mounted read-only from the yolov9-onnx image volume. t, s and m are all
+            # in that image, so trying another variant is a path change here.
             model:
-              width: 300
-              height: 300
-              input_tensor: nhwc
-              input_pixel_format: bgr
-              path: /openvino-model/ssdlite_mobilenet_v2.xml
-              labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+              model_type: yolo-generic
+              width: 320
+              height: 320
+              input_tensor: nchw
+              input_dtype: float
+              path: /models/yolov9-s-320.onnx
+              labelmap_path: /labelmap/coco-80.txt
 
             ffmpeg:
               hwaccel_args: preset-vaapi
@@ -284,6 +287,17 @@ spec:
         existingClaim: frigate-media-nfs
         globalMounts:
           - path: /media/frigate
+      # Deliberately not under /config/model_cache: this mount is read-only and
+      # Frigate writes its compiled OpenVINO blob into model_cache
+      models:
+        type: custom
+        volumeSpec:
+          image:
+            reference: ghcr.io/blackjid/yolov9-onnx:1.0.0
+            pullPolicy: IfNotPresent
+        globalMounts:
+          - path: /models
+            readOnly: true
       cache:
         type: emptyDir
         medium: Memory
