@@ -144,18 +144,11 @@ spec:
                 - dog
                 - cat
 
+            # Recording lives on the UniFi Dream Machine; Frigate only detects.
+            # Main streams stay defined in go2rtc below so the UI can pull them
+            # on demand for live view, but nothing holds them open 24/7.
             record:
-              enabled: true
-              continuous:
-                days: 0
-              motion:
-                days: 0
-              alerts:
-                retain:
-                  days: 14
-              detections:
-                retain:
-                  days: 7
+              enabled: false
 
             snapshots:
               enabled: true
@@ -193,9 +186,6 @@ spec:
               backyard:
                 ffmpeg:
                   inputs:
-                    - path: rtsp://127.0.0.1:8554/backyard
-                      input_args: preset-rtsp-restream
-                      roles: [record]
                     - path: rtsp://127.0.0.1:8554/backyard_sub
                       input_args: preset-rtsp-restream
                       roles: [detect]
@@ -206,9 +196,6 @@ spec:
               backyard_pool:
                 ffmpeg:
                   inputs:
-                    - path: rtsp://127.0.0.1:8554/backyard_pool
-                      input_args: preset-rtsp-restream
-                      roles: [record]
                     - path: rtsp://127.0.0.1:8554/backyard_pool_sub
                       input_args: preset-rtsp-restream
                       roles: [detect]
@@ -219,9 +206,6 @@ spec:
               entrance:
                 ffmpeg:
                   inputs:
-                    - path: rtsp://127.0.0.1:8554/entrance
-                      input_args: preset-rtsp-restream
-                      roles: [record]
                     - path: rtsp://127.0.0.1:8554/entrance_sub
                       input_args: preset-rtsp-restream
                       roles: [detect]
@@ -232,9 +216,6 @@ spec:
               living_room:
                 ffmpeg:
                   inputs:
-                    - path: rtsp://127.0.0.1:8554/living_room
-                      input_args: preset-rtsp-restream
-                      roles: [record]
                     - path: rtsp://127.0.0.1:8554/living_room_sub
                       input_args: preset-rtsp-restream
                       roles: [detect]
@@ -245,9 +226,6 @@ spec:
               family_room:
                 ffmpeg:
                   inputs:
-                    - path: rtsp://127.0.0.1:8554/family_room
-                      input_args: preset-rtsp-restream
-                      roles: [record]
                     - path: rtsp://127.0.0.1:8554/family_room_sub
                       input_args: preset-rtsp-restream
                       roles: [detect]
@@ -258,9 +236,6 @@ spec:
               service_yard:
                 ffmpeg:
                   inputs:
-                    - path: rtsp://127.0.0.1:8554/service_yard
-                      input_args: preset-rtsp-restream
-                      roles: [record]
                     - path: rtsp://127.0.0.1:8554/service_yard_sub
                       input_args: preset-rtsp-restream
                       roles: [detect]
