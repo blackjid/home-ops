@@ -7,6 +7,15 @@
     commitMessageExtra: "({{manager}})",
     additionalBranchPrefix: "{{manager}}-",
   },
+  customManagers: [
+    {
+      description: "YOLOv9 ONNX image volume reference (not a field the flux manager sees)",
+      customType: "regex",
+      managerFilePatterns: ["kubernetes/apps/home/frigate/app/helmrelease.yaml"],
+      matchStrings: ["reference:\\s+(?<depName>ghcr\\.io/[^\\s:]+):(?<currentValue>\\S+)"],
+      datasourceTemplate: "docker",
+    },
+  ],
   packageRules: [
     // Auto-merge rules
     {
