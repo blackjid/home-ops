@@ -1,0 +1,298 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: frigate
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: frigate
+  interval: 1h
+  values:
+    controllers:
+      frigate:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        strategy: Recreate
+        containers:
+          app:
+            image:
+              repository: ghcr.io/blakeblackshear/frigate
+              tag: 0.17.2@sha256:d4351369984d4a9e2a49ac59736f6490856a7ea11f7790040746d21496967010
+            env:
+              TZ: America/Santiago
+              LIBVA_DRIVER_NAME: iHD
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret"
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/version
+                    port: &port 5000
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/version
+                    port: *port
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/version
+                    port: *port
+                  failureThreshold: 30
+                  periodSeconds: 10
+            securityContext:
+              # Frigate's s6 supervisor needs to start as root and drop privileges itself
+              allowPrivilegeEscalation: false
+              capabilities: {add: ["PERFMON"]} # intel_gpu_top stats
+            resources:
+              claims:
+                - name: gpu
+              requests:
+                cpu: 500m
+              limits:
+                memory: 4Gi
+    defaultPodOptions:
+      affinity:
+        podAntiAffinity:
+          # Both apps claim the single iGPU of whichever node they land on, so keep
+          # detection off the node that is transcoding
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                namespaces: ["media"]
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: plex
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: frigate
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+          go2rtc:
+            port: 1984
+          rtsp:
+            port: 8554
+    route:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: /api/version
+        hostnames:
+          - "{{ .Release.Name }}.blkh.dev"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    configMaps:
+      config:
+        data:
+          config.yml: |-
+            mqtt:
+              enabled: true
+              host: mosquitto.home.svc.cluster.local
+              port: 1883
+              client_id: frigate
+              topic_prefix: frigate
+
+            detectors:
+              ov:
+                type: openvino
+                device: GPU
+
+            model:
+              width: 300
+              height: 300
+              input_tensor: nhwc
+              input_pixel_format: bgr
+              path: /openvino-model/ssdlite_mobilenet_v2.xml
+              labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+
+            ffmpeg:
+              hwaccel_args: preset-vaapi
+
+            detect:
+              enabled: true
+              fps: 5
+
+            objects:
+              track:
+                - person
+                - car
+                - dog
+                - cat
+
+            record:
+              enabled: true
+              continuous:
+                days: 0
+              motion:
+                days: 0
+              alerts:
+                retain:
+                  days: 14
+              detections:
+                retain:
+                  days: 7
+
+            snapshots:
+              enabled: true
+              retain:
+                default: 14
+
+            go2rtc:
+              streams:
+                backyard:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.238:554/h264Preview_01_main
+                backyard_sub:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.238:554/h264Preview_01_sub
+                backyard_pool:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.42:554/h264Preview_01_main
+                backyard_pool_sub:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.42:554/h264Preview_01_sub
+                entrance:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.223:554/h264Preview_01_main
+                entrance_sub:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.223:554/h264Preview_01_sub
+                living_room:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.231:554/h264Preview_01_main
+                living_room_sub:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.231:554/h264Preview_01_sub
+                family_room:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.84:554/h264Preview_01_main
+                family_room_sub:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.84:554/h264Preview_01_sub
+                service_yard:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.146:554/h264Preview_01_main
+                service_yard_sub:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.146:554/h264Preview_01_sub
+
+            cameras:
+              backyard:
+                ffmpeg:
+                  inputs:
+                    - path: rtsp://127.0.0.1:8554/backyard
+                      input_args: preset-rtsp-restream
+                      roles: [record]
+                    - path: rtsp://127.0.0.1:8554/backyard_sub
+                      input_args: preset-rtsp-restream
+                      roles: [detect]
+                live:
+                  streams:
+                    Main: backyard
+                    Sub: backyard_sub
+              backyard_pool:
+                ffmpeg:
+                  inputs:
+                    - path: rtsp://127.0.0.1:8554/backyard_pool
+                      input_args: preset-rtsp-restream
+                      roles: [record]
+                    - path: rtsp://127.0.0.1:8554/backyard_pool_sub
+                      input_args: preset-rtsp-restream
+                      roles: [detect]
+                live:
+                  streams:
+                    Main: backyard_pool
+                    Sub: backyard_pool_sub
+              entrance:
+                ffmpeg:
+                  inputs:
+                    - path: rtsp://127.0.0.1:8554/entrance
+                      input_args: preset-rtsp-restream
+                      roles: [record]
+                    - path: rtsp://127.0.0.1:8554/entrance_sub
+                      input_args: preset-rtsp-restream
+                      roles: [detect]
+                live:
+                  streams:
+                    Main: entrance
+                    Sub: entrance_sub
+              living_room:
+                ffmpeg:
+                  inputs:
+                    - path: rtsp://127.0.0.1:8554/living_room
+                      input_args: preset-rtsp-restream
+                      roles: [record]
+                    - path: rtsp://127.0.0.1:8554/living_room_sub
+                      input_args: preset-rtsp-restream
+                      roles: [detect]
+                live:
+                  streams:
+                    Main: living_room
+                    Sub: living_room_sub
+              family_room:
+                ffmpeg:
+                  inputs:
+                    - path: rtsp://127.0.0.1:8554/family_room
+                      input_args: preset-rtsp-restream
+                      roles: [record]
+                    - path: rtsp://127.0.0.1:8554/family_room_sub
+                      input_args: preset-rtsp-restream
+                      roles: [detect]
+                live:
+                  streams:
+                    Main: family_room
+                    Sub: family_room_sub
+              service_yard:
+                ffmpeg:
+                  inputs:
+                    - path: rtsp://127.0.0.1:8554/service_yard
+                      input_args: preset-rtsp-restream
+                      roles: [record]
+                    - path: rtsp://127.0.0.1:8554/service_yard_sub
+                      input_args: preset-rtsp-restream
+                      roles: [detect]
+                live:
+                  streams:
+                    Main: service_yard
+                    Sub: service_yard_sub
+    persistence:
+      config:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /config
+      config-file:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /config/config.yml
+            subPath: config.yml
+            readOnly: true
+      media:
+        existingClaim: frigate-media-nfs
+        globalMounts:
+          - path: /media/frigate
+      cache:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 1Gi
+        globalMounts:
+          - path: /tmp/cache
+      shm:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 256Mi
+        globalMounts:
+          - path: /dev/shm
