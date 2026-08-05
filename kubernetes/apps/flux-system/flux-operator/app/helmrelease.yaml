@@ -20,8 +20,6 @@ spec:
             username: flux
             groups:
               - flux-admin
-      networkPolicy:
-        create: false
       httpRoute:
         enabled: true
         hostnames:
@@ -29,3 +27,5 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: network
+      networkPolicy:
+        create: false
