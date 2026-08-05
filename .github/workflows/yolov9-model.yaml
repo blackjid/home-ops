@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Image tag to publish, following the repo YYYY.M.PATCH convention
+        description: Image tag to publish, semver (1.0.0 for the first build)
         required: true
         type: string
 
