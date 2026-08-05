@@ -8,3 +8,4 @@ JUST_UNSTABLE = "1"
 "uv" = "latest"
 "pipx:flux-local" = "latest"
 talosctl = { version = "latest", exe = "talosctl" }
+flux2 = "latest"
