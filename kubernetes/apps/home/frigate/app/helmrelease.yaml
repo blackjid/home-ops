@@ -189,18 +189,28 @@ spec:
 
             go2rtc:
               streams:
-                backyard:
+                # 192.168.20.238 is HA's "Quincho Fluent" — it was called backyard
+                # here, which left the actual backyard camera without the name
+                quincho:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.238:554/h264Preview_01_main
-                backyard_sub:
+                quincho_sub:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.238:554/h264Preview_01_sub
+                # 192.168.20.223 is HA's "Greengarden Fluent", area Backyard. It was
+                # configured as entrance, so entrance pointed at the wrong garden
+                backyard:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.223:554/h264Preview_01_main
+                backyard_sub:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.223:554/h264Preview_01_sub
                 backyard_pool:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.42:554/h264Preview_01_main
                 backyard_pool_sub:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.42:554/h264Preview_01_sub
+                # The real entrance: Reolink Duo 2 PoE, dual lens stitched into one
+                # ultra-wide frame (main 4608x1728 HEVC, sub 1536x576 h264)
                 entrance:
-                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.223:554/h264Preview_01_main
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.250:554/h264Preview_01_main
                 entrance_sub:
-                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.223:554/h264Preview_01_sub
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.250:554/h264Preview_01_sub
                 living_room:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.231:554/h264Preview_01_main
                 living_room_sub:
@@ -215,6 +225,19 @@ spec:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.146:554/h264Preview_01_sub
 
             cameras:
+              quincho:
+                ffmpeg:
+                  inputs:
+                    - path: rtsp://127.0.0.1:8554/quincho
+                      input_args: preset-rtsp-restream
+                      roles: [record]
+                    - path: rtsp://127.0.0.1:8554/quincho_sub
+                      input_args: preset-rtsp-restream
+                      roles: [detect]
+                live:
+                  streams:
+                    Main: quincho
+                    Sub: quincho_sub
               backyard:
                 ffmpeg:
                   inputs:
