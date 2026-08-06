@@ -132,7 +132,10 @@ spec:
               height: 320
               input_tensor: nchw
               input_dtype: float
-              path: /models/yolov9-s-320.onnx
+              # m over s to see whether the extra capacity fixes dogs being called
+              # cats. Fine-grained class discrimination is where the bigger variant
+              # earns its keep; revert to yolov9-s-320.onnx if the iGPU can't take it.
+              path: /models/yolov9-m-320.onnx
               labelmap_path: /labelmap/coco-80.txt
 
             ffmpeg:
