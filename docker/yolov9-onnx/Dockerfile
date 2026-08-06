@@ -9,7 +9,7 @@
 # crops a motion region and zooms in before inference — so 640 is not worth the cost
 # here. Shipping t, s and m together makes switching variants a config change rather
 # than a rebuild.
-FROM python:3.11 AS build
+FROM python:3.14 AS build
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y cmake libgl1 \
