@@ -291,6 +291,13 @@ spec:
                     Main: living_room
                     Sub: living_room_sub
               family_room:
+                # Stopgap: 192.168.20.84 drops off the network intermittently, and
+                # Frigate's reconnect loop burns ~0.75 cores producing 0 fps while it
+                # does. The camera itself answers when probed directly, so this is a
+                # link fault to chase at the camera, not here. Flip back to true once
+                # it holds a connection; the go2rtc streams below stay defined so
+                # that is the only change needed.
+                enabled: false
                 ffmpeg:
                   inputs:
                     - path: rtsp://127.0.0.1:8554/family_room
