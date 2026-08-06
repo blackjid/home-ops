@@ -132,10 +132,11 @@ spec:
               height: 320
               input_tensor: nchw
               input_dtype: float
-              # m over s to see whether the extra capacity fixes dogs being called
-              # cats. Fine-grained class discrimination is where the bigger variant
-              # earns its keep; revert to yolov9-s-320.onnx if the iGPU can't take it.
-              path: /models/yolov9-m-320.onnx
+              # Back to s: m ran 70-76ms per inference, so at ~14 detections/sec the
+              # detector was at ~100% duty cycle and Frigate was dropping ~3fps of
+              # frames it never got to look at. The dog/cat confusion m was meant to
+              # fix needs Frigate+ retraining instead, not a bigger COCO detector.
+              path: /models/yolov9-s-320.onnx
               labelmap_path: /labelmap/coco-80.txt
 
             ffmpeg:
@@ -188,18 +189,28 @@ spec:
 
             go2rtc:
               streams:
-                backyard:
+                # 192.168.20.238 is HA's "Quincho Fluent" — it was called backyard
+                # here, which left the actual backyard camera without the name
+                quincho:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.238:554/h264Preview_01_main
-                backyard_sub:
+                quincho_sub:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.238:554/h264Preview_01_sub
+                # 192.168.20.223 is HA's "Greengarden Fluent", area Backyard. It was
+                # configured as entrance, so entrance pointed at the wrong garden
+                backyard:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.223:554/h264Preview_01_main
+                backyard_sub:
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.223:554/h264Preview_01_sub
                 backyard_pool:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.42:554/h264Preview_01_main
                 backyard_pool_sub:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.42:554/h264Preview_01_sub
+                # The real entrance: Reolink Duo 2 PoE, dual lens stitched into one
+                # ultra-wide frame (main 4608x1728 HEVC, sub 1536x576 h264)
                 entrance:
-                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.223:554/h264Preview_01_main
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.250:554/h264Preview_01_main
                 entrance_sub:
-                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.223:554/h264Preview_01_sub
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.250:554/h264Preview_01_sub
                 living_room:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.231:554/h264Preview_01_main
                 living_room_sub:
@@ -214,6 +225,19 @@ spec:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.146:554/h264Preview_01_sub
 
             cameras:
+              quincho:
+                ffmpeg:
+                  inputs:
+                    - path: rtsp://127.0.0.1:8554/quincho
+                      input_args: preset-rtsp-restream
+                      roles: [record]
+                    - path: rtsp://127.0.0.1:8554/quincho_sub
+                      input_args: preset-rtsp-restream
+                      roles: [detect]
+                live:
+                  streams:
+                    Main: quincho
+                    Sub: quincho_sub
               backyard:
                 ffmpeg:
                   inputs:
@@ -267,6 +291,13 @@ spec:
                     Main: living_room
                     Sub: living_room_sub
               family_room:
+                # Stopgap: 192.168.20.84 drops off the network intermittently, and
+                # Frigate's reconnect loop burns ~0.75 cores producing 0 fps while it
+                # does. The camera itself answers when probed directly, so this is a
+                # link fault to chase at the camera, not here. Flip back to true once
+                # it holds a connection; the go2rtc streams below stay defined so
+                # that is the only change needed.
+                enabled: false
                 ffmpeg:
                   inputs:
                     - path: rtsp://127.0.0.1:8554/family_room
