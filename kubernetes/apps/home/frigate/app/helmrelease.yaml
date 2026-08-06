@@ -66,7 +66,9 @@ spec:
               requests:
                 cpu: 500m
               limits:
-                memory: 4Gi
+                # Enrichments load the jinav1 large + ArcFace models on top of the
+                # detector; upstream asks for 8GB minimum with semantic search on
+                memory: 8Gi
     defaultPodOptions:
       affinity:
         podAntiAffinity:
@@ -146,6 +148,22 @@ spec:
                 - car
                 - dog
                 - cat
+
+            # Enrichments share the same iGPU as the detector: OpenVINO picks it up
+            # automatically in the default image, so no device key is needed.
+            # Models are downloaded once into /config/model_cache on the config PVC.
+            semantic_search:
+              enabled: true
+              model: jinav1
+              model_size: large
+
+            face_recognition:
+              enabled: true
+              # 0.17.x ships OpenVINO 2025.3, which has a clCreateSubBuffer bug that
+              # crashes the embeddings manager for the large (ArcFace) model on Intel
+              # iGPUs. If embeddings_manager starts crash-looping, set `device: CPU`
+              # here, or drop to `model_size: small`, until 0.18 (OpenVINO 2025.4).
+              model_size: large
 
             record:
               enabled: true
