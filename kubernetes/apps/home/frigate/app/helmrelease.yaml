@@ -132,10 +132,11 @@ spec:
               height: 320
               input_tensor: nchw
               input_dtype: float
-              # m over s to see whether the extra capacity fixes dogs being called
-              # cats. Fine-grained class discrimination is where the bigger variant
-              # earns its keep; revert to yolov9-s-320.onnx if the iGPU can't take it.
-              path: /models/yolov9-m-320.onnx
+              # Back to s: m ran 70-76ms per inference, so at ~14 detections/sec the
+              # detector was at ~100% duty cycle and Frigate was dropping ~3fps of
+              # frames it never got to look at. The dog/cat confusion m was meant to
+              # fix needs Frigate+ retraining instead, not a bigger COCO detector.
+              path: /models/yolov9-s-320.onnx
               labelmap_path: /labelmap/coco-80.txt
 
             ffmpeg:
