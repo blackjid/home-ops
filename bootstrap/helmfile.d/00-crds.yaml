@@ -23,7 +23,7 @@ releases:
   - name: grafana-operator
     namespace: o11y
     chart: oci://ghcr.io/grafana/helm-charts/grafana-operator
-    version: 5.24.0
+    version: 5.25.0
 
   - name: kube-prometheus-stack
     namespace: o11y
