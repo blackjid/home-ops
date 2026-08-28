@@ -15,6 +15,21 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         strategy: Recreate
+        initContainers:
+          init-config:
+            image:
+              repository: docker.io/mikefarah/yq
+              tag: 4.44.6
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                if [ -f /config/config.yml ]; then
+                  yq eval-all 'select(fileIndex==0) * select(fileIndex==1)' \
+                    /config/config.yml /config-src/config.yml > /config/config.yml.tmp
+                  mv /config/config.yml.tmp /config/config.yml
+                else
+                  cp /config-src/config.yml /config/config.yml
+                fi
         containers:
           app:
             image:
@@ -328,11 +343,15 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
+      # Not mounted at /config/config.yml directly: the init container deep-merges
+      # this into the PVC's config.yml instead, so UI-only changes (e.g. custom
+      # classification models, which Frigate can only persist by writing to
+      # config.yml) survive pod restarts instead of being clobbered by git.
       config-file:
         type: configMap
         identifier: config
         globalMounts:
-          - path: /config/config.yml
+          - path: /config-src/config.yml
             subPath: config.yml
             readOnly: true
       media:
