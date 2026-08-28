@@ -354,10 +354,14 @@ spec:
           - path: /config-src/config.yml
             subPath: config.yml
             readOnly: true
+      # Scoped to the app container only: init-config doesn't touch media,
+      # models, cache or shm, and shouldn't wait on the NFS mount to start.
       media:
         existingClaim: frigate-media-nfs
-        globalMounts:
-          - path: /media/frigate
+        advancedMounts:
+          frigate:
+            app:
+              - path: /media/frigate
       # Deliberately not under /config/model_cache: this mount is read-only and
       # Frigate writes its compiled OpenVINO blob into model_cache
       models:
@@ -366,18 +370,24 @@ spec:
           image:
             reference: ghcr.io/blackjid/yolov9-onnx:1.0.0
             pullPolicy: IfNotPresent
-        globalMounts:
-          - path: /models
-            readOnly: true
+        advancedMounts:
+          frigate:
+            app:
+              - path: /models
+                readOnly: true
       cache:
         type: emptyDir
         medium: Memory
         sizeLimit: 1Gi
-        globalMounts:
-          - path: /tmp/cache
+        advancedMounts:
+          frigate:
+            app:
+              - path: /tmp/cache
       shm:
         type: emptyDir
         medium: Memory
         sizeLimit: 256Mi
-        globalMounts:
-          - path: /dev/shm
+        advancedMounts:
+          frigate:
+            app:
+              - path: /dev/shm
