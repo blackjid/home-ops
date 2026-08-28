@@ -23,11 +23,9 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
               - |
-                # -s (not -f): a zero-byte config.yml must fall through to the
-                # plain copy below, or yq has nothing on fileIndex==0 to merge
-                # and silently emits nothing, clobbering config.yml with an
-                # empty file that every future boot then "merges" into more
-                # emptiness. Same guard on the merge's own output before mv.
+                # -s not -f: a zero-byte config.yml must fall through to the
+                # copy below, or yq merges against nothing and clobbers it
+                # with another empty file forever. Same guard on its output.
                 if [ -s /config/config.yml ] \
                   && yq eval-all 'select(fileIndex==0) * select(fileIndex==1)' \
                     /config/config.yml /config-src/config.yml > /config/config.yml.tmp \
@@ -349,10 +347,9 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
-      # Not mounted at /config/config.yml directly: the init container deep-merges
-      # this into the PVC's config.yml instead, so UI-only changes (e.g. custom
-      # classification models, which Frigate can only persist by writing to
-      # config.yml) survive pod restarts instead of being clobbered by git.
+      # Not mounted at /config/config.yml: init-config merges this into the
+      # PVC's copy instead, so UI-only changes (e.g. classification models)
+      # survive restarts instead of being clobbered by the read-only git version.
       config-file:
         type: configMap
         identifier: config
@@ -360,8 +357,7 @@ spec:
           - path: /config-src/config.yml
             subPath: config.yml
             readOnly: true
-      # Scoped to the app container only: init-config doesn't touch media,
-      # models, cache or shm, and shouldn't wait on the NFS mount to start.
+      # Scoped to app only: init-config never touches media/models/cache/shm.
       media:
         existingClaim: frigate-media-nfs
         advancedMounts:
