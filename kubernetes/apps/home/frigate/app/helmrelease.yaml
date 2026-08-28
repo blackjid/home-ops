@@ -23,9 +23,15 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
               - |
-                if [ -f /config/config.yml ]; then
-                  yq eval-all 'select(fileIndex==0) * select(fileIndex==1)' \
-                    /config/config.yml /config-src/config.yml > /config/config.yml.tmp
+                # -s (not -f): a zero-byte config.yml must fall through to the
+                # plain copy below, or yq has nothing on fileIndex==0 to merge
+                # and silently emits nothing, clobbering config.yml with an
+                # empty file that every future boot then "merges" into more
+                # emptiness. Same guard on the merge's own output before mv.
+                if [ -s /config/config.yml ] \
+                  && yq eval-all 'select(fileIndex==0) * select(fileIndex==1)' \
+                    /config/config.yml /config-src/config.yml > /config/config.yml.tmp \
+                  && [ -s /config/config.yml.tmp ]; then
                   mv /config/config.yml.tmp /config/config.yml
                 else
                   cp /config-src/config.yml /config/config.yml
