@@ -1,0 +1,193 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hermes
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: hermes
+  interval: 1h
+  values:
+    controllers:
+      hermes:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        strategy: Recreate
+        pod:
+          automountServiceAccountToken: true
+        serviceAccount:
+          name: hermes
+        containers:
+          app:
+            image: &image
+              repository: nousresearch/hermes-agent
+              tag: v2026.6.5@sha256:9ad3b04ec916ea2c2da22358fd43b024c788d74073210695af88bfc2e63869b4
+            command: ["hermes", "gateway", "run", "--no-supervise"]
+            env:
+              API_SERVER_ENABLED: "true"
+              API_SERVER_HOST: 0.0.0.0
+              API_SERVER_PORT: &gatewayPort 8642
+              HASS_URL: http://home-assistant.home.svc.cluster.local:8123
+              HERMES_HOME: &dataDir /opt/data
+              HOME: *dataDir
+              PATH: /opt/hermes/.venv/bin:/opt/data/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+              TZ: America/Santiago
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret"
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: *gatewayPort
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: *gatewayPort
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+                  failureThreshold: 30
+            resources:
+              requests:
+                cpu: 500m
+                memory: 2Gi
+              limits:
+                cpu: 4
+                memory: 8Gi
+          dashboard:
+            image: *image
+            args: ["dashboard", "--host", "0.0.0.0", "--insecure"]
+            env:
+              GATEWAY_HEALTH_URL: http://localhost:8642
+              TZ: America/Santiago
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
+        fsGroupChangePolicy: OnRootMismatch
+    serviceAccount:
+      hermes: {}
+    rbac:
+      roles:
+        hermes-cluster:
+          type: ClusterRole
+          rules:
+            - apiGroups: [""]
+              resources:
+                - pods
+                - pods/log
+                - nodes
+                - services
+                - namespaces
+                - configmaps
+                - persistentvolumes
+                - persistentvolumeclaims
+                - endpoints
+                - serviceaccounts
+                - events
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["apps"]
+              resources: ["deployments", "daemonsets", "statefulsets", "replicasets", "controllerrevisions"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["batch"]
+              resources: ["jobs", "cronjobs"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["networking.k8s.io"]
+              resources: ["ingresses", "ingressclasses", "networkpolicies"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["storage.k8s.io"]
+              resources: ["storageclasses", "csinodes", "csidrivers", "volumeattachments"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["autoscaling"]
+              resources: ["horizontalpodautoscalers"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["policy"]
+              resources: ["poddisruptionbudgets"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["rbac.authorization.k8s.io"]
+              resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["metrics.k8s.io"]
+              resources: ["nodes", "pods"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["helm.toolkit.fluxcd.io"]
+              resources: ["helmreleases"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["kustomize.toolkit.fluxcd.io"]
+              resources: ["kustomizations"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["source.toolkit.fluxcd.io"]
+              resources: ["gitrepositories", "helmrepositories", "ocirepositories", "buckets", "helmcharts"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["external-secrets.io"]
+              resources: ["externalsecrets", "secretstores", "clustersecretstores"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: ["apps"]
+              resources: ["deployments", "daemonsets", "statefulsets"]
+              verbs: ["patch", "update"]
+            - apiGroups: ["apps"]
+              resources: ["deployments/scale", "statefulsets/scale"]
+              verbs: ["patch", "update"]
+            - apiGroups: [""]
+              resources: ["pods"]
+              verbs: ["delete"]
+            - apiGroups: ["helm.toolkit.fluxcd.io"]
+              resources: ["helmreleases"]
+              verbs: ["patch"]
+            - apiGroups: ["kustomize.toolkit.fluxcd.io"]
+              resources: ["kustomizations"]
+              verbs: ["patch"]
+      bindings:
+        hermes-cluster:
+          type: ClusterRoleBinding
+          roleRef:
+            kind: ClusterRole
+            identifier: hermes-cluster
+          subjects:
+            - kind: ServiceAccount
+              identifier: hermes
+    service:
+      app:
+        controller: hermes
+        ports:
+          dashboard:
+            port: &dashboardPort 9119
+          gateway:
+            port: *gatewayPort
+    route:
+      app:
+        hostnames: ["{{ .Release.Name }}.blkh.dev"]
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *dashboardPort
+    persistence:
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: *dataDir
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
