@@ -23,7 +23,7 @@ spec:
           app:
             image: &image
               repository: nousresearch/hermes-agent
-              tag: v2026.6.5@sha256:9ad3b04ec916ea2c2da22358fd43b024c788d74073210695af88bfc2e63869b4
+              tag: v2026.8.27@sha256:e0df6adebddf29b91112aefc999d4aaf6846c9eb544faca5672a16a13590ff79
             command: ["hermes", "gateway", "run", "--no-supervise"]
             env:
               API_SERVER_ENABLED: "true"
@@ -67,10 +67,13 @@ spec:
                 memory: 8Gi
           dashboard:
             image: *image
-            args: ["dashboard", "--host", "0.0.0.0", "--insecure"]
+            args: ["dashboard", "--host", "0.0.0.0"]
             env:
               GATEWAY_HEALTH_URL: http://localhost:8642
               TZ: America/Santiago
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret"
             resources:
               requests:
                 cpu: 50m
