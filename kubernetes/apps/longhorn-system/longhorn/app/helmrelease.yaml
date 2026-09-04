@@ -12,13 +12,6 @@ spec:
   values:
     preUpgradeChecker:
       jobEnabled: false
-      upgradeVersionCheck: false
-    image:
-      longhorn:
-        instanceManager:
-          tag: v1.11.0-hotfix-1
-        manager:
-          tag: v1.11.0-hotfix-1
     persistence:
       defaultDataLocality: best-effort
       recurringJobSelector:
