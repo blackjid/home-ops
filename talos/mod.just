@@ -60,4 +60,4 @@ machine-controller node:
 
 [private]
 machine-image:
-    just template "{{ talos_dir }}/machineconfig.yaml.j2" | yq -e 'select(.machine) | .machine.install.image'
+    just template "{{ talos_dir }}/machineconfig.yaml.j2" | yq -e 'select(.kind == "UnattendedInstallConfig") | .installer.image'
