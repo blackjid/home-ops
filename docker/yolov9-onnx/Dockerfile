@@ -15,7 +15,7 @@ RUN apt-get update \
     && apt-get install --no-install-recommends -y cmake libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=ghcr.io/astral-sh/uv:0.12.9 /uv /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.12.10 /uv /bin/
 
 WORKDIR /yolov9
 ADD https://github.com/WongKinYiu/yolov9.git .
