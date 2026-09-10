@@ -15,14 +15,21 @@ spec:
           server: black-station.internal
           path: /volume1/VolsyncKopia
   create:
-    enabled: false # adopt volsync's existing repo, never re-initialize
+    enabled: false
   encryption:
     passwordSecretRef:
       name: kopiur-repository-secret
       namespace: kopiur-system
       key: KOPIA_PASSWORD
   maintenance:
-    enabled: false # volsync's KopiaMaintenance still owns compaction
+    enabled: true
+    schedule:
+      quick:
+        cron: 0 * * * *
+        jitter: 10m
+      full:
+        cron: 0 2 * * *
+        jitter: 30m
   moverDefaults:
     cache:
       contentCacheSizeMb: 512
