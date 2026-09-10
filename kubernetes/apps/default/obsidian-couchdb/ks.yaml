@@ -19,6 +19,8 @@ spec:
     substitute:
       APP: obsidian-couchdb
       KOPIUR_CAPACITY: 30Gi
+      KOPIUR_PUID: "568"
+      KOPIUR_PGID: "568"
       VOLSYNC_CAPACITY: 30Gi
   prune: true
   sourceRef:

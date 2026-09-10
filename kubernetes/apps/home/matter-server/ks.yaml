@@ -20,6 +20,8 @@ spec:
     substitute:
       APP: matter-server
       KOPIUR_CAPACITY: 5Gi
+      KOPIUR_PUID: "0"
+      KOPIUR_PGID: "0"
       VOLSYNC_CAPACITY: 5Gi
   prune: true
   sourceRef:
