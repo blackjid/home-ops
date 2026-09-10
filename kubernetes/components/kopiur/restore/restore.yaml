@@ -5,6 +5,9 @@ kind: Restore
 metadata:
   name: ${APP}
 spec:
+  mover:
+    inheritSecurityContextFrom:
+      snapshot: {}
   policy:
     onMissingSnapshot: Continue
   source:
