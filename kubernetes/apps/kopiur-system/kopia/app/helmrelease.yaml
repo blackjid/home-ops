@@ -80,9 +80,9 @@ spec:
                   "path": "/repository"
                 }
               },
-              "hostname": "volsync.{{ .Release.Namespace }}.svc.cluster.local",
-              "username": "volsync",
-              "description": "volsync",
+              "hostname": "kopia.{{ .Release.Namespace }}.svc.cluster.local",
+              "username": "kopia",
+              "description": "nas",
               "enableActions": false
             }
     persistence:
