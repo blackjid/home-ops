@@ -6,9 +6,12 @@ metadata:
   name: autobrr
 spec:
   components:
+    - ../../../../components/kopiur/backup
     - ../../../../components/volsync
     - ../../../../components/zeroscaler
   dependsOn:
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: longhorn
       namespace: longhorn-system
   interval: 1h
