@@ -7,7 +7,6 @@ metadata:
 spec:
   components:
     - ../../../../components/kopiur/backup
-    - ../../../../components/kopiur/restore
   dependsOn:
     - name: kopiur-repository
       namespace: kopiur-system
