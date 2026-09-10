@@ -23,5 +23,9 @@ spec:
       key: KOPIA_PASSWORD
   maintenance:
     enabled: false # volsync's KopiaMaintenance still owns compaction
+  moverDefaults:
+    cache:
+      contentCacheSizeMb: 512
+      metadataCacheSizeMb: 1024
   scheduleDefaults:
     timezone: America/Santiago
