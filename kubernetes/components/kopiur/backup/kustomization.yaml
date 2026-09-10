@@ -5,3 +5,5 @@ kind: Component
 resources:
   - ./snapshotpolicy.yaml
   - ./snapshotschedule.yaml
+  - ./pvc.yaml
+  - ./restore.yaml
