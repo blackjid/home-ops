@@ -7,8 +7,11 @@ metadata:
   namespace: ai
 spec:
   components:
+    - ../../../../components/kopiur/backup
     - ../../../../components/volsync
   dependsOn:
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: longhorn
       namespace: longhorn-system
   interval: 1h
@@ -16,6 +19,9 @@ spec:
   postBuild:
     substitute:
       APP: hermes
+      KOPIUR_CAPACITY: 10Gi
+      KOPIUR_PUID: "10000"
+      KOPIUR_PGID: "10000"
       VOLSYNC_CAPACITY: 10Gi
       VOLSYNC_PUID: "10000"
       VOLSYNC_PGID: "10000"
