@@ -19,6 +19,8 @@ spec:
     substitute:
       APP: zwave
       KOPIUR_CAPACITY: 1Gi
+      KOPIUR_PUID: "0"
+      KOPIUR_PGID: "0"
       VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
