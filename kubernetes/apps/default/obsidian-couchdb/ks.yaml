@@ -7,7 +7,7 @@ metadata:
 spec:
   components:
     - ../../../../components/kopiur/backup
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/restore
   dependsOn:
     - name: kopiur-repository
       namespace: kopiur-system
@@ -21,7 +21,6 @@ spec:
       KOPIUR_CAPACITY: 30Gi
       KOPIUR_PUID: "568"
       KOPIUR_PGID: "568"
-      VOLSYNC_CAPACITY: 30Gi
   prune: true
   sourceRef:
     kind: GitRepository
