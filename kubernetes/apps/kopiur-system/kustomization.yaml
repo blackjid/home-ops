@@ -10,4 +10,6 @@ components:
 
 resources:
   - ./namespace.yaml
+  - ./kopia/ks.yaml
+  - ./kopia-sync/ks.yaml
   - ./kopiur/ks.yaml
