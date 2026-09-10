@@ -6,8 +6,11 @@ metadata:
   name: zigbee2mqtt
 spec:
   components:
+    - ../../../../components/kopiur/backup
     - ../../../../components/volsync
   dependsOn:
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: longhorn
       namespace: longhorn-system
     - name: mosquitto
@@ -16,6 +19,7 @@ spec:
   postBuild:
     substitute:
       APP: zigbee2mqtt
+      KOPIUR_CAPACITY: 1Gi
       VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:

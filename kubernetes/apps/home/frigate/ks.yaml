@@ -7,12 +7,15 @@ metadata:
   namespace: home
 spec:
   components:
+    - ../../../../components/kopiur/backup
     - ../../../../components/volsync
   dependsOn:
     - name: csi-driver-nfs
       namespace: kube-system
     - name: intel-gpu-resource-driver
       namespace: kube-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: longhorn
       namespace: longhorn-system
     - name: mosquitto
@@ -22,6 +25,7 @@ spec:
   postBuild:
     substitute:
       APP: frigate
+      KOPIUR_CAPACITY: 10Gi
       VOLSYNC_CAPACITY: 10Gi
   prune: true
   sourceRef:
