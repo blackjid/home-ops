@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/repositoryreplication_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: RepositoryReplication
+metadata:
+  name: nas-offsite
+spec:
+  sourceRef:
+    kind: ClusterRepository
+    name: nas
+  destination:
+    s3:
+      bucket: volsync-kopia
+      endpoint: ${S3_ENDPOINT}
+      region: auto
+      auth:
+        secretRef:
+          name: kopia-sync-s3-secret
+          namespace: kopiur-system
+  schedule:
+    cron: 0 3 * * *
+  sync:
+    deleteExtra: true
+    parallel: 4
