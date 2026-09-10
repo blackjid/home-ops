@@ -14,6 +14,9 @@ spec:
         nfs:
           server: black-station.internal
           path: /volume1/VolsyncKopia
+  catalog:
+    periodicRefresh: true
+    refreshInterval: 6h
   create:
     enabled: false
   encryption:
