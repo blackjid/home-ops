@@ -6,9 +6,12 @@ metadata:
   name: shelfmark
 spec:
   components:
+    - ../../../../components/kopiur/backup
     - ../../../../components/volsync
     - ../../../../components/zeroscaler
   dependsOn:
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: longhorn
       namespace: longhorn-system
   interval: 1h
@@ -16,6 +19,7 @@ spec:
   postBuild:
     substitute:
       APP: shelfmark
+      KOPIUR_CAPACITY: 1Gi
       VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
