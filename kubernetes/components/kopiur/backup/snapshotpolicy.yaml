@@ -6,7 +6,7 @@ metadata:
   name: ${APP}
 spec:
   compression:
-    compressor: zstd-fastest
+    compressor: zstd
   copyMethod: Snapshot
   mover:
     cache:
