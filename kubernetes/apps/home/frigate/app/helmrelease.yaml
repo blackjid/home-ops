@@ -233,10 +233,11 @@ spec:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.84:554/h264Preview_01_main
                 family_room_sub:
                   - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.84:554/h264Preview_01_sub
+                # Service Yard is the Reolink exposed in HA at 192.168.20.91.
                 service_yard:
-                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.146:554/h264Preview_01_main
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.91:554/h264Preview_01_main
                 service_yard_sub:
-                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.146:554/h264Preview_01_sub
+                  - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@192.168.20.91:554/h264Preview_01_sub
 
             cameras:
               quincho:
