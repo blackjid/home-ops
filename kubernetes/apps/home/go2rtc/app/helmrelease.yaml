@@ -25,6 +25,8 @@ spec:
                 enabled: true
               readiness:
                 enabled: true
+                spec:
+                  initialDelaySeconds: 45
               startup:
                 enabled: true
                 spec:
