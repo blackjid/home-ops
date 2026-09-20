@@ -20,12 +20,6 @@ spec:
             image:
               repository: ghcr.io/alexxit/go2rtc
               tag: 1.9.14@sha256:675c318b23c06fd862a61d262240c9a63436b4050d177ffc68a32710d9e05bae
-            args:
-              - /bin/sh
-              - -c
-              - |-
-                until nc -z 127.0.0.1 18554; do sleep 1; done
-                exec /usr/local/bin/go2rtc -config /config/go2rtc.yaml
             probes:
               liveness:
                 enabled: true
@@ -47,10 +41,12 @@ spec:
                 cpu: 10m
               limits:
                 memory: 512Mi
+        initContainers:
           dahua-p2p:
+            restartPolicy: Always
             image:
               repository: ghcr.io/blackjid/dahua-p2p
-              tag: 0.3.0@sha256:cc86899fe7ad24820e6143c97f448b3bf19bed2700cdf504f1d7f5b25b991160
+              tag: 0.4.0@sha256:9d6da9e651ece0e839a749f8b8696fae861b2e9b5bdb80be704aa7bae9752311
             env:
               DAHUA_SERIAL:
                 valueFrom:
@@ -68,6 +64,16 @@ spec:
                     name: go2rtc-secret
                     key: DAHUA_PASSWORD
               LISTEN_ADDR: 127.0.0.1:18554
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 1
+                  tcpSocket:
+                    host: 127.0.0.1
+                    port: 18554
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
