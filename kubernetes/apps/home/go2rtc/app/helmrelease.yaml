@@ -20,6 +20,12 @@ spec:
             image:
               repository: ghcr.io/alexxit/go2rtc
               tag: 1.9.14@sha256:675c318b23c06fd862a61d262240c9a63436b4050d177ffc68a32710d9e05bae
+            args:
+              - /bin/sh
+              - -c
+              - |-
+                until nc -z 127.0.0.1 18554; do sleep 1; done
+                exec /usr/local/bin/go2rtc -config /config/go2rtc.yaml
             probes:
               liveness:
                 enabled: true
@@ -44,7 +50,7 @@ spec:
           dahua-p2p:
             image:
               repository: ghcr.io/blackjid/dahua-p2p
-              tag: 0.2.0@sha256:371ff5cc48d906ef6febf496b97d26406631ea6391883e5bf7e679406f63c2c1
+              tag: 0.3.0@sha256:cc86899fe7ad24820e6143c97f448b3bf19bed2700cdf504f1d7f5b25b991160
             env:
               DAHUA_SERIAL:
                 valueFrom:
