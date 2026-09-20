@@ -12,7 +12,9 @@ spec:
   values:
     controllers:
       go2rtc:
-        strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        strategy: Recreate
         containers:
           app:
             image:
@@ -37,7 +39,39 @@ spec:
                 cpu: 10m
               limits:
                 memory: 512Mi
+          dahua-p2p:
+            image:
+              repository: ghcr.io/blackjid/dahua-p2p
+              tag: 0.2.0@sha256:371ff5cc48d906ef6febf496b97d26406631ea6391883e5bf7e679406f63c2c1
+            env:
+              DAHUA_SERIAL:
+                valueFrom:
+                  secretKeyRef:
+                    name: go2rtc-secret
+                    key: DAHUA_SERIAL
+              DAHUA_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: go2rtc-secret
+                    key: DAHUA_USERNAME
+              DAHUA_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: go2rtc-secret
+                    key: DAHUA_PASSWORD
+              LISTEN_ADDR: 127.0.0.1:18554
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 128Mi
     defaultPodOptions:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -49,6 +83,7 @@ spec:
         ports:
           http:
             port: 80
+            targetPort: 1984
       streams:
         type: LoadBalancer
         annotations:
@@ -57,6 +92,7 @@ spec:
         ports:
           streams-rtsp:
             port: 554
+            targetPort: 8554
           streams-webrtc-tcp:
             port: 8555
             protocol: TCP
@@ -78,6 +114,8 @@ spec:
       config-file:
         type: secret
         name: go2rtc-secret
-        globalMounts:
-          - path: /config/go2rtc.yaml
-            subPath: go2rtc.yaml
+        advancedMounts:
+          go2rtc:
+            app:
+              - path: /config/go2rtc.yaml
+                subPath: go2rtc.yaml
