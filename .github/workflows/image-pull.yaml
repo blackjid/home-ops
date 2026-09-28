@@ -45,6 +45,7 @@ jobs:
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
           cache: false
+          install_args: github:home-operations/flate
           tool_versions: |
             github:home-operations/flate 0.2.12
 
