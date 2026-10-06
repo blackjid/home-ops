@@ -73,7 +73,7 @@ releases:
   - name: onepassword-connect
     namespace: external-secrets
     chart: oci://ghcr.io/1password/connect
-    version: 2.4.1
+    version: 2.4.2
     values:
       - ./templates/values.yaml.gotmpl
     hooks:
