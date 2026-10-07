@@ -23,7 +23,7 @@ spec:
         description: Longhorn volume {{$labels.volume}} on {{$labels.node}} is Fault for
           more than 2 minutes.
         summary: Longhorn volume {{$labels.volume}} is Fault
-      expr: longhorn_volume_robustness == 3
+      expr: longhorn_volume_robustness{state="faulted"} == 1
       for: 5m
       labels:
         issue: Longhorn volume {{$labels.volume}} is Fault.
@@ -33,7 +33,7 @@ spec:
         description: Longhorn volume {{$labels.volume}} on {{$labels.node}} is Degraded for
           more than 5 minutes.
         summary: Longhorn volume {{$labels.volume}} is Degraded
-      expr: longhorn_volume_robustness == 2
+      expr: longhorn_volume_robustness{state="degraded"} == 1
       for: 5m
       labels:
         issue: Longhorn volume {{$labels.volume}} is Degraded.
