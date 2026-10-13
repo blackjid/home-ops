@@ -35,13 +35,7 @@ spec:
       nodeDrainPolicy: allow-if-replica-is-stopped
       replicaReplenishmentWaitInterval: "3600"
     networkPolicies:
-      metricsScrapeSources:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: o11y
-          podSelector:
-            matchLabels:
-              app.kubernetes.io/name: prometheus
+      restrictInternalTraffic: false
     ingress:
       enabled: false
     httproute:
