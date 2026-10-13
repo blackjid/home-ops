@@ -7,3 +7,4 @@ resources:
   - ./ocirepository.yaml
   - ./grafanadashboard.yaml
   - ./prometheusrule.yaml
+  - ./networkpolicy.yaml
