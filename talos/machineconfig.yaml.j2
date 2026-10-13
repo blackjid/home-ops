@@ -116,14 +116,10 @@ params:
   net.ipv4.tcp_fastopen: "3"
   net.ipv4.tcp_mtu_probing: "1"
   net.ipv4.tcp_notsent_lowat: "131072"
-  net.ipv4.tcp_rmem: 4096 87380 33554432
+  net.ipv4.tcp_rmem: 4096 131072 67108864
   net.ipv4.tcp_slow_start_after_idle: "0"
-  net.ipv4.tcp_window_scaling: "1"
-  net.ipv4.tcp_wmem: 4096 65536 33554432
-  sunrpc.tcp_max_slot_table_entries: "128"
-  sunrpc.tcp_slot_table_entries: "128"
+  net.ipv4.tcp_wmem: 4096 65536 67108864
   user.max_user_namespaces: "11255"
-  vm.nr_hugepages: "1024"
 ---
 apiVersion: v1alpha1
 kind: EtcFileConfig
