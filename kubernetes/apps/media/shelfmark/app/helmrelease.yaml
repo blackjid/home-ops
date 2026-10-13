@@ -95,3 +95,7 @@ spec:
         globalMounts:
           - path: /tmp
           - path: /var/log
+          - path: /tmp/shelfmark/seleniumbase/downloaded_files
+            subPath: downloaded_files
+          - path: /tmp/shelfmark/seleniumbase/archived_files
+            subPath: archived_files
