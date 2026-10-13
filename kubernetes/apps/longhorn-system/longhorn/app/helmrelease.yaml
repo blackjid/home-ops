@@ -34,6 +34,14 @@ spec:
       storageReservedPercentageForDefaultDisk: "10"
       nodeDrainPolicy: allow-if-replica-is-stopped
       replicaReplenishmentWaitInterval: "3600"
+    networkPolicies:
+      metricsScrapeSources:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: o11y
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
     ingress:
       enabled: false
     httproute:
