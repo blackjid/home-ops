@@ -123,6 +123,16 @@ params:
 ---
 apiVersion: v1alpha1
 kind: EtcFileConfig
+name: nfs.conf
+mode: 0o644
+contents: |
+  [nfsrahead]
+  nfs=16384
+  nfs4=16384
+  default=128
+---
+apiVersion: v1alpha1
+kind: EtcFileConfig
 name: nfsmount.conf
 mode: 0o644
 contents: |
@@ -130,7 +140,7 @@ contents: |
   nfsvers=3
   hard=True
   nolock=True
-  nconnect=8
+  nconnect=16
   noatime=True
   rsize=1048576
   wsize=1048576
