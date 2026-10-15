@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: public.ecr.aws/docker/library/couchdb
-              tag: 3.5.2
+              tag: 3.5.3
             envFrom:
               - secretRef:
                   name: obsidian-couchdb-secret
