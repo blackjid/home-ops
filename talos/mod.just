@@ -39,7 +39,7 @@ render-config node:
 [doc('Reset a node')]
 reset-node node *args:
     gum confirm "Reset node {{ node }}?" --default="No" && \
-        talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --system-labels-to-wipe u-local-hostpath --system-labels-to-wipe u-longhorn --graceful=false {{ args }} || exit 0
+        talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --system-labels-to-wipe r-miroir-slow --system-labels-to-wipe u-longhorn --graceful=false {{ args }} || exit 0
 
 [doc('Shutdown a node')]
 shutdown-node node *args:
