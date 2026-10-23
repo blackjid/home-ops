@@ -78,7 +78,7 @@ jobs:
             mostly the bjw-s app-template chart), shared Kustomize components
             under `kubernetes/components/`, Talos config under `talos/`
             (`machineconfig.yaml.j2`, `schematic.yaml.j2`, `nodes/`), custom
-            images under `docker/`. Storage is Longhorn and OpenEBS; volume
+            images under `docker/`. Storage is Longhorn and Miroir; volume
             backups use Kopiur; secrets come from 1Password via
             external-secrets. Treat any change that could force a PVC
             recreation, a Longhorn volume migration or a CRD API removal as
