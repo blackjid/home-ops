@@ -18,8 +18,8 @@ selector:
   match: link.driver == "e1000e" && mac(link.permanent_addr).startsWith("1c:69:7a:02:")
 ---
 apiVersion: v1alpha1
-kind: UserVolumeConfig
-name: local-hostpath
+kind: RawVolumeConfig
+name: miroir-slow
 provisioning:
   diskSelector:
     match: disk.dev_path == '/dev/sda' && !system_disk

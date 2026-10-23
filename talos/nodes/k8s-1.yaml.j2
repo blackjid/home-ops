@@ -18,8 +18,8 @@ selector:
   match: link.driver == "r8169" && mac(link.permanent_addr).startsWith("d8:c4:97:bf:")
 ---
 apiVersion: v1alpha1
-kind: UserVolumeConfig
-name: local-hostpath
+kind: RawVolumeConfig
+name: miroir-slow
 provisioning:
   diskSelector:
     match: system_disk

@@ -77,7 +77,7 @@ clusterSecret: op://kubernetes/talos/CLUSTER_SECRET
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
-  image: factory.talos.dev/metal-installer/70e64fe909966c58a9de15d74b7cb61f453cec21cca9eccc8de133f6a72f72b8:v1.14.4
+  image: factory.talos.dev/metal-installer/71ad4efa6dab992699ccbd7c1bc68eb602099fca56dadfc53b423edcef4933da:v1.14.4
 provisioning:
   diskSelector:
     match: disk.dev_path == "/dev/nvme0n1"
@@ -95,6 +95,20 @@ apiVersion: v1alpha1
 kind: WatchdogTimerConfig
 device: /dev/watchdog0
 timeout: 10m
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: dm_thin_pool
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: drbd
+parameters:
+  - usermode_helper=disabled
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: drbd_transport_tcp
 ---
 apiVersion: v1alpha1
 kind: KernelModuleConfig
