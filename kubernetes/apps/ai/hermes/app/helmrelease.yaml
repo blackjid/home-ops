@@ -29,6 +29,9 @@ spec:
               API_SERVER_ENABLED: "true"
               API_SERVER_HOST: 0.0.0.0
               API_SERVER_PORT: &gatewayPort 8642
+              GIT_CONFIG_COUNT: "1"
+              GIT_CONFIG_KEY_0: credential.https://github.com.helper
+              GIT_CONFIG_VALUE_0: "!f() { echo username=x-access-token; echo password=$GITHUB_TOKEN; }; f"
               HASS_URL: http://home-assistant.home.svc.cluster.local:8123
               HERMES_HOME: &dataDir /opt/data
               HOME: *dataDir
