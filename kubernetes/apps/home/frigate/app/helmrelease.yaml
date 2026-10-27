@@ -297,10 +297,11 @@ spec:
                   inputs:
                     - path: rtsp://127.0.0.1:8554/living_room
                       input_args: preset-rtsp-restream
-                      roles: [record]
-                    - path: rtsp://127.0.0.1:8554/living_room_sub
-                      input_args: preset-rtsp-restream
-                      roles: [detect]
+                      roles: [record, detect]
+                detect:
+                  width: 2880
+                  height: 1616
+                  fps: 5
                 live:
                   streams:
                     Main: living_room
