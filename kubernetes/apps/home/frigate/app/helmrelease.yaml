@@ -299,8 +299,8 @@ spec:
                       input_args: preset-rtsp-restream
                       roles: [record, detect]
                 detect:
-                  width: 2880
-                  height: 1616
+                  width: 1920
+                  height: 1080
                   fps: 5
                 live:
                   streams:
@@ -380,7 +380,7 @@ spec:
       shm:
         type: emptyDir
         medium: Memory
-        sizeLimit: 256Mi
+        sizeLimit: 512Mi
         advancedMounts:
           frigate:
             app:
