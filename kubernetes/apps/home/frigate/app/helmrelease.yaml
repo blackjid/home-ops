@@ -297,10 +297,11 @@ spec:
                   inputs:
                     - path: rtsp://127.0.0.1:8554/living_room
                       input_args: preset-rtsp-restream
-                      roles: [record]
-                    - path: rtsp://127.0.0.1:8554/living_room_sub
-                      input_args: preset-rtsp-restream
-                      roles: [detect]
+                      roles: [record, detect]
+                detect:
+                  width: 1920
+                  height: 1080
+                  fps: 5
                 live:
                   streams:
                     Main: living_room
@@ -379,7 +380,7 @@ spec:
       shm:
         type: emptyDir
         medium: Memory
-        sizeLimit: 256Mi
+        sizeLimit: 512Mi
         advancedMounts:
           frigate:
             app:
