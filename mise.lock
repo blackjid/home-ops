@@ -44,7 +44,7 @@ version = "8.4.0"
 backend = "pipx:flux-local"
 
 [[tools.talosctl]]
-version = "1.14.4"
+version = "1.14.5"
 backend = "aqua:siderolabs/talos"
 
 [tools.talosctl.options]
