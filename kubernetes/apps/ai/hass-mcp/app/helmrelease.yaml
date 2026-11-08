@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/homeassistant-ai/ha-mcp
-              tag: 9.1.0@sha256:4259f24727d2052d80d57f4789f97371ea3c7a4dd3060bbb3c61b5ee33f6678e
+              tag: 9.1.2@sha256:381b1e01635d3c51f35a01882863610bc0b76a22bae93835a6a5a5c926d9ecb4
             command: ["ha-mcp-web"]
             env:
               HOMEASSISTANT_URL: http://home-assistant.home.svc.cluster.local:8123
