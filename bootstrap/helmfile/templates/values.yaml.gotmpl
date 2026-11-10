@@ -1,0 +1,2 @@
+{{- $app := index .Release.Labels "app" | default .Release.Name -}}
+{{ (fromYaml (readFile (printf "../../../kubernetes/apps/%s/%s/app/helmrelease.yaml" .Release.Namespace $app))).spec.values | toYaml }}
