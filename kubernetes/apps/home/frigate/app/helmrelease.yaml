@@ -182,6 +182,7 @@ spec:
             face_recognition:
               enabled: true
               model_size: large
+              min_area: 1600
 
             record:
               enabled: true
@@ -326,10 +327,10 @@ spec:
                   inputs:
                     - path: rtsp://127.0.0.1:8554/service_yard
                       input_args: preset-rtsp-restream
-                      roles: [record]
-                    - path: rtsp://127.0.0.1:8554/service_yard_sub
-                      input_args: preset-rtsp-restream
-                      roles: [detect]
+                      roles: [record, detect]
+                detect:
+                  width: 1280
+                  height: 720
                 live:
                   streams:
                     Main: service_yard
