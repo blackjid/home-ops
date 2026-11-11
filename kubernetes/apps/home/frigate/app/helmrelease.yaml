@@ -331,6 +331,9 @@ spec:
                     - path: rtsp://127.0.0.1:8554/service_yard_sub
                       input_args: preset-rtsp-restream
                       roles: [detect]
+                detect:
+                  width: 640
+                  height: 480
                 live:
                   streams:
                     Main: service_yard
